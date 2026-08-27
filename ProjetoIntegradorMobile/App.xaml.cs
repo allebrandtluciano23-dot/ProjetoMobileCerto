@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
+﻿
 namespace ProjetoIntegradorMobile
 {
     public partial class App : Application
@@ -7,6 +6,13 @@ namespace ProjetoIntegradorMobile
         public App()
         {
             InitializeComponent();
+            InicializarBanco();
+
+        }
+
+        private async void InicializarBanco()
+        {
+            await DatabaseConfig.Database.Inicializar();
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
