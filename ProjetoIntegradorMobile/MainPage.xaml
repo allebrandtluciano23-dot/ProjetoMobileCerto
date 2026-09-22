@@ -1,87 +1,328 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProjetoIntegradorMobile.MainPage"
              BackgroundColor="White">
 
-    <Grid RowDefinitions="Auto, *, Auto">
-        <VerticalStackLayout Grid.Row="0" Spacing="1" Margin="10">
+    <Grid RowDefinitions="Auto,*,Auto">
 
-            <Label  Text="Ola, Chefe!"
-                    FontSize="Large"
-                    TextColor="Black"
-                    HorizontalOptions="Start" />
+        <!-- CABEÇALHO -->
+        <VerticalStackLayout Grid.Row="0"
+                             Padding="20,15,20,5"
+                             Spacing="15">
 
-            <Label  Text="O que vamos cozinha hoje?"
-                    FontSize="Subtitle"
-                    TextColor="Black"
-                    HorizontalOptions="Start" />
+            <!-- Saudação -->
+            <Grid ColumnDefinitions="Auto,*,Auto">
 
-            <Border Stroke="Gray" StrokeThickness="1"  Padding="5,0" HorizontalOptions="FillAndExpand">
+                <!-- Foto do usuário -->
+                <Border WidthRequest="48"
+                        HeightRequest="48"
+                        StrokeThickness="0"
+                        BackgroundColor="#EEEEEE"
+                        StrokeShape="RoundRectangle 24">
 
-                <Grid ColumnDefinitions="Auto, *">
-                    <Image  Grid.Column="0"
-                            Source="lupa.png"
-                            WidthRequest="20"
-                            HeightRequest="20" 
-                            VerticalOptions="Center"
-                            Margin="5"/>
+                    <Label Text="👨‍🍳"
+                           FontSize="25"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                </Border>
+
+                <VerticalStackLayout Grid.Column="1"
+                                     Margin="12,0,0,0"
+                                     VerticalOptions="Center">
+
+                    <Label Text="Olá, Chefe!"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="Black"/>
+
+                    <Label Text="Vamos cozinhar algo delicioso."
+                           FontSize="13"
+                           TextColor="Gray"/>
+                </VerticalStackLayout>
+
+                <!-- Botão menu -->
+                <Border Grid.Column="2"
+                        WidthRequest="45"
+                        HeightRequest="45"
+                        Stroke="#EEEEEE"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 15">
+
+                    <Label Text="☰"
+                           FontSize="20"
+                           TextColor="Black"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                </Border>
+
+            </Grid>
+
+
+            <!-- BARRA DE PESQUISA -->
+            <Border Stroke="#EEEEEE"
+                    StrokeThickness="1"
+                    BackgroundColor="White"
+                    HeightRequest="55"
+                    StrokeShape="RoundRectangle 18"
+                    Padding="15,0">
+
+                <Grid ColumnDefinitions="Auto,*,Auto">
+
+                    <Label Text="⌕"
+                           FontSize="30"
+                           TextColor="Black"
+                           VerticalOptions="Center"/>
 
                     <Entry Grid.Column="1"
                            x:Name="searchEntry"
-                           Placeholder="Buscar.."
+                           Placeholder="Buscar receitas"
+                           PlaceholderColor="Gray"
+                           TextColor="Black"
+                           FontSize="14"
+                           VerticalOptions="Center"/>
+
+                    <Label Grid.Column="2"
+                           Text="☷"
+                           FontSize="22"
+                           TextColor="Black"
                            VerticalOptions="Center"/>
 
                 </Grid>
+
             </Border>
+
+
+            <!-- CATEGORIAS -->
+            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+
+                <HorizontalStackLayout Spacing="10">
+
+                    <Border BackgroundColor="#F3F3F3" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
+
+                        <Label Text="Todos"
+                               TextColor="Black"
+                               FontAttributes="Bold"/>
+                    </Border>
+
+                    <Border BackgroundColor="#F3F3F3" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
+
+                        <Label Text="Rápidos"
+                               TextColor="Black"/>
+                    </Border>
+
+                    <Border BackgroundColor="#F3F3F3" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
+
+                        <Label Text="Almoço"
+                               TextColor="Black"/>
+                    </Border>
+
+                    <Border BackgroundColor="#F3F3F3" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
+
+                        <Label Text="Jantar"
+                               TextColor="Black"/>
+                    </Border>
+
+                    <Border BackgroundColor="#F3F3F3" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
+
+                        <Label Text="Sobremesas"
+                               TextColor="Black"/>
+                    </Border>
+
+                </HorizontalStackLayout>
+
+            </ScrollView>
+
         </VerticalStackLayout>
 
-        <ScrollView Grid.Row="1" Padding="10">
-            <VerticalStackLayout Spacing="10">
 
-                <Label Text="Conteudo"
+        <!-- CONTEÚDO -->
+        <ScrollView Grid.Row="1">
+
+            <VerticalStackLayout Padding="20,10,20,20" Spacing="15">
+
+                <!-- POPULARES -->
+                <Label Text="Populares hoje"
+                       FontSize="21"
+                       FontAttributes="Bold"
+                       TextColor="Black"/>
+
+
+                <!-- Cards populares EX ((implementar no back isso) -->
+                <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+
+                    <HorizontalStackLayout Spacing="15">
+
+                        <!-- Receita 1 EX -->
+                        <VerticalStackLayout WidthRequest="230" Spacing="5">
+
+                            <Border HeightRequest="160" StrokeThickness="0" StrokeShape="RoundRectangle 15">
+
+                                <Image Source="frango.png"
+                                       Aspect="AspectFill"/>
+                            </Border>
+
+                            <Label Text="Frango com molho"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="Black"/>
+
+                            <Label Text="Fácil e delicioso"
+                                   FontSize="13"
+                                   TextColor="Gray"/>
+
+                        </VerticalStackLayout>
+
+
+                        <!-- Receita 2 EX -->
+                        <VerticalStackLayout WidthRequest="230" Spacing="5">
+
+                            <Border HeightRequest="160" StrokeThickness="0" StrokeShape="RoundRectangle 15">
+
+                                <Image Source="legumes.png"
+                                       Aspect="AspectFill"/>
+                            </Border>
+
+                            <Label Text="Legumes salteados"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="Black"/>
+
+                            <Label Text="Colorido e saudável"
+                                   FontSize="13"
+                                   TextColor="Gray"/>
+
+                        </VerticalStackLayout>
+
+                    </HorizontalStackLayout>
+
+                </ScrollView>
+
+
+                <!-- DESTAQUE DA SEMANA -->
+                <Label Text="Destaques da semana"
+                       FontSize="21"
+                       FontAttributes="Bold"
                        TextColor="Black"
-                       HorizontalOptions="Center"/>
+                       Margin="0,10,0,0"/>
+
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+
+                    <!-- Receita 3 EX -->
+                    <VerticalStackLayout Grid.Column="0" Spacing="5">
+
+                        <Border HeightRequest="130" StrokeThickness="0" StrokeShape="RoundRectangle 15">
+
+                            <Image Source="macarrao.png"
+                                   Aspect="AspectFill"/>
+                        </Border>
+
+                        <Label Text="Macarrão cremoso"
+                               FontSize="15"
+                               FontAttributes="Bold"
+                               TextColor="Black"/>
+
+                    </VerticalStackLayout>
+
+
+  
+                    <VerticalStackLayout Grid.Column="1" Spacing="5">
+
+                        <Border HeightRequest="130" StrokeThickness="0" StrokeShape="RoundRectangle 15">
+
+                            <Image Source="ramen.png"
+                                   Aspect="AspectFill"/>
+                        </Border>
+
+                        <Label Text="Ramen especial"
+                               FontSize="15"
+                               FontAttributes="Bold"
+                               TextColor="Black"/>
+
+                    </VerticalStackLayout>
+
+                </Grid>
 
             </VerticalStackLayout>
+
         </ScrollView>
 
-        <Grid Grid.Row="2" ColumnDefinitions="*,*,*,*">
 
-            <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center">
+        <!-- MENU INFERIOR -->
+        <Border Grid.Row="2" BackgroundColor="White" Stroke="#EEEEEE" StrokeThickness="1" Padding="5,8">
 
-                <Label Text="Início"
-                        FontSize="11" 
-                        HorizontalOptions="Center" 
-                        TextColor="#E53935"/>
-            </VerticalStackLayout>
+            <Grid ColumnDefinitions="*,*,*,*">
 
-            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center">
+                <!-- INÍCIO -->
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
 
-                <Label  Text="Pesquisa"
-                        FontSize="11" 
-                        HorizontalOptions="Center" 
-                        TextColor="#E53935"/>
-            </VerticalStackLayout>
+                    <Label Text="⌂"
+                           TextColor="Black"
+                           FontSize="25"
+                           HorizontalOptions="Center"/>
 
-            <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center">
+                    <Label Text="Início"
+                           FontSize="11"
+                           HorizontalOptions="Center"
+                           TextColor="Black"/>
 
-                <Label  Text="Favoritos"
-                        FontSize="11" 
-                        HorizontalOptions="Center" 
-                        TextColor="#E53935"/>
-            </VerticalStackLayout>
+                </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Column="3" VerticalOptions="Center" HorizontalOptions="Center">
 
-                <Label Text="Perfil"
-                        FontSize="11" 
-                        HorizontalOptions="Center" 
-                        TextColor="#E53935"/>
+                <!-- BUSCAR -->
+                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
 
-            </VerticalStackLayout>
-        </Grid>
-        
+                    <Label Text="⌕"
+                           FontSize="25"
+                           HorizontalOptions="Center"
+                           TextColor="Black"/>
+
+                    <Label Text="Buscar"
+                           FontSize="11"
+                           TextColor="Black"
+                           HorizontalOptions="Center"/>
+
+                </VerticalStackLayout>
+
+
+                <!-- FAVORITOS -->
+                <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
+
+                    <Label Text="♡"
+                           FontSize="25"
+                           HorizontalOptions="Center"
+                           TextColor="Black"/>
+
+                    <Label Text="Favoritos"
+                           FontSize="11"
+                           TextColor="Black"
+                           HorizontalOptions="Center"/>
+
+                </VerticalStackLayout>
+
+
+                <!-- PERFIL -->
+                <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center">
+
+                    <Label Text="♙"
+                           FontSize="25"
+                           HorizontalOptions="Center"
+                           TextColor="Black"/>
+
+                    <Label Text="Perfil"
+                           FontSize="11"
+                           TextColor="Black"
+                           HorizontalOptions="Center"/>
+
+                </VerticalStackLayout>
+
+            </Grid>
+
+        </Border>
+
     </Grid>
 
 </ContentPage>
