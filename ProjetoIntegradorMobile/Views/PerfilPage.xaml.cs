@@ -1,8 +1,8 @@
 namespace ProjetoIntegradorMobile.Views;
 
-public partial class ExluirReceita : ContentPage
+public partial class PerfilPage : ContentPage
 {
-	public ExluirReceita()
+	public PerfilPage()
 	{
 		InitializeComponent();
 	}

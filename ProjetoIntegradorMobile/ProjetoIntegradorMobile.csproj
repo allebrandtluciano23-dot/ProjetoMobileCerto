@@ -68,22 +68,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\EditarReceita.xaml.cs">
-	    <DependentUpon>EditarReceita.xaml</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiXaml Update="Views\EditarReceita.xaml">
+	  <MauiXaml Update="Views\BuscarPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ExluirReceita.xaml">
+	  <MauiXaml Update="Views\FavoritosPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\listaReceita.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\NovaReceita.xaml">
+	  <MauiXaml Update="Views\PerfilPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

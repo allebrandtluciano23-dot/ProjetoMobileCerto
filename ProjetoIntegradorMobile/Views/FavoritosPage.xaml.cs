@@ -1,8 +1,8 @@
 namespace ProjetoIntegradorMobile.Views;
 
-public partial class listaReceita : ContentPage
+public partial class FavoritosPage : ContentPage
 {
-	public listaReceita()
+	public FavoritosPage()
 	{
 		InitializeComponent();
 	}

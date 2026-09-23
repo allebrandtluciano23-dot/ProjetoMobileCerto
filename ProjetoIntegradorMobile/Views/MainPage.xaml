@@ -2,7 +2,7 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ProjetoIntegradorMobile.MainPage"
+             x:Class="ProjetoIntegradorMobile.Views.MainPage"
              BackgroundColor="White">
 
     <Grid RowDefinitions="Auto,*,Auto">
@@ -210,7 +210,6 @@
 
 
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
-
                     <!-- Receita 3 EX -->
                     <VerticalStackLayout Grid.Column="0" Spacing="5">
 
@@ -259,6 +258,10 @@
                 <!-- INÍCIO -->
                 <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
 
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Inicio_Tapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+
                     <Label Text="⌂"
                            TextColor="Black"
                            FontSize="25"
@@ -274,6 +277,10 @@
 
                 <!-- BUSCAR -->
                 <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Buscar_Tapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
 
                     <Label Text="⌕"
                            FontSize="25"
@@ -291,6 +298,10 @@
                 <!-- FAVORITOS -->
                 <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
 
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Favoritos_Tapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    
                     <Label Text="♡"
                            FontSize="25"
                            HorizontalOptions="Center"
@@ -307,6 +318,10 @@
                 <!-- PERFIL -->
                 <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center">
 
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Perfil_Tapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    
                     <Label Text="♙"
                            FontSize="25"
                            HorizontalOptions="Center"

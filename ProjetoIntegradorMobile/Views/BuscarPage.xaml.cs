@@ -1,9 +1,10 @@
 namespace ProjetoIntegradorMobile.Views;
 
-public partial class NovaReceita : ContentPage
+public partial class BuscarPage : ContentPage
 {
-	public NovaReceita()
+	public BuscarPage()
 	{
 		InitializeComponent();
 	}
+
 }
