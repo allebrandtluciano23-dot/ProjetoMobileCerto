@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ProjetoIntegradorMobile.Views.EntradaPage"
+             BackgroundColor="White"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+
+        <VerticalStackLayout Padding="30,60,30,30" Spacing="20">
+
+            <!-- LOGO -->
+            <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+
+                <!-- CHAPÉU DE CHEF -->
+                <Grid WidthRequest="110" HeightRequest="95" HorizontalOptions="Center">
+
+                    <!-- Nuvem esquerda -->
+                    <Ellipse WidthRequest="42" HeightRequest="42"
+                             Fill="White" Stroke="Black" StrokeThickness="3"
+                             HorizontalOptions="Start" VerticalOptions="Start"
+                             Margin="14,20,0,0"/>
+
+                    <!-- Nuvem direita -->
+                    <Ellipse WidthRequest="42" HeightRequest="42"
+                             Fill="White" Stroke="Black" StrokeThickness="3"
+                             HorizontalOptions="End" VerticalOptions="Start"
+                             Margin="0,20,14,0"/>
+
+                    <!-- Nuvem central -->
+                    <Ellipse WidthRequest="58" HeightRequest="58"
+                             Fill="White" Stroke="Black" StrokeThickness="3"
+                             HorizontalOptions="Center" VerticalOptions="Start"/>
+
+                    <!-- Faixa do chapéu -->
+                    <Border HeightRequest="40"
+                            Margin="14,0"
+                            VerticalOptions="End"
+                            BackgroundColor="White"
+                            Stroke="Black"
+                            StrokeThickness="3"
+                            StrokeShape="RoundRectangle 0,0,12,12"/>
+
+                </Grid>
+
+                <Label Text="CheefBook"
+                       FontSize="32"
+                       FontAttributes="Bold"
+                       TextColor="Black"
+                       HorizontalOptions="Center"/>
+
+                <Label Text="Receitas que se adaptam a você"
+                       FontSize="14"
+                       TextColor="Gray"
+                       HorizontalOptions="Center"/>
+
+            </VerticalStackLayout>
+
+
+            <!-- CAMPO USUÁRIO / E-MAIL -->
+            <Border Stroke="#EEEEEE"
+                    StrokeThickness="1"
+                    BackgroundColor="White"
+                    HeightRequest="55"
+                    Margin="0,25,0,0"
+                    StrokeShape="RoundRectangle 18"
+                    Padding="15,0">
+
+                <Grid ColumnDefinitions="Auto,*">
+
+                    <Label Text="♙"
+                           FontSize="24"
+                           TextColor="Black"
+                           VerticalOptions="Center"/>
+
+                    <Entry Grid.Column="1"
+                           x:Name="usuarioEntry"
+                           Placeholder="Usuário ou e-mail"
+                           PlaceholderColor="Gray"
+                           TextColor="Black"
+                           FontSize="14"
+                           Keyboard="Email"
+                           VerticalOptions="Center"/>
+
+                </Grid>
+            </Border>
+
+
+            <!-- CAMPO SENHA -->
+            <Border Stroke="#EEEEEE"
+                    StrokeThickness="1"
+                    BackgroundColor="White"
+                    HeightRequest="55"
+                    StrokeShape="RoundRectangle 18"
+                    Padding="15,0">
+
+                <Grid ColumnDefinitions="Auto,*,Auto">
+
+                    <Label Text="🔒"
+                           FontSize="18"
+                           VerticalOptions="Center"/>
+
+                    <Entry Grid.Column="1"
+                           x:Name="senhaEntry"
+                           Placeholder="Senha"
+                           PlaceholderColor="Gray"
+                           TextColor="Black"
+                           FontSize="14"
+                           IsPassword="True"
+                           VerticalOptions="Center"/>
+
+                    <!-- Mostrar / ocultar senha -->
+                    <Label Grid.Column="2"
+                           x:Name="lblOlho"
+                           Text="👁"
+                           FontSize="20"
+                           TextColor="Black"
+                           VerticalOptions="Center">
+
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="MostrarSenha_Tapped"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+
+                </Grid>
+            </Border>
+
+
+            <!-- LEMBRAR DE MIM / ESQUECEU A SENHA -->
+            <Grid ColumnDefinitions="*,Auto">
+
+                <HorizontalStackLayout Spacing="5">
+
+                    <CheckBox x:Name="chkLembrar"
+                              Color="Black"
+                              VerticalOptions="Center"/>
+
+                    <Label Text="Lembrar de mim"
+                           FontSize="13"
+                           TextColor="Black"
+                           VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+
+                <Label Grid.Column="1"
+                       Text="Esqueceu sua senha?"
+                       FontSize="13"
+                       TextColor="Gray"
+                       TextDecorations="Underline"
+                       VerticalOptions="Center">
+
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="EsqueceuSenha_Tapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+
+            </Grid>
+
+
+            <!-- MENSAGEM DE ERRO -->
+            <Label x:Name="lblErro"
+                   Text=""
+                   FontSize="13"
+                   TextColor="#D32F2F"
+                   HorizontalOptions="Center"
+                   IsVisible="False"/>
+
+
+            <!-- BOTÃO ENTRAR -->
+            <Border BackgroundColor="Black"
+                    StrokeThickness="0"
+                    HeightRequest="55"
+                    StrokeShape="RoundRectangle 18">
+
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Entrar_Tapped"/>
+                </Border.GestureRecognizers>
+
+                <Label Text="Entrar"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </Border>
+
+
+            <!-- CADASTRO -->
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
+
+                <Label Text="Não tem uma conta?"
+                       FontSize="13"
+                       TextColor="Gray"/>
+
+                <Label Text="Cadastre-se"
+                       FontSize="13"
+                       FontAttributes="Bold"
+                       TextColor="Black"
+                       TextDecorations="Underline">
+
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Cadastrar_Tapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>
