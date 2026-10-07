@@ -13,37 +13,6 @@
             <!-- LOGO -->
             <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
 
-                <!-- CHAPÉU DE CHEF -->
-                <Grid WidthRequest="110" HeightRequest="95" HorizontalOptions="Center">
-
-                    <!-- Nuvem esquerda -->
-                    <Ellipse WidthRequest="42" HeightRequest="42"
-                             Fill="White" Stroke="Black" StrokeThickness="3"
-                             HorizontalOptions="Start" VerticalOptions="Start"
-                             Margin="14,20,0,0"/>
-
-                    <!-- Nuvem direita -->
-                    <Ellipse WidthRequest="42" HeightRequest="42"
-                             Fill="White" Stroke="Black" StrokeThickness="3"
-                             HorizontalOptions="End" VerticalOptions="Start"
-                             Margin="0,20,14,0"/>
-
-                    <!-- Nuvem central -->
-                    <Ellipse WidthRequest="58" HeightRequest="58"
-                             Fill="White" Stroke="Black" StrokeThickness="3"
-                             HorizontalOptions="Center" VerticalOptions="Start"/>
-
-                    <!-- Faixa do chapéu -->
-                    <Border HeightRequest="40"
-                            Margin="14,0"
-                            VerticalOptions="End"
-                            BackgroundColor="White"
-                            Stroke="Black"
-                            StrokeThickness="3"
-                            StrokeShape="RoundRectangle 0,0,12,12"/>
-
-                </Grid>
-
                 <Label Text="CheefBook"
                        FontSize="32"
                        FontAttributes="Bold"

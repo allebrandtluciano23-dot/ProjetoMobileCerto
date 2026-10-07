@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ProjetoIntegradorMobile.Views.ExcluirReceitaPage"
+             BackgroundColor="White"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- CABEÇALHO -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="Auto,*"
+              Padding="30,50,30,0">
+
+            <Label Text="←"
+                   FontSize="28"
+                   TextColor="Black"
+                   VerticalOptions="Center">
+
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Voltar_Tapped"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+            <Label Grid.Column="1"
+                   Text="Receitas"
+                   FontSize="16"
+                   TextColor="Black"
+                   Margin="15,0,0,0"
+                   VerticalOptions="Center"/>
+
+        </Grid>
+
+
+        <!-- CONTEÚDO -->
+        <VerticalStackLayout Grid.Row="1"
+                             Padding="30,0,30,30"
+                             Spacing="20"
+                             VerticalOptions="Center">
+
+            <!-- Ícone -->
+            <Border WidthRequest="100"
+                    HeightRequest="100"
+                    StrokeThickness="0"
+                    BackgroundColor="#F3F3F3"
+                    HorizontalOptions="Center"
+                    StrokeShape="RoundRectangle 50">
+
+                <Label Text="🗑"
+                       FontSize="45"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </Border>
+
+            <!-- Textos -->
+            <VerticalStackLayout Spacing="10">
+
+                <Label Text="Excluir receita?"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       TextColor="Black"
+                       HorizontalOptions="Center"/>
+
+                <Label x:Name="lblMensagem"
+                       Text="Tem certeza que deseja excluir esta receita? Esta ação não pode ser desfeita."
+                       FontSize="14"
+                       TextColor="Gray"
+                       HorizontalTextAlignment="Center"
+                       HorizontalOptions="Center"/>
+
+            </VerticalStackLayout>
+
+            <!-- Mensagem de erro -->
+            <Label x:Name="lblErro"
+                   Text=""
+                   FontSize="13"
+                   TextColor="#D32F2F"
+                   HorizontalOptions="Center"
+                   IsVisible="False"/>
+
+            <!-- Botão excluir -->
+            <Border BackgroundColor="#D32F2F"
+                    StrokeThickness="0"
+                    HeightRequest="55"
+                    Margin="0,15,0,0"
+                    StrokeShape="RoundRectangle 18">
+
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Excluir_Tapped"/>
+                </Border.GestureRecognizers>
+
+                <Label Text="Excluir"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </Border>
+
+            <!-- Botão cancelar -->
+            <Border Stroke="#EEEEEE"
+                    StrokeThickness="1"
+                    BackgroundColor="#F3F3F3"
+                    HeightRequest="55"
+                    StrokeShape="RoundRectangle 18">
+
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Cancelar_Tapped"/>
+                </Border.GestureRecognizers>
+
+                <Label Text="Cancelar"
+                       FontSize="16"
+                       TextColor="Black"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </Border>
+
+        </VerticalStackLayout>
+
+    </Grid>
+
+</ContentPage>

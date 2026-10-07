@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ProjetoIntegradorMobile.Views.NovaReceitaPage"
+             BackgroundColor="White"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+
+        <VerticalStackLayout Padding="30,50,30,30" Spacing="18">
+
+            <!-- CABEÇALHO -->
+            <Grid ColumnDefinitions="Auto,*">
+
+                <Label Text="←"
+                       FontSize="28"
+                       TextColor="Black"
+                       VerticalOptions="Center">
+
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Voltar_Tapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+
+                <Label Grid.Column="1"
+                       Text="Nova receita"
+                       FontSize="21"
+                       FontAttributes="Bold"
+                       TextColor="Black"
+                       Margin="15,0,0,0"
+                       VerticalOptions="Center"/>
+
+            </Grid>
+
+
+            <!-- ADICIONAR FOTO -->
+            <Border Stroke="Gray"
+                    StrokeThickness="1"
+                    StrokeDashArray="4,4"
+                    BackgroundColor="White"
+                    HeightRequest="160"
+                    Margin="0,10,0,0"
+                    StrokeShape="RoundRectangle 18">
+
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="AdicionarFoto_Tapped"/>
+                </Border.GestureRecognizers>
+
+                <Grid>
+
+                    <!-- Foto escolhida -->
+                    <Image x:Name="imgReceita"
+                           Aspect="AspectFill"
+                           IsVisible="False"/>
+
+                    <!-- Texto padrão -->
+                    <VerticalStackLayout x:Name="stackFotoVazia"
+                                         Spacing="8"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="Center">
+
+                        <Label Text="📷"
+                               FontSize="34"
+                               HorizontalOptions="Center"/>
+
+                        <Label Text="Adicionar foto"
+                               FontSize="14"
+                               TextColor="Gray"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+
+                </Grid>
+            </Border>
+
+
+            <!-- NOME DA RECEITA -->
+            <Border Stroke="#EEEEEE"
+                    StrokeThickness="1"
+                    BackgroundColor="White"
+                    HeightRequest="55"
+                    StrokeShape="RoundRectangle 18"
+                    Padding="15,0">
+
+                <Grid ColumnDefinitions="Auto,*">
+
+                    <Label Text="⌕"
+                           FontSize="30"
+                           TextColor="Black"
+                           VerticalOptions="Center"/>
+
+                    <Entry Grid.Column="1"
+                           x:Name="nomeEntry"
+                           Placeholder="Nome da receita"
+                           PlaceholderColor="Gray"
+                           TextColor="Black"
+                           FontSize="14"
+                           VerticalOptions="Center"/>
+
+                </Grid>
+            </Border>
+
+
+            <!-- DESCRIÇÃO -->
+            <Border Stroke="#EEEEEE"
+                    StrokeThickness="1"
+                    BackgroundColor="White"
+                    HeightRequest="110"
+                    StrokeShape="RoundRectangle 18"
+                    Padding="15,5">
+
+                <Editor x:Name="descricaoEditor"
+                        Placeholder="Descrição"
+                        PlaceholderColor="Gray"
+                        TextColor="Black"
+                        FontSize="14"/>
+            </Border>
+
+
+            <!-- CATEGORIA E TEMPO DE PREPARO -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+
+                <!-- Categoria -->
+                <VerticalStackLayout Grid.Column="0" Spacing="5">
+
+                    <Label Text="Categoria"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="Black"/>
+
+                    <Border Stroke="#EEEEEE"
+                            StrokeThickness="1"
+                            BackgroundColor="White"
+                            HeightRequest="55"
+                            StrokeShape="RoundRectangle 18"
+                            Padding="15,0">
+
+                        <Picker x:Name="categoriaPicker"
+                                Title="Selecione"
+                                TitleColor="Gray"
+                                TextColor="Black"
+                                FontSize="14"
+                                VerticalOptions="Center"/>
+                    </Border>
+
+                </VerticalStackLayout>
+
+
+                <!-- Tempo de preparo -->
+                <VerticalStackLayout Grid.Column="1" Spacing="5">
+
+                    <Label Text="Tempo de preparo"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="Black"/>
+
+                    <Border Stroke="#EEEEEE"
+                            StrokeThickness="1"
+                            BackgroundColor="White"
+                            HeightRequest="55"
+                            StrokeShape="RoundRectangle 18"
+                            Padding="15,0">
+
+                        <TimePicker x:Name="tempoPicker"
+                                    Format="HH:mm"
+                                    Time="00:30:00"
+                                    TextColor="Black"
+                                    FontSize="14"
+                                    VerticalOptions="Center"/>
+                    </Border>
+
+                </VerticalStackLayout>
+
+            </Grid>
+
+
+            <!-- INGREDIENTES -->
+            <Label Text="Ingredientes"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   TextColor="Black"/>
+
+            <VerticalStackLayout x:Name="listaIngredientes" Spacing="10"/>
+
+            <Border Stroke="#EEEEEE"
+                    StrokeThickness="1"
+                    BackgroundColor="White"
+                    HeightRequest="55"
+                    StrokeShape="RoundRectangle 18"
+                    Padding="15,0">
+
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="AdicionarIngrediente_Tapped"/>
+                </Border.GestureRecognizers>
+
+                <Grid ColumnDefinitions="Auto,*">
+
+                    <Label Text="⊕"
+                           FontSize="24"
+                           TextColor="Black"
+                           VerticalOptions="Center"/>
+
+                    <Label Grid.Column="1"
+                           Text="Adicionar ingrediente"
+                           FontSize="14"
+                           TextColor="Gray"
+                           Margin="12,0,0,0"
+                           VerticalOptions="Center"/>
+
+                </Grid>
+            </Border>
+
+
+            <!-- MENSAGEM DE ERRO -->
+            <Label x:Name="lblErro"
+                   Text=""
+                   FontSize="13"
+                   TextColor="#D32F2F"
+                   HorizontalOptions="Center"
+                   IsVisible="False"/>
+
+
+            <!-- BOTÃO SALVAR -->
+            <Border BackgroundColor="Black"
+                    StrokeThickness="0"
+                    HeightRequest="55"
+                    Margin="0,10,0,0"
+                    StrokeShape="RoundRectangle 18">
+
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Salvar_Tapped"/>
+                </Border.GestureRecognizers>
+
+                <Label Text="Salvar receita"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </Border>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>

@@ -73,7 +73,6 @@
                 </Grid>
             </Border>
 
-
             <!-- E-MAIL -->
             <Border Stroke="#EEEEEE"
                     StrokeThickness="1"
@@ -100,34 +99,6 @@
 
                 </Grid>
             </Border>
-
-
-            <!-- USUÁRIO -->
-            <Border Stroke="#EEEEEE"
-                    StrokeThickness="1"
-                    BackgroundColor="White"
-                    HeightRequest="55"
-                    StrokeShape="RoundRectangle 18"
-                    Padding="15,0">
-
-                <Grid ColumnDefinitions="Auto,*">
-
-                    <Label Text="♙"
-                           FontSize="24"
-                           TextColor="Black"
-                           VerticalOptions="Center"/>
-
-                    <Entry Grid.Column="1"
-                           x:Name="usuarioEntry"
-                           Placeholder="Usuário"
-                           PlaceholderColor="Gray"
-                           TextColor="Black"
-                           FontSize="14"
-                           VerticalOptions="Center"/>
-
-                </Grid>
-            </Border>
-
 
             <!-- SENHA -->
             <Border Stroke="#EEEEEE"
@@ -224,7 +195,6 @@
                        VerticalOptions="Center"/>
             </Border>
 
-
             <!-- JÁ TEM CONTA -->
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
 
@@ -244,9 +214,6 @@
                 </Label>
 
             </HorizontalStackLayout>
-
         </VerticalStackLayout>
-
     </ScrollView>
-
 </ContentPage>
