@@ -51,3 +51,4 @@ public partial class NovaReceitaPage : ContentPage
     private void MostrarErro(string mensagem)
     {
     }
+}

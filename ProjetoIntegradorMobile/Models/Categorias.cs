@@ -2,12 +2,13 @@
 
 namespace ProjetoIntegradorMobile.Models
 {
+    [Table("categoria")]
     public class Categoria
     {
-        [PrimaryKey, AutoIncrement]
+        [PrimaryKey, AutoIncrement, Column("id_categoria")]
         public int IdCategoria { get; set; }
 
-        [NotNull, Unique]
+        [NotNull, Unique, Column("nome")]
         public string Nome { get; set; } = string.Empty;
     }
 }

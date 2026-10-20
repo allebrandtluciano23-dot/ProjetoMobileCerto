@@ -11,6 +11,9 @@ namespace ProjetoIntegradorMobile
             Routing.RegisterRoute(nameof(BuscarPage), typeof(BuscarPage));
             Routing.RegisterRoute(nameof(FavoritosPage), typeof(FavoritosPage));
             Routing.RegisterRoute(nameof(PerfilPage), typeof(PerfilPage));
+            Routing.RegisterRoute(nameof(EntradaPage), typeof(EntradaPage));
+            Routing.RegisterRoute(nameof(CadastroPage), typeof(CadastroPage));
+
         }
     }
 }

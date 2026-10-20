@@ -2,14 +2,16 @@
 
 namespace ProjetoIntegradorMobile.Models
 {
+    [Table("ingrediente")]
     public class Ingrediente
     {
-        [PrimaryKey, AutoIncrement]
+        [PrimaryKey, AutoIncrement, Column("id_ingrediente")]
         public int IdIngrediente { get; set; }
 
-        [NotNull, Unique]
+        [NotNull, Unique, Column("nome")]
         public string Nome { get; set; } = string.Empty;
 
-        public string UnidadePadrao { get; set; } = string.Empty;
+        [Column("unidade_padrao")]
+        public string? UnidadePadrao { get; set; }
     }
 }

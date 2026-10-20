@@ -7,15 +7,15 @@
 
     <Grid RowDefinitions="Auto,*,Auto">
 
-        <!-- CABEÇALHO -->
+        <!-- CABEÇALHO parte pessoal -->
         <VerticalStackLayout Grid.Row="0"
                              Padding="20,15,20,5"
                              Spacing="15">
 
-            <!-- Saudação -->
+            <!-- Saudação ola-->
             <Grid ColumnDefinitions="Auto,*,Auto">
 
-                <!-- Foto do usuário -->
+                <!-- Foto do usuário com border???-->
                 <Border WidthRequest="48"
                         HeightRequest="48"
                         StrokeThickness="0"
@@ -42,7 +42,7 @@
                            TextColor="Gray"/>
                 </VerticalStackLayout>
 
-                <!-- Botão menu -->
+                <!-- Botão menu para busca-->
                 <Border Grid.Column="2"
                         WidthRequest="45"
                         HeightRequest="45"
@@ -61,7 +61,7 @@
             </Grid>
 
 
-            <!-- BARRA DE PESQUISA -->
+            <!-- BARRA DE PESQUISA para busca tbmm -->
             <Border Stroke="#EEEEEE"
                     StrokeThickness="1"
                     BackgroundColor="White"
@@ -95,7 +95,7 @@
             </Border>
 
 
-            <!-- CATEGORIAS -->
+            <!-- CATEGORIAS divididas, decidir layout -->
             <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
 
                 <HorizontalStackLayout Spacing="10">
@@ -138,12 +138,12 @@
         </VerticalStackLayout>
 
 
-        <!-- CONTEÚDO -->
+        <!-- CONTEÚDO implementar no back-->
         <ScrollView Grid.Row="1">
 
             <VerticalStackLayout Padding="20,10,20,20" Spacing="15">
 
-                <!-- POPULARES -->
+                <!-- POPULARES fazer no back sugerir oq mais sai -->
                 <Label Text="Populares hoje"
                        FontSize="21"
                        FontAttributes="Bold"
@@ -201,7 +201,7 @@
                 </ScrollView>
 
 
-                <!-- DESTAQUE DA SEMANA -->
+                <!-- DESTAQUE DA SEMANA mesma coisa de qual mais sair  -->
                 <Label Text="Destaques da semana"
                        FontSize="21"
                        FontAttributes="Bold"
@@ -250,7 +250,7 @@
         </ScrollView>
 
 
-        <!-- MENU INFERIOR -->
+        <!-- MENU INFERIOR pra navegação-->
         <Border Grid.Row="2" BackgroundColor="White" Stroke="#EEEEEE" StrokeThickness="1" Padding="5,8">
 
             <Grid ColumnDefinitions="*,*,*,*">

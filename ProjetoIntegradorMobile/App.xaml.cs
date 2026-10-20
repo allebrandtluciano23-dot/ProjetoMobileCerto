@@ -1,4 +1,6 @@
 ﻿
+using ProjetoIntegradorMobile.Views;
+
 namespace ProjetoIntegradorMobile
 {
     public partial class App : Application

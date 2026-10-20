@@ -1,4 +1,5 @@
-﻿using ProjetoIntegradorMobile.Views;
+﻿using ProjetoIntegradorMobile.Helpers;
+using ProjetoIntegradorMobile.Views;
 
 namespace ProjetoIntegradorMobile.Views
 {
@@ -25,7 +26,10 @@ namespace ProjetoIntegradorMobile.Views
 
         private async void Perfil_Tapped(object sender, TappedEventArgs e)
         {
-            await Shell.Current.GoToAsync(nameof(PerfilPage));
+            if (SessaoUsuario.EstaLogado)
+                await Shell.Current.GoToAsync(nameof(PerfilPage));
+            else
+                await Shell.Current.GoToAsync(nameof(EntradaPage));
         }
     }
 }

@@ -2,21 +2,23 @@
 
 namespace ProjetoIntegradorMobile.Models
 {
+    [Table("usuario")]
     public class Usuario
     {
-        [PrimaryKey, AutoIncrement]
+        [PrimaryKey, AutoIncrement, Column("id_usuario")]
         public int IdUsuario { get; set; }
 
-        [NotNull]
+        [NotNull, Column("nome")]
         public string Nome { get; set; } = string.Empty;
 
-        [NotNull, Unique]
+        [NotNull, Unique, Column("email")]
         public string Email { get; set; } = string.Empty;
 
-        [NotNull]
+        [NotNull, Column("senha_hash")]
         public string SenhaHash { get; set; } = string.Empty;
 
-        [NotNull]
-        public string DataCadastro { get; set; } = string.Empty;
+        // Mesmo formato do datetime('now') do SQLite (UTC)
+        [NotNull, Column("data_cadastro")]
+        public string DataCadastro { get; set; } = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
     }
 }
