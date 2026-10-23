@@ -1,9 +1,12 @@
+using ProjetoIntegradorMobile.DAO;
 using ProjetoIntegradorMobile.Helpers;
 
 namespace ProjetoIntegradorMobile.Views;
 
 public partial class CadastroPage : ContentPage
 {
+    UsuarioDAO usuarioDAO = new UsuarioDAO();
+
     public CadastroPage()
     {
         InitializeComponent();
@@ -17,7 +20,7 @@ public partial class CadastroPage : ContentPage
     private void MostrarSenha_Tapped(object sender, TappedEventArgs e)
     {
         senhaEntry.IsPassword = !senhaEntry.IsPassword;
-        lblOlho.Text = senhaEntry.IsPassword ? "👁" : "🙈";
+        imgOlho.Source = senhaEntry.IsPassword ? "eye_off.png" : "eye.png";
     }
 
     private async void Cadastrar_Tapped(object sender, TappedEventArgs e)
@@ -47,7 +50,7 @@ public partial class CadastroPage : ContentPage
             return;
         }
 
-        var usuario = await DatabaseConfig.Database.CadastrarUsuarioAsync(nome, email, senha);
+        var usuario = await usuarioDAO.CadastrarAsync(nome, email, senha);
         if (usuario == null)
         {
             MostrarErro("Já existe uma conta com esse e-mail.");

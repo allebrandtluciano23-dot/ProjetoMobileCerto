@@ -26,6 +26,9 @@ namespace ProjetoIntegradorMobile.Models
         [Column("porcoes")]
         public int? Porcoes { get; set; }
 
+        [Column("favorita")]
+        public bool Favorita { get; set; }
+
         [NotNull, Column("data_criacao")]
         public string DataCriacao { get; set; } = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
     }

@@ -1,9 +1,12 @@
+using ProjetoIntegradorMobile.DAO;
 using ProjetoIntegradorMobile.Helpers;
 
 namespace ProjetoIntegradorMobile.Views;
 
 public partial class EntradaPage : ContentPage
 {
+    UsuarioDAO usuarioDAO = new UsuarioDAO();
+
     public EntradaPage()
     {
         InitializeComponent();
@@ -12,7 +15,7 @@ public partial class EntradaPage : ContentPage
     private void MostrarSenha_Tapped(object sender, TappedEventArgs e)
     {
         senhaEntry.IsPassword = !senhaEntry.IsPassword;
-        lblOlho.Text = senhaEntry.IsPassword ? "👁" : "🙈";
+        imgOlho.Source = senhaEntry.IsPassword ? "eye_off.png" : "eye.png";
     }
 
     private async void EsqueceuSenha_Tapped(object sender, TappedEventArgs e)
@@ -33,7 +36,7 @@ public partial class EntradaPage : ContentPage
             return;
         }
 
-        var usuario = await DatabaseConfig.Database.AutenticarAsync(email, senha);
+        var usuario = await usuarioDAO.AutenticarAsync(email, senha);
         if (usuario == null)
         {
             MostrarErro("E-mail ou senha inválidos.");

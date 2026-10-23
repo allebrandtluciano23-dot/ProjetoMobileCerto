@@ -18,13 +18,14 @@ namespace ProjetoIntegradorMobile.Data
         // acessar o banco, então não há problema se uma tela consultar antes do App terminar.
         public Task Inicializar() => _inicializacao ??= CriarTabelas();
 
-        private async Task<SQLiteAsyncConnection> Conexao()
+        // Usado pelos DAOs: garante que as tabelas existem e devolve a conexão
+        public async Task<SQLiteAsyncConnection> Conexao()
         {
             await Inicializar();
             return _database;
         }
 
-        private static string Agora() => DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+        public static string Agora() => DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
 
         private async Task CriarTabelas()
         {
@@ -69,6 +70,7 @@ namespace ProjetoIntegradorMobile.Data
                     modo_preparo TEXT NOT NULL,
                     tempo_preparo_min INTEGER,
                     porcoes INTEGER,
+                    favorita INTEGER NOT NULL DEFAULT 0,
                     data_criacao TEXT NOT NULL DEFAULT (datetime('now')),
 
                     FOREIGN KEY (id_usuario)
@@ -80,6 +82,18 @@ namespace ProjetoIntegradorMobile.Data
                         ON DELETE SET NULL
                 );
             ");
+
+            // Bancos criados antes da coluna "favorita" existir: adiciona a coluna.
+            // Se ela já existir, o SQLite dá erro de coluna duplicada e só ignoramos.
+            try
+            {
+                await _database.ExecuteAsync(
+                    "ALTER TABLE receita ADD COLUMN favorita INTEGER NOT NULL DEFAULT 0;");
+            }
+            catch (SQLiteException)
+            {
+                // coluna já existe
+            }
 
             // RECEITA_INGREDIENTE
             await _database.ExecuteAsync(@"
@@ -293,280 +307,7 @@ namespace ProjetoIntegradorMobile.Data
             }
         }
 
-        // =====================================================================
-        // USUÁRIO
-        // =====================================================================
-
-        /// <summary>
-        /// Cadastra um usuário guardando a senha com hash.
-        /// Retorna null se o e-mail já estiver cadastrado.
-        /// </summary>
-        public async Task<Usuario?> CadastrarUsuarioAsync(string nome, string email, string senha)
-        {
-            var db = await Conexao();
-            email = email.Trim().ToLowerInvariant();
-
-            if (await EmailExisteAsync(email))
-                return null;
-
-            var usuario = new Usuario
-            {
-                Nome = nome.Trim(),
-                Email = email,
-                SenhaHash = SenhaHelper.GerarHash(senha),
-                DataCadastro = Agora()
-            };
-
-            await db.InsertAsync(usuario); // preenche usuario.IdUsuario
-            return usuario;
-        }
-
-        /// <summary>
-        /// Confere e-mail e senha. Retorna o usuário se estiverem corretos, senão null.
-        /// </summary>
-        public async Task<Usuario?> AutenticarAsync(string email, string senha)
-        {
-            var usuario = await BuscarUsuarioPorEmailAsync(email);
-            if (usuario == null || !SenhaHelper.Verificar(senha, usuario.SenhaHash))
-                return null;
-            return usuario;
-        }
-
-        public async Task<Usuario?> BuscarUsuarioPorEmailAsync(string email)
-        {
-            var db = await Conexao();
-            email = email.Trim().ToLowerInvariant();
-            return await db.Table<Usuario>().FirstOrDefaultAsync(u => u.Email == email);
-        }
-
-        public async Task<Usuario?> BuscarUsuarioPorIdAsync(int idUsuario)
-        {
-            var db = await Conexao();
-            return await db.FindAsync<Usuario>(idUsuario);
-        }
-
-        public async Task<bool> EmailExisteAsync(string email)
-        {
-            var db = await Conexao();
-            email = email.Trim().ToLowerInvariant();
-            return await db.Table<Usuario>().CountAsync(u => u.Email == email) > 0;
-        }
-
-        public async Task<int> AtualizarUsuarioAsync(Usuario usuario)
-        {
-            var db = await Conexao();
-            return await db.UpdateAsync(usuario);
-        }
-
-        public async Task<bool> AlterarSenhaAsync(int idUsuario, string senhaAtual, string novaSenha)
-        {
-            var db = await Conexao();
-            var usuario = await db.FindAsync<Usuario>(idUsuario);
-            if (usuario == null || !SenhaHelper.Verificar(senhaAtual, usuario.SenhaHash))
-                return false;
-
-            usuario.SenhaHash = SenhaHelper.GerarHash(novaSenha);
-            await db.UpdateAsync(usuario);
-            return true;
-        }
-
-        // Apaga o usuário e, em cascata, tudo dele (receitas, planos, refeições...)
-        public async Task<int> ExcluirUsuarioAsync(int idUsuario)
-        {
-            var db = await Conexao();
-            return await db.DeleteAsync<Usuario>(idUsuario);
-        }
-
-        // =====================================================================
-        // CATEGORIA
-        // =====================================================================
-
-        public async Task<List<Categoria>> ListarCategoriasAsync()
-        {
-            var db = await Conexao();
-            return await db.Table<Categoria>().OrderBy(c => c.Nome).ToListAsync();
-        }
-
-        public async Task<Categoria?> BuscarCategoriaPorNomeAsync(string nome)
-        {
-            var db = await Conexao();
-            nome = nome.Trim();
-            return await db.Table<Categoria>().FirstOrDefaultAsync(c => c.Nome == nome);
-        }
-
-        public async Task<Categoria> ObterOuCriarCategoriaAsync(string nome)
-        {
-            var existente = await BuscarCategoriaPorNomeAsync(nome);
-            if (existente != null)
-                return existente;
-
-            var db = await Conexao();
-            var categoria = new Categoria { Nome = nome.Trim() };
-            await db.InsertAsync(categoria);
-            return categoria;
-        }
-
-        // =====================================================================
-        // INGREDIENTE
-        // =====================================================================
-
-        public async Task<List<Ingrediente>> ListarIngredientesAsync()
-        {
-            var db = await Conexao();
-            return await db.Table<Ingrediente>().OrderBy(i => i.Nome).ToListAsync();
-        }
-
-        public async Task<Ingrediente?> BuscarIngredientePorNomeAsync(string nome)
-        {
-            var db = await Conexao();
-            nome = nome.Trim();
-            return await db.Table<Ingrediente>().FirstOrDefaultAsync(i => i.Nome == nome);
-        }
-
-        public async Task<Ingrediente> ObterOuCriarIngredienteAsync(string nome, string? unidadePadrao = null)
-        {
-            var existente = await BuscarIngredientePorNomeAsync(nome);
-            if (existente != null)
-                return existente;
-
-            var db = await Conexao();
-            var ingrediente = new Ingrediente { Nome = nome.Trim(), UnidadePadrao = unidadePadrao };
-            await db.InsertAsync(ingrediente);
-            return ingrediente;
-        }
-
-        // =====================================================================
-        // RECEITA
-        // =====================================================================
-
-        public async Task<int> InserirReceitaAsync(Receita receita)
-        {
-            var db = await Conexao();
-            if (string.IsNullOrEmpty(receita.DataCriacao))
-                receita.DataCriacao = Agora();
-            await db.InsertAsync(receita); // preenche receita.IdReceita
-            return receita.IdReceita;
-        }
-
-        /// <summary>
-        /// Salva a receita e os ingredientes de uma vez (se algo falhar, nada é salvo).
-        /// Ingredientes que ainda não existem são criados automaticamente.
-        /// </summary>
-        public async Task<int> SalvarReceitaComIngredientesAsync(
-            Receita receita,
-            IEnumerable<(string Nome, double Quantidade, string? Unidade)> ingredientes)
-        {
-            var db = await Conexao();
-            if (string.IsNullOrEmpty(receita.DataCriacao))
-                receita.DataCriacao = Agora();
-
-            await db.RunInTransactionAsync(conn =>
-            {
-                conn.Insert(receita);
-
-                foreach (var item in ingredientes)
-                {
-                    var nome = item.Nome.Trim();
-                    var ingrediente = conn.Table<Ingrediente>().FirstOrDefault(i => i.Nome == nome);
-                    if (ingrediente == null)
-                    {
-                        ingrediente = new Ingrediente { Nome = nome, UnidadePadrao = item.Unidade };
-                        conn.Insert(ingrediente);
-                    }
-
-                    conn.Execute(
-                        "INSERT OR REPLACE INTO receita_ingrediente (id_receita, id_ingrediente, quantidade, unidade) VALUES (?, ?, ?, ?)",
-                        receita.IdReceita, ingrediente.IdIngrediente, item.Quantidade, item.Unidade);
-                }
-            });
-
-            return receita.IdReceita;
-        }
-
-        public async Task<int> AtualizarReceitaAsync(Receita receita)
-        {
-            var db = await Conexao();
-            return await db.UpdateAsync(receita);
-        }
-
-        // Apaga a receita e, em cascata, ingredientes, adaptações, refeições e sugestões ligadas a ela
-        public async Task<int> ExcluirReceitaAsync(int idReceita)
-        {
-            var db = await Conexao();
-            return await db.DeleteAsync<Receita>(idReceita);
-        }
-
-        public async Task<Receita?> BuscarReceitaPorIdAsync(int idReceita)
-        {
-            var db = await Conexao();
-            return await db.FindAsync<Receita>(idReceita);
-        }
-
-        public async Task<List<Receita>> ListarReceitasAsync()
-        {
-            var db = await Conexao();
-            return await db.QueryAsync<Receita>(
-                "SELECT * FROM receita ORDER BY data_criacao DESC");
-        }
-
-        public async Task<List<Receita>> ListarReceitasPorUsuarioAsync(int idUsuario)
-        {
-            var db = await Conexao();
-            return await db.QueryAsync<Receita>(
-                "SELECT * FROM receita WHERE id_usuario = ? ORDER BY data_criacao DESC", idUsuario);
-        }
-
-        public async Task<List<Receita>> ListarReceitasPorCategoriaAsync(int idCategoria)
-        {
-            var db = await Conexao();
-            return await db.QueryAsync<Receita>(
-                "SELECT * FROM receita WHERE id_categoria = ? ORDER BY titulo", idCategoria);
-        }
-
-        /// <summary>Busca receitas pelo título ou por um ingrediente que elas usam.</summary>
-        public async Task<List<Receita>> BuscarReceitasAsync(string texto)
-        {
-            var db = await Conexao();
-            var termo = "%" + texto.Trim() + "%";
-            return await db.QueryAsync<Receita>(@"
-                SELECT DISTINCT r.* FROM receita r
-                LEFT JOIN receita_ingrediente ri ON ri.id_receita = r.id_receita
-                LEFT JOIN ingrediente i ON i.id_ingrediente = ri.id_ingrediente
-                WHERE r.titulo LIKE ? OR i.nome LIKE ?
-                ORDER BY r.titulo", termo, termo);
-        }
-
-        // =====================================================================
-        // INGREDIENTES DA RECEITA
-        // =====================================================================
-
-        public async Task AdicionarIngredienteNaReceitaAsync(int idReceita, int idIngrediente, double quantidade, string? unidade)
-        {
-            var db = await Conexao();
-            await db.ExecuteAsync(
-                "INSERT OR REPLACE INTO receita_ingrediente (id_receita, id_ingrediente, quantidade, unidade) VALUES (?, ?, ?, ?)",
-                idReceita, idIngrediente, quantidade, unidade);
-        }
-
-        public async Task RemoverIngredienteDaReceitaAsync(int idReceita, int idIngrediente)
-        {
-            var db = await Conexao();
-            await db.ExecuteAsync(
-                "DELETE FROM receita_ingrediente WHERE id_receita = ? AND id_ingrediente = ?",
-                idReceita, idIngrediente);
-        }
-
-        public async Task<List<IngredienteDaReceita>> ListarIngredientesDaReceitaAsync(int idReceita)
-        {
-            var db = await Conexao();
-            return await db.QueryAsync<IngredienteDaReceita>(@"
-                SELECT i.id_ingrediente AS IdIngrediente, i.nome AS Nome,
-                       ri.quantidade AS Quantidade, ri.unidade AS Unidade
-                FROM receita_ingrediente ri
-                JOIN ingrediente i ON i.id_ingrediente = ri.id_ingrediente
-                WHERE ri.id_receita = ?
-                ORDER BY i.nome", idReceita);
-        }
+        // Usuário, categoria, ingrediente e receita: ver a pasta DAO
 
         // =====================================================================
         // RECEITA PERSONALIZADA (adaptação de uma receita por um usuário)

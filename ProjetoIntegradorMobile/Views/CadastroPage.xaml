@@ -37,12 +37,6 @@
                            TextColor="Gray"/>
                 </VerticalStackLayout>
 
-                <Label Grid.Column="1"
-                       Text="🍃"
-                       FontSize="45"
-                       Margin="10,0,0,0"
-                       VerticalOptions="Center"/>
-
             </Grid>
 
 
@@ -55,11 +49,6 @@
                     Padding="15,0">
 
                 <Grid ColumnDefinitions="Auto,*">
-
-                    <Label Text="♙"
-                           FontSize="24"
-                           TextColor="Black"
-                           VerticalOptions="Center"/>
 
                     <Entry Grid.Column="1"
                            x:Name="nomeEntry"
@@ -82,12 +71,7 @@
                     Padding="15,0">
 
                 <Grid ColumnDefinitions="Auto,*">
-
-                    <Label Text="✉"
-                           FontSize="22"
-                           TextColor="Black"
-                           VerticalOptions="Center"/>
-
+                    
                     <Entry Grid.Column="1"
                            x:Name="emailEntry"
                            Placeholder="E-mail"
@@ -102,39 +86,35 @@
 
             <!-- SENHA -->
             <Border Stroke="#EEEEEE"
-                    StrokeThickness="1"
-                    BackgroundColor="White"
-                    HeightRequest="55"
-                    StrokeShape="RoundRectangle 18"
-                    Padding="15,0">
+                StrokeThickness="1"
+                BackgroundColor="White"
+                HeightRequest="55"
+                StrokeShape="RoundRectangle 18"
+                Padding="15,0">
 
                 <Grid ColumnDefinitions="Auto,*,Auto">
 
-                    <Label Text="🔒"
-                           FontSize="18"
-                           VerticalOptions="Center"/>
-
                     <Entry Grid.Column="1"
-                           x:Name="senhaEntry"
-                           Placeholder="Senha"
-                           PlaceholderColor="Gray"
-                           TextColor="Black"
-                           FontSize="14"
-                           IsPassword="True"
-                           VerticalOptions="Center"/>
+                    x:Name="senhaEntry"
+                    Placeholder="Senha"
+                    PlaceholderColor="Gray"
+                    TextColor="Black"
+                    FontSize="14"
+                    IsPassword="True"
+                    VerticalOptions="Center"/>
 
                     <!-- Mostrar / ocultar senha -->
-                    <Label Grid.Column="2"
-                           x:Name="lblOlho"
-                           Text="👁"
-                           FontSize="20"
-                           TextColor="Black"
-                           VerticalOptions="Center">
+                    <Image Grid.Column="2"
+                    x:Name="imgOlho"
+                    Source="eye_off.png"
+                    WidthRequest="24"
+                    HeightRequest="24"
+                    VerticalOptions="Center">
 
-                        <Label.GestureRecognizers>
+                        <Image.GestureRecognizers>
                             <TapGestureRecognizer Tapped="MostrarSenha_Tapped"/>
-                        </Label.GestureRecognizers>
-                    </Label>
+                        </Image.GestureRecognizers>
+                    </Image>
 
                 </Grid>
             </Border>
@@ -149,10 +129,6 @@
                     Padding="15,0">
 
                 <Grid ColumnDefinitions="Auto,*">
-
-                    <Label Text="🔒"
-                           FontSize="18"
-                           VerticalOptions="Center"/>
 
                     <Entry Grid.Column="1"
                            x:Name="confirmarSenhaEntry"

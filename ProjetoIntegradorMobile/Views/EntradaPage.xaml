@@ -37,12 +37,7 @@
                     Padding="15,0">
 
                 <Grid ColumnDefinitions="Auto,*">
-
-                    <Label Text="♙"
-                           FontSize="24"
-                           TextColor="Black"
-                           VerticalOptions="Center"/>
-
+                    
                     <Entry Grid.Column="1"
                            x:Name="usuarioEntry"
                            Placeholder="Usuário ou e-mail"
@@ -58,39 +53,35 @@
 
             <!-- CAMPO SENHA -->
             <Border Stroke="#EEEEEE"
-                    StrokeThickness="1"
-                    BackgroundColor="White"
-                    HeightRequest="55"
-                    StrokeShape="RoundRectangle 18"
-                    Padding="15,0">
+            StrokeThickness="1"
+            BackgroundColor="White"
+            HeightRequest="55"
+            StrokeShape="RoundRectangle 18"
+            Padding="15,0">
 
                 <Grid ColumnDefinitions="Auto,*,Auto">
-
-                    <Label Text="🔒"
-                           FontSize="18"
-                           VerticalOptions="Center"/>
-
+                    
                     <Entry Grid.Column="1"
-                           x:Name="senhaEntry"
-                           Placeholder="Senha"
-                           PlaceholderColor="Gray"
-                           TextColor="Black"
-                           FontSize="14"
-                           IsPassword="True"
-                           VerticalOptions="Center"/>
+                        x:Name="senhaEntry"
+                        Placeholder="Senha"
+                        PlaceholderColor="Gray"
+                        TextColor="Black"
+                        FontSize="14"
+                        IsPassword="True"
+                        VerticalOptions="Center"/>
 
                     <!-- Mostrar / ocultar senha -->
-                    <Label Grid.Column="2"
-                           x:Name="lblOlho"
-                           Text="👁"
-                           FontSize="20"
-                           TextColor="Black"
-                           VerticalOptions="Center">
-
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="MostrarSenha_Tapped"/>
-                        </Label.GestureRecognizers>
-                    </Label>
+                    <Image Grid.Column="2"
+                        x:Name="imgOlho"
+                        Source="eye_off.png"
+                        WidthRequest="24"
+                        HeightRequest="24"
+                        VerticalOptions="Center">
+                        
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="MostrarSenha_Tapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
 
                 </Grid>
             </Border>
@@ -98,18 +89,6 @@
 
             <!-- LEMBRAR DE MIM / ESQUECEU A SENHA -->
             <Grid ColumnDefinitions="*,Auto">
-
-                <HorizontalStackLayout Spacing="5">
-
-                    <CheckBox x:Name="chkLembrar"
-                              Color="Black"
-                              VerticalOptions="Center"/>
-
-                    <Label Text="Lembrar de mim"
-                           FontSize="13"
-                           TextColor="Black"
-                           VerticalOptions="Center"/>
-                </HorizontalStackLayout>
 
                 <Label Grid.Column="1"
                        Text="Esqueceu sua senha?"
