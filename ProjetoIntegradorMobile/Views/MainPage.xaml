@@ -3,6 +3,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProjetoIntegradorMobile.Views.MainPage"
+             xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
+             xmlns:models="clr-namespace:ProjetoIntegradorMobile.Models"
+             x:DataType="vm:MainViewModel"
              BackgroundColor="White">
 
     <Grid RowDefinitions="Auto,*,Auto">
@@ -32,7 +35,7 @@
                                      Margin="12,0,0,0"
                                      VerticalOptions="Center">
 
-                    <Label Text="Olá, Chefe!"
+                    <Label Text="{Binding Saudacao}"
                            FontSize="18"
                            FontAttributes="Bold"
                            TextColor="Black"/>
@@ -78,6 +81,7 @@
 
                     <Entry Grid.Column="1"
                            x:Name="searchEntry"
+                           Text="{Binding Filtro}"
                            Placeholder="Buscar receitas"
                            PlaceholderColor="Gray"
                            TextColor="Black"
@@ -98,34 +102,48 @@
             <!-- CATEGORIAS divididas, decidir layout -->
             <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
 
-                <HorizontalStackLayout Spacing="10">
+                <HorizontalStackLayout x:Name="hsCategorias" Spacing="10">
 
-                    <Border BackgroundColor="#F3F3F3" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
+                    <Border BackgroundColor="Black" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Categoria_Tapped" CommandParameter="Todos"/>
+                        </Border.GestureRecognizers>
 
                         <Label Text="Todos"
-                               TextColor="Black"
-                               FontAttributes="Bold"/>
+                               TextColor="White" FontAttributes="Bold"/>
                     </Border>
 
                     <Border BackgroundColor="#F3F3F3" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Categoria_Tapped" CommandParameter="Rápidos"/>
+                        </Border.GestureRecognizers>
 
                         <Label Text="Rápidos"
                                TextColor="Black"/>
                     </Border>
 
                     <Border BackgroundColor="#F3F3F3" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Categoria_Tapped" CommandParameter="Almoço"/>
+                        </Border.GestureRecognizers>
 
                         <Label Text="Almoço"
                                TextColor="Black"/>
                     </Border>
 
                     <Border BackgroundColor="#F3F3F3" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Categoria_Tapped" CommandParameter="Jantar"/>
+                        </Border.GestureRecognizers>
 
                         <Label Text="Jantar"
                                TextColor="Black"/>
                     </Border>
 
                     <Border BackgroundColor="#F3F3F3" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Categoria_Tapped" CommandParameter="Sobremesas"/>
+                        </Border.GestureRecognizers>
 
                         <Label Text="Sobremesas"
                                TextColor="Black"/>
@@ -138,116 +156,90 @@
         </VerticalStackLayout>
 
 
-        <!-- CONTEÚDO implementar no back-->
-        <ScrollView Grid.Row="1">
+        <!-- CONTEÚDO: receitas do banco, filtradas pela busca e pela categoria -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,Auto,*" Padding="20,10,20,0">
 
-            <VerticalStackLayout Padding="20,10,20,20" Spacing="15">
+            <Label Grid.Row="0"
+                   Text="Receitas"
+                   FontSize="21"
+                   FontAttributes="Bold"
+                   TextColor="Black"
+                   Margin="0,0,0,10"/>
 
-                <!-- POPULARES fazer no back sugerir oq mais sai -->
-                <Label Text="Populares hoje"
-                       FontSize="21"
-                       FontAttributes="Bold"
-                       TextColor="Black"/>
+            <!-- Mensagem de erro (só aparece se o banco falhar) -->
+            <Label Grid.Row="1"
+                   Text="{Binding MensagemErro}"
+                   IsVisible="{Binding TemErro}"
+                   FontSize="13"
+                   TextColor="#D32F2F"
+                   Margin="0,0,0,10"/>
 
+            <CollectionView Grid.Row="2"
+                            x:Name="cvReceitas"
+                            ItemsSource="{Binding Receitas}"
+                            SelectionMode="None">
 
-                <!-- Cards populares EX ((implementar no back isso) -->
-                <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="12"/>
+                </CollectionView.ItemsLayout>
 
-                    <HorizontalStackLayout Spacing="15">
+                <!-- Aparece quando não há receita (banco vazio ou filtro sem resultado) -->
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="0,40" Spacing="5">
+                        <Label Text="🍽"
+                               FontSize="40"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Nenhuma receita encontrada."
+                               FontSize="15"
+                               TextColor="Gray"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
 
-                        <!-- Receita 1 EX -->
-                        <VerticalStackLayout WidthRequest="230" Spacing="5">
+                <!-- Card de cada receita -->
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:ReceitaResumo">
 
-                            <Border HeightRequest="160" StrokeThickness="0" StrokeShape="RoundRectangle 15">
+                        <Border Stroke="#EEEEEE"
+                                StrokeThickness="1"
+                                BackgroundColor="White"
+                                StrokeShape="RoundRectangle 18"
+                                Padding="15">
 
-                                <Image Source="frango.png"
-                                       Aspect="AspectFill"/>
-                            </Border>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
 
-                            <Label Text="Frango com molho"
-                                   FontSize="16"
-                                   FontAttributes="Bold"
-                                   TextColor="Black"/>
+                                <VerticalStackLayout Grid.Column="0" Spacing="3">
 
-                            <Label Text="Fácil e delicioso"
-                                   FontSize="13"
-                                   TextColor="Gray"/>
+                                    <Label Text="{Binding Titulo}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="Black"/>
 
-                        </VerticalStackLayout>
+                                    <Label Text="{Binding NomeCategoria}"
+                                           FontSize="13"
+                                           TextColor="Gray"/>
 
+                                    <Label Text="{Binding Detalhes}"
+                                           FontSize="12"
+                                           TextColor="Gray"/>
+                                </VerticalStackLayout>
 
-                        <!-- Receita 2 EX -->
-                        <VerticalStackLayout WidthRequest="230" Spacing="5">
-
-                            <Border HeightRequest="160" StrokeThickness="0" StrokeShape="RoundRectangle 15">
-
-                                <Image Source="legumes.png"
-                                       Aspect="AspectFill"/>
-                            </Border>
-
-                            <Label Text="Legumes salteados"
-                                   FontSize="16"
-                                   FontAttributes="Bold"
-                                   TextColor="Black"/>
-
-                            <Label Text="Colorido e saudável"
-                                   FontSize="13"
-                                   TextColor="Gray"/>
-
-                        </VerticalStackLayout>
-
-                    </HorizontalStackLayout>
-
-                </ScrollView>
-
-
-                <!-- DESTAQUE DA SEMANA mesma coisa de qual mais sair  -->
-                <Label Text="Destaques da semana"
-                       FontSize="21"
-                       FontAttributes="Bold"
-                       TextColor="Black"
-                       Margin="0,10,0,0"/>
-
-
-                <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
-                    <!-- Receita 3 EX -->
-                    <VerticalStackLayout Grid.Column="0" Spacing="5">
-
-                        <Border HeightRequest="130" StrokeThickness="0" StrokeShape="RoundRectangle 15">
-
-                            <Image Source="macarrao.png"
-                                   Aspect="AspectFill"/>
+                                <!-- Coração só nas receitas marcadas como favoritas -->
+                                <Label Grid.Column="1"
+                                       Text="♥"
+                                       FontSize="22"
+                                       TextColor="#D32F2F"
+                                       VerticalOptions="Center"
+                                       IsVisible="{Binding Favorita}"/>
+                            </Grid>
                         </Border>
 
-                        <Label Text="Macarrão cremoso"
-                               FontSize="15"
-                               FontAttributes="Bold"
-                               TextColor="Black"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
 
-                    </VerticalStackLayout>
+            </CollectionView>
 
-
-  
-                    <VerticalStackLayout Grid.Column="1" Spacing="5">
-
-                        <Border HeightRequest="130" StrokeThickness="0" StrokeShape="RoundRectangle 15">
-
-                            <Image Source="ramen.png"
-                                   Aspect="AspectFill"/>
-                        </Border>
-
-                        <Label Text="Ramen especial"
-                               FontSize="15"
-                               FontAttributes="Bold"
-                               TextColor="Black"/>
-
-                    </VerticalStackLayout>
-
-                </Grid>
-
-            </VerticalStackLayout>
-
-        </ScrollView>
+        </Grid>
 
 
         <!-- MENU INFERIOR pra navegação-->

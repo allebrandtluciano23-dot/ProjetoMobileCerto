@@ -305,6 +305,9 @@ namespace ProjetoIntegradorMobile.Data
                 await _database.ExecuteAsync(
                     "INSERT OR IGNORE INTO categoria (nome) VALUES (?)", nome);
             }
+
+            // RECEITAS DE EXEMPLO (só na primeira vez que o app abre)
+            await DadosExemplo.InserirAsync(_database);
         }
 
         // Usuário, categoria, ingrediente e receita: ver a pasta DAO

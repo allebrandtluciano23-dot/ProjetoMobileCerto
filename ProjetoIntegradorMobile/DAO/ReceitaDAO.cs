@@ -45,6 +45,29 @@ namespace ProjetoIntegradorMobile.DAO
                 "SELECT * FROM receita ORDER BY data_criacao DESC");
         }
 
+        /// <summary>
+        /// Lista de receitas para os cards da tela inicial: dados da receita + nome da categoria
+        /// + nomes dos ingredientes (para o filtro). Mais recentes primeiro.
+        /// </summary>
+        public async Task<List<ReceitaResumo>> ListarResumoAsync()
+        {
+            var db = await DatabaseConfig.Database.Conexao();
+            return await db.QueryAsync<ReceitaResumo>(@"
+                SELECT r.id_receita        AS IdReceita,
+                       r.titulo            AS Titulo,
+                       c.nome              AS NomeCategoria,
+                       r.tempo_preparo_min AS TempoPreparoMin,
+                       r.porcoes           AS Porcoes,
+                       r.favorita          AS Favorita,
+                       (SELECT GROUP_CONCAT(i.nome, ' ')
+                          FROM receita_ingrediente ri
+                          JOIN ingrediente i ON i.id_ingrediente = ri.id_ingrediente
+                         WHERE ri.id_receita = r.id_receita) AS NomesIngredientes
+                FROM receita r
+                LEFT JOIN categoria c ON c.id_categoria = r.id_categoria
+                ORDER BY r.data_criacao DESC, r.id_receita DESC");
+        }
+
         public async Task<List<Receita>> ListarPorUsuarioAsync(int iIdUsuario)
         {
             var db = await DatabaseConfig.Database.Conexao();
