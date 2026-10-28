@@ -3,6 +3,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProjetoIntegradorMobile.Views.EntradaPage"
+             xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
+             x:DataType="vm:EntradaViewModel"
              BackgroundColor="White"
              Shell.NavBarIsVisible="False">
 
@@ -40,6 +42,7 @@
                     
                     <Entry Grid.Column="1"
                            x:Name="usuarioEntry"
+                           Text="{Binding Email}"
                            Placeholder="Usuário ou e-mail"
                            PlaceholderColor="Gray"
                            TextColor="Black"
@@ -63,6 +66,7 @@
                     
                     <Entry Grid.Column="1"
                         x:Name="senhaEntry"
+                        Text="{Binding Senha}"
                         Placeholder="Senha"
                         PlaceholderColor="Gray"
                         TextColor="Black"
@@ -107,11 +111,11 @@
 
             <!-- MENSAGEM DE ERRO -->
             <Label x:Name="lblErro"
-                   Text=""
+                   Text="{Binding MensagemErro}"
                    FontSize="13"
                    TextColor="#D32F2F"
                    HorizontalOptions="Center"
-                   IsVisible="False"/>
+                   IsVisible="{Binding TemErro}"/>
 
 
             <!-- BOTÃO ENTRAR -->
