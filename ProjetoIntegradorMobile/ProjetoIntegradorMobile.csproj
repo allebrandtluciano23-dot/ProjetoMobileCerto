@@ -91,4 +91,13 @@
 	  </MauiXaml>
 	</ItemGroup>
 
+	<!-- WINDOWS: o Windows App SDK 1.8 copia um "resources.pri" próprio para a pasta de saída.
+	     No modo não empacotado (WindowsPackageType=None), o Windows carrega esse arquivo em vez do
+	     ProjetoIntegradorMobile.pri do app e não encontra os recursos do MAUI
+	     (erro "Cannot locate resource ... Resources.xbf"). Apagando-o depois do build,
+	     o app usa o próprio .pri, que já contém tudo. Não afeta o Android. -->
+	<Target Name="RemoverResourcesPriDoWindowsAppSdk" AfterTargets="Build" Condition="'$(TargetPlatformIdentifier)' == 'windows'">
+		<Delete Files="$(OutDir)resources.pri" />
+	</Target>
+
 </Project>

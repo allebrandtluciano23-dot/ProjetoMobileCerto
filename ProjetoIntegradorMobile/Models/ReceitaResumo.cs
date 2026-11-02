@@ -10,11 +10,15 @@ namespace ProjetoIntegradorMobile.Models
         public int? TempoPreparoMin { get; set; }
         public int? Porcoes { get; set; }
         public bool Favorita { get; set; }
+        public string? Dificuldade { get; set; }
+        public string? CaminhoFoto { get; set; }
+
+        public bool TemFoto => !string.IsNullOrEmpty(CaminhoFoto);
 
         // Nomes dos ingredientes separados por espaço (usado só pelo filtro de busca)
         public string? NomesIngredientes { get; set; }
 
-        // Texto do card, ex.: "40 min · 2 porções"
+        // Texto do card, ex.: "40 min · 2 porções · Fácil"
         public string Detalhes
         {
             get
@@ -28,6 +32,9 @@ namespace ProjetoIntegradorMobile.Models
                     lPartes.Add("1 porção");
                 else if (Porcoes > 1)
                     lPartes.Add($"{Porcoes} porções");
+
+                if (!string.IsNullOrEmpty(Dificuldade))
+                    lPartes.Add(Dificuldade);
 
                 return string.Join(" · ", lPartes);
             }

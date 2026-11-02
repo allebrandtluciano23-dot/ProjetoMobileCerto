@@ -59,6 +59,8 @@ namespace ProjetoIntegradorMobile.DAO
                        r.tempo_preparo_min AS TempoPreparoMin,
                        r.porcoes           AS Porcoes,
                        r.favorita          AS Favorita,
+                       r.dificuldade       AS Dificuldade,
+                       r.caminho_foto      AS CaminhoFoto,
                        (SELECT GROUP_CONCAT(i.nome, ' ')
                           FROM receita_ingrediente ri
                           JOIN ingrediente i ON i.id_ingrediente = ri.id_ingrediente

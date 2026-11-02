@@ -33,13 +33,13 @@ namespace ProjetoIntegradorMobile.Data
                 };
                 conn.Insert(usuario);
 
-                InserirReceita(conn, usuario.IdUsuario, "Rápidos", "Omelete de queijo", 10, 1,
+                InserirReceita(conn, usuario.IdUsuario, "Rápidos", "Omelete de queijo", 10, 1, "Fácil",
                     "1. Bata os ovos com o sal.\n" +
                     "2. Aqueça o azeite na frigideira e despeje os ovos.\n" +
                     "3. Quando firmar, coloque o queijo, dobre ao meio e sirva.",
                     ("Ovo", 3, "un"), ("Queijo muçarela", 50, "g"), ("Azeite", 1, "colher (sopa)"), ("Sal", 1, "pitada"));
 
-                InserirReceita(conn, usuario.IdUsuario, "Almoço", "Frango grelhado com legumes", 40, 2,
+                InserirReceita(conn, usuario.IdUsuario, "Almoço", "Frango grelhado com legumes", 40, 2, "Média",
                     "1. Tempere o frango com sal e deixe descansar 10 minutos.\n" +
                     "2. Grelhe o frango em fogo médio, 6 minutos de cada lado.\n" +
                     "3. Corte a abobrinha e a cenoura em rodelas e refogue no azeite.\n" +
@@ -47,14 +47,14 @@ namespace ProjetoIntegradorMobile.Data
                     ("Peito de frango", 400, "g"), ("Abobrinha", 1, "un"), ("Cenoura", 1, "un"),
                     ("Azeite", 2, "colher (sopa)"), ("Sal", 1, "pitada"));
 
-                InserirReceita(conn, usuario.IdUsuario, "Jantar", "Sopa de legumes", 45, 4,
+                InserirReceita(conn, usuario.IdUsuario, "Jantar", "Sopa de legumes", 45, 4, "Fácil",
                     "1. Pique a cebola e refogue no azeite.\n" +
                     "2. Junte a batata e a cenoura em cubos e cubra com água.\n" +
                     "3. Cozinhe por 30 minutos, acerte o sal e sirva.",
                     ("Batata", 2, "un"), ("Cenoura", 2, "un"), ("Cebola", 1, "un"),
                     ("Azeite", 1, "colher (sopa)"), ("Água", 1.5, "l"), ("Sal", 1, "pitada"));
 
-                InserirReceita(conn, usuario.IdUsuario, "Sobremesas", "Mousse de maracujá", 20, 6,
+                InserirReceita(conn, usuario.IdUsuario, "Sobremesas", "Mousse de maracujá", 20, 6, "Fácil",
                     "1. Bata no liquidificador o leite condensado, o creme de leite e o suco.\n" +
                     "2. Coloque em taças e leve à geladeira por 3 horas.",
                     ("Leite condensado", 395, "g"), ("Creme de leite", 200, "g"), ("Suco de maracujá", 200, "ml"));
@@ -64,7 +64,7 @@ namespace ProjetoIntegradorMobile.Data
         // Grava uma receita e seus ingredientes (criando os ingredientes que ainda não existem)
         private static void InserirReceita(
             SQLiteConnection conn, int iIdUsuario, string sCategoria, string sTitulo,
-            int iTempoMin, int iPorcoes, string sModoPreparo,
+            int iTempoMin, int iPorcoes, string sDificuldade, string sModoPreparo,
             params (string Nome, double Quantidade, string Unidade)[] ingredientes)
         {
             int iIdCategoria = conn.ExecuteScalar<int>(
@@ -78,6 +78,7 @@ namespace ProjetoIntegradorMobile.Data
                 ModoPreparo = sModoPreparo,
                 TempoPreparoMin = iTempoMin,
                 Porcoes = iPorcoes,
+                Dificuldade = sDificuldade,
                 DataCriacao = Database.Agora()
             };
             conn.Insert(receita);

@@ -1,0 +1,15 @@
+<Project>
+
+  <!--
+    O caminho da pasta do projeto é longo (Desktop\Projeto Integrador VI- Soluções Avançadas em Computação\...).
+    O build do Android cria arquivos com nomes compridos dentro de "obj" e passava do limite de
+    260 caracteres do Windows (erro "Could not find a part of the path ... .java").
+    Aqui as pastas "bin" e "obj" passam a ficar num caminho curto, fora da pasta do projeto.
+    Este arquivo é lido automaticamente pelo Visual Studio antes do .csproj.
+  -->
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>C:\CheefBookBuild\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <BaseOutputPath>C:\CheefBookBuild\bin\$(MSBuildProjectName)\</BaseOutputPath>
+  </PropertyGroup>
+
+</Project>

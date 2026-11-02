@@ -159,12 +159,27 @@
         <!-- CONTEÚDO: receitas do banco, filtradas pela busca e pela categoria -->
         <Grid Grid.Row="1" RowDefinitions="Auto,Auto,*" Padding="20,10,20,0">
 
-            <Label Grid.Row="0"
-                   Text="Receitas"
-                   FontSize="21"
-                   FontAttributes="Bold"
-                   TextColor="Black"
-                   Margin="0,0,0,10"/>
+            <!-- Título + botão que abre a tela Nova receita (como Modal) -->
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
+
+                <Label Text="Receitas"
+                       FontSize="21"
+                       FontAttributes="Bold"
+                       TextColor="Black"
+                       VerticalOptions="Center"/>
+
+                <Button Grid.Column="1"
+                        x:Name="btNovaReceita"
+                        Text="+ Nova receita"
+                        FontSize="13"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Black"
+                        CornerRadius="15"
+                        HeightRequest="38"
+                        Padding="15,0"
+                        Clicked="btNovaReceita_Clicked"/>
+            </Grid>
 
             <!-- Mensagem de erro (só aparece se o banco falhar) -->
             <Label Grid.Row="1"
@@ -206,9 +221,28 @@
                                 StrokeShape="RoundRectangle 18"
                                 Padding="15">
 
-                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
 
-                                <VerticalStackLayout Grid.Column="0" Spacing="3">
+                                <!-- Foto da receita (ou um prato, se não tiver foto) -->
+                                <Border Grid.Column="0"
+                                        WidthRequest="64"
+                                        HeightRequest="64"
+                                        StrokeThickness="0"
+                                        BackgroundColor="#F3F3F3"
+                                        StrokeShape="RoundRectangle 14"
+                                        VerticalOptions="Center">
+                                    <Grid>
+                                        <Label Text="🍽"
+                                               FontSize="26"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"/>
+                                        <Image Source="{Binding CaminhoFoto}"
+                                               Aspect="AspectFill"
+                                               IsVisible="{Binding TemFoto}"/>
+                                    </Grid>
+                                </Border>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
 
                                     <Label Text="{Binding Titulo}"
                                            FontSize="16"
@@ -225,7 +259,7 @@
                                 </VerticalStackLayout>
 
                                 <!-- Coração só nas receitas marcadas como favoritas -->
-                                <Label Grid.Column="1"
+                                <Label Grid.Column="2"
                                        Text="♥"
                                        FontSize="22"
                                        TextColor="#D32F2F"

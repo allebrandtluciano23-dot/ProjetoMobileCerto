@@ -71,6 +71,8 @@ namespace ProjetoIntegradorMobile.Data
                     tempo_preparo_min INTEGER,
                     porcoes INTEGER,
                     favorita INTEGER NOT NULL DEFAULT 0,
+                    dificuldade TEXT,
+                    caminho_foto TEXT,
                     data_criacao TEXT NOT NULL DEFAULT (datetime('now')),
 
                     FOREIGN KEY (id_usuario)
@@ -83,17 +85,10 @@ namespace ProjetoIntegradorMobile.Data
                 );
             ");
 
-            // Bancos criados antes da coluna "favorita" existir: adiciona a coluna.
-            // Se ela já existir, o SQLite dá erro de coluna duplicada e só ignoramos.
-            try
-            {
-                await _database.ExecuteAsync(
-                    "ALTER TABLE receita ADD COLUMN favorita INTEGER NOT NULL DEFAULT 0;");
-            }
-            catch (SQLiteException)
-            {
-                // coluna já existe
-            }
+            // Bancos criados antes destas colunas existirem: adiciona as colunas que faltam
+            await AdicionarColunaAsync("receita", "favorita INTEGER NOT NULL DEFAULT 0");
+            await AdicionarColunaAsync("receita", "dificuldade TEXT");
+            await AdicionarColunaAsync("receita", "caminho_foto TEXT");
 
             // RECEITA_INGREDIENTE
             await _database.ExecuteAsync(@"
@@ -308,6 +303,20 @@ namespace ProjetoIntegradorMobile.Data
 
             // RECEITAS DE EXEMPLO (só na primeira vez que o app abre)
             await DadosExemplo.InserirAsync(_database);
+        }
+
+        // Adiciona uma coluna numa tabela que já existe (para quem já tinha o app instalado).
+        // Se a coluna já existir, o SQLite dá erro de coluna duplicada e só ignoramos.
+        private async Task AdicionarColunaAsync(string sTabela, string sDefinicaoColuna)
+        {
+            try
+            {
+                await _database.ExecuteAsync($"ALTER TABLE {sTabela} ADD COLUMN {sDefinicaoColuna};");
+            }
+            catch (SQLiteException)
+            {
+                // coluna já existe
+            }
         }
 
         // Usuário, categoria, ingrediente e receita: ver a pasta DAO

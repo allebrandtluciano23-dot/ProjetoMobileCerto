@@ -21,6 +21,29 @@ namespace ProjetoIntegradorMobile.Views
             await vm.CarregarAsync();
         }
 
+        // ---------- Nova receita ----------
+
+        // Abre a tela Nova receita como MODAL (por cima da tela inicial)
+        private async void btNovaReceita_Clicked(object sender, EventArgs e)
+        {
+            // A receita fica no nome de quem está logado, então precisa entrar antes
+            if (!SessaoUsuario.EstaLogado)
+            {
+                bool bEntrar = await DisplayAlertAsync("Entrar",
+                    "Para criar receitas, entre na sua conta.", "Entrar", "Cancelar");
+                if (bEntrar)
+                    await Shell.Current.GoToAsync(nameof(EntradaPage));
+                return;
+            }
+
+            NovaReceitaPage pagina = new NovaReceitaPage();
+
+            // Quando o modal fechar, recarrega a lista (para a receita nova aparecer)
+            pagina.Disappearing += async (s, ev) => await vm.CarregarAsync();
+
+            await Navigation.PushModalAsync(pagina);
+        }
+
         // ---------- Categorias ----------
 
         private void Categoria_Tapped(object sender, TappedEventArgs e)
