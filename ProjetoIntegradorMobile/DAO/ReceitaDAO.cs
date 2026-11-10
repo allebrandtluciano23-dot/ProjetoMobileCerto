@@ -46,28 +46,43 @@ namespace ProjetoIntegradorMobile.DAO
         }
 
         /// <summary>
-        /// Lista de receitas para os cards da tela inicial: dados da receita + nome da categoria
-        /// + nomes dos ingredientes (para o filtro). Mais recentes primeiro.
+        /// Lista de receitas para os cards: dados da receita + nome da categoria
+        /// + nomes dos ingredientes (para o filtro) + se é favorita DO USUÁRIO LOGADO.
+        /// iIdUsuarioLogado = 0 quando ninguém está logado (aí nenhuma aparece como favorita).
+        /// bSoFavoritas = true traz só as favoritas desse usuário (tela Favoritos).
+        /// Mais recentes primeiro.
         /// </summary>
-        public async Task<List<ReceitaResumo>> ListarResumoAsync()
+        public async Task<List<ReceitaResumo>> ListarResumoAsync(int iIdUsuarioLogado, bool bSoFavoritas = false)
         {
             var db = await DatabaseConfig.Database.Conexao();
-            return await db.QueryAsync<ReceitaResumo>(@"
+
+            string sFiltroFavoritas = bSoFavoritas
+                ? "WHERE EXISTS (SELECT 1 FROM favorito f WHERE f.id_receita = r.id_receita AND f.id_usuario = ?)"
+                : "";
+
+            string sSql = @"
                 SELECT r.id_receita        AS IdReceita,
                        r.titulo            AS Titulo,
                        c.nome              AS NomeCategoria,
                        r.tempo_preparo_min AS TempoPreparoMin,
                        r.porcoes           AS Porcoes,
-                       r.favorita          AS Favorita,
+                       r.vegetariana       AS Vegetariana,
                        r.dificuldade       AS Dificuldade,
                        r.caminho_foto      AS CaminhoFoto,
+                       EXISTS (SELECT 1 FROM favorito f
+                                WHERE f.id_receita = r.id_receita AND f.id_usuario = ?) AS Favorita,
                        (SELECT GROUP_CONCAT(i.nome, ' ')
                           FROM receita_ingrediente ri
                           JOIN ingrediente i ON i.id_ingrediente = ri.id_ingrediente
                          WHERE ri.id_receita = r.id_receita) AS NomesIngredientes
                 FROM receita r
                 LEFT JOIN categoria c ON c.id_categoria = r.id_categoria
-                ORDER BY r.data_criacao DESC, r.id_receita DESC");
+                " + sFiltroFavoritas + @"
+                ORDER BY r.data_criacao DESC, r.id_receita DESC";
+
+            return bSoFavoritas
+                ? await db.QueryAsync<ReceitaResumo>(sSql, iIdUsuarioLogado, iIdUsuarioLogado)
+                : await db.QueryAsync<ReceitaResumo>(sSql, iIdUsuarioLogado);
         }
 
         public async Task<List<Receita>> ListarPorUsuarioAsync(int iIdUsuario)
@@ -82,13 +97,6 @@ namespace ProjetoIntegradorMobile.DAO
             var db = await DatabaseConfig.Database.Conexao();
             return await db.QueryAsync<Receita>(
                 "SELECT * FROM receita WHERE id_categoria = ? ORDER BY titulo", iIdCategoria);
-        }
-
-        public async Task<List<Receita>> ListarFavoritasAsync(int iIdUsuario)
-        {
-            var db = await DatabaseConfig.Database.Conexao();
-            return await db.QueryAsync<Receita>(
-                "SELECT * FROM receita WHERE id_usuario = ? AND favorita = 1 ORDER BY titulo", iIdUsuario);
         }
 
         /// <summary>Filtro da busca: receitas cujo título ou algum ingrediente contém o texto.</summary>
@@ -116,6 +124,14 @@ namespace ProjetoIntegradorMobile.DAO
                 ORDER BY i.nome", iIdReceita);
         }
 
+        /// <summary>Quantas pessoas capturaram (copiaram) esta receita. Usado no aviso antes de excluir.</summary>
+        public async Task<int> ContarCapturasAsync(int iIdReceita)
+        {
+            var db = await DatabaseConfig.Database.Conexao();
+            return await db.ExecuteScalarAsync<int>(
+                "SELECT COUNT(*) FROM receita_personalizada WHERE id_receita_original = ?", iIdReceita);
+        }
+
         // ---------- UPDATE ----------
 
         /// <summary>
@@ -133,14 +149,6 @@ namespace ProjetoIntegradorMobile.DAO
                 conn.Execute("DELETE FROM receita_ingrediente WHERE id_receita = ?", receita.IdReceita);
                 SalvarIngredientes(conn, receita.IdReceita, ingredientes);
             });
-        }
-
-        // Usado pelo CheckBox "Favorita" (liga/desliga sem mexer no resto da receita)
-        public async Task AlterarFavoritaAsync(int iIdReceita, bool bFavorita)
-        {
-            var db = await DatabaseConfig.Database.Conexao();
-            await db.ExecuteAsync(
-                "UPDATE receita SET favorita = ? WHERE id_receita = ?", bFavorita ? 1 : 0, iIdReceita);
         }
 
         // ---------- DELETE ----------

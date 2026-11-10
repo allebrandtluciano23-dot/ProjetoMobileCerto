@@ -9,6 +9,9 @@ namespace ProjetoIntegradorMobile.Models
         public string? NomeCategoria { get; set; }
         public int? TempoPreparoMin { get; set; }
         public int? Porcoes { get; set; }
+        public bool Vegetariana { get; set; }
+
+        // Favorita DO USUÁRIO LOGADO (vem da tabela favorito, não da receita)
         public bool Favorita { get; set; }
         public string? Dificuldade { get; set; }
         public string? CaminhoFoto { get; set; }
@@ -19,25 +22,25 @@ namespace ProjetoIntegradorMobile.Models
         public string? NomesIngredientes { get; set; }
 
         // Texto do card, ex.: "40 min · 2 porções · Fácil"
-        public string Detalhes
+        public string Detalhes => MontarDetalhes(TempoPreparoMin, Porcoes, Dificuldade);
+
+        // Também usado pela tela de detalhe da receita
+        public static string MontarDetalhes(int? iTempoMin, int? iPorcoes, string? sDificuldade)
         {
-            get
-            {
-                List<string> lPartes = new List<string>();
+            List<string> lPartes = new List<string>();
 
-                if (TempoPreparoMin > 0)
-                    lPartes.Add($"{TempoPreparoMin} min");
+            if (iTempoMin > 0)
+                lPartes.Add($"{iTempoMin} min");
 
-                if (Porcoes == 1)
-                    lPartes.Add("1 porção");
-                else if (Porcoes > 1)
-                    lPartes.Add($"{Porcoes} porções");
+            if (iPorcoes == 1)
+                lPartes.Add("1 porção");
+            else if (iPorcoes > 1)
+                lPartes.Add($"{iPorcoes} porções");
 
-                if (!string.IsNullOrEmpty(Dificuldade))
-                    lPartes.Add(Dificuldade);
+            if (!string.IsNullOrEmpty(sDificuldade))
+                lPartes.Add(sDificuldade);
 
-                return string.Join(" · ", lPartes);
-            }
+            return string.Join(" · ", lPartes);
         }
     }
 }

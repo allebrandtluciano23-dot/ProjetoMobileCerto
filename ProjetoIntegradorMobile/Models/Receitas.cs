@@ -26,8 +26,9 @@ namespace ProjetoIntegradorMobile.Models
         [Column("porcoes")]
         public int? Porcoes { get; set; }
 
-        [Column("favorita")]
-        public bool Favorita { get; set; }
+        // Campo booleano da tabela (CheckBox "Vegetariana" no formulário)
+        [Column("vegetariana")]
+        public bool Vegetariana { get; set; }
 
         // Valores usados: "Fácil", "Média", "Difícil"
         [Column("dificuldade")]

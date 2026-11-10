@@ -20,8 +20,8 @@ public partial class CadastroPage : ContentPage
 
     private void MostrarSenha_Tapped(object sender, TappedEventArgs e)
     {
-        senhaEntry.IsPassword = !senhaEntry.IsPassword;
-        imgOlho.Source = senhaEntry.IsPassword ? "eye_off.png" : "eye.png";
+        txSenha.IsPassword = !txSenha.IsPassword;
+        imOlho.Source = txSenha.IsPassword ? "eye_off.png" : "eye.png";
     }
 
     private async void Cadastrar_Tapped(object sender, TappedEventArgs e)

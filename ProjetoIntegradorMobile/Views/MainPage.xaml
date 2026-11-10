@@ -80,7 +80,7 @@
                            VerticalOptions="Center"/>
 
                     <Entry Grid.Column="1"
-                           x:Name="searchEntry"
+                           x:Name="txBuscar"
                            Text="{Binding Filtro}"
                            Placeholder="Buscar receitas"
                            PlaceholderColor="Gray"
@@ -102,7 +102,7 @@
             <!-- CATEGORIAS divididas, decidir layout -->
             <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
 
-                <HorizontalStackLayout x:Name="hsCategorias" Spacing="10">
+                <HorizontalStackLayout x:Name="slCategorias" Spacing="10">
 
                     <Border BackgroundColor="Black" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
                         <Border.GestureRecognizers>
@@ -221,6 +221,12 @@
                                 StrokeShape="RoundRectangle 18"
                                 Padding="15">
 
+                            <!-- Tocar no card abre o detalhe da receita -->
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="Receita_Tapped"
+                                                      CommandParameter="{Binding .}"/>
+                            </Border.GestureRecognizers>
+
                             <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
 
                                 <!-- Foto da receita (ou um prato, se não tiver foto) -->
@@ -256,9 +262,14 @@
                                     <Label Text="{Binding Detalhes}"
                                            FontSize="12"
                                            TextColor="Gray"/>
+
+                                    <Label Text="🌱 Vegetariana"
+                                           FontSize="12"
+                                           TextColor="#2E7D32"
+                                           IsVisible="{Binding Vegetariana}"/>
                                 </VerticalStackLayout>
 
-                                <!-- Coração só nas receitas marcadas como favoritas -->
+                                <!-- Coração só nas receitas que o usuário logado favoritou -->
                                 <Label Grid.Column="2"
                                        Text="♥"
                                        FontSize="22"

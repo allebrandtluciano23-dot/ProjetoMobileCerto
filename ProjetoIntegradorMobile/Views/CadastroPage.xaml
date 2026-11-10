@@ -53,7 +53,7 @@
                 <Grid ColumnDefinitions="Auto,*">
 
                     <Entry Grid.Column="1"
-                           x:Name="nomeEntry"
+                           x:Name="txNome"
                            Text="{Binding Nome}"
                            Placeholder="Nome completo"
                            PlaceholderColor="Gray"
@@ -76,7 +76,7 @@
                 <Grid ColumnDefinitions="Auto,*">
                     
                     <Entry Grid.Column="1"
-                           x:Name="emailEntry"
+                           x:Name="txEmail"
                            Text="{Binding Email}"
                            Placeholder="E-mail"
                            PlaceholderColor="Gray"
@@ -99,7 +99,7 @@
                 <Grid ColumnDefinitions="Auto,*,Auto">
 
                     <Entry Grid.Column="1"
-                    x:Name="senhaEntry"
+                    x:Name="txSenha"
                     Text="{Binding Senha}"
                     Placeholder="Senha"
                     PlaceholderColor="Gray"
@@ -110,7 +110,7 @@
 
                     <!-- Mostrar / ocultar senha -->
                     <Image Grid.Column="2"
-                    x:Name="imgOlho"
+                    x:Name="imOlho"
                     Source="eye_off.png"
                     WidthRequest="24"
                     HeightRequest="24"
@@ -136,7 +136,7 @@
                 <Grid ColumnDefinitions="Auto,*">
 
                     <Entry Grid.Column="1"
-                           x:Name="confirmarSenhaEntry"
+                           x:Name="txConfirmarSenha"
                            Text="{Binding ConfirmarSenha}"
                            Placeholder="Confirmar senha"
                            PlaceholderColor="Gray"
@@ -150,7 +150,7 @@
 
 
             <!-- MENSAGEM DE ERRO -->
-            <Label x:Name="lblErro"
+            <Label x:Name="lbErro"
                    Text="{Binding MensagemErro}"
                    FontSize="13"
                    TextColor="#D32F2F"

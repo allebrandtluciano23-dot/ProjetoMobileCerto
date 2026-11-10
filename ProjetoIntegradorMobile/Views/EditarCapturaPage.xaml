@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+    "Minha versão": edição da cópia capturada de uma receita de outro usuário.
+    Aberta como MODAL (pelo detalhe da receita ou por "Minhas adaptações").
+    O que é salvo aqui fica só na cópia; a receita original do autor não muda.
+-->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ProjetoIntegradorMobile.Views.EditarCapturaPage"
+             xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
+             xmlns:models="clr-namespace:ProjetoIntegradorMobile.Models"
+             x:DataType="vm:EditarCapturaViewModel"
+             BackgroundColor="White"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+
+        <VerticalStackLayout Padding="30,50,30,30" Spacing="18">
+
+            <!-- CABEÇALHO -->
+            <Grid ColumnDefinitions="Auto,*">
+
+                <Label Text="←"
+                       FontSize="28"
+                       TextColor="Black"
+                       VerticalOptions="Center">
+
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Voltar_Tapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+
+                <Label Grid.Column="1"
+                       Text="Minha versão"
+                       FontSize="21"
+                       FontAttributes="Bold"
+                       TextColor="Black"
+                       Margin="15,0,0,0"
+                       VerticalOptions="Center"/>
+            </Grid>
+
+
+            <!-- RECEITA ORIGINAL (só para mostrar de onde veio) -->
+            <Border Stroke="#EEEEEE"
+                    StrokeThickness="1"
+                    BackgroundColor="#F8F8F8"
+                    StrokeShape="RoundRectangle 18"
+                    Padding="12">
+
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+
+                    <Border WidthRequest="60"
+                            HeightRequest="60"
+                            StrokeThickness="0"
+                            BackgroundColor="#EEEEEE"
+                            StrokeShape="RoundRectangle 12">
+                        <Grid>
+                            <Label Text="🍽"
+                                   FontSize="24"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   IsVisible="{Binding SemFoto}"/>
+
+                            <Image x:Name="imFoto"
+                                   Source="{Binding CaminhoFoto}"
+                                   Aspect="AspectFill"
+                                   IsVisible="{Binding TemFoto}"/>
+                        </Grid>
+                    </Border>
+
+                    <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+
+                        <Label Text="{Binding Origem}"
+                               FontSize="13"
+                               TextColor="Black"/>
+
+                        <Label Text="{Binding Detalhes}"
+                               FontSize="12"
+                               TextColor="Gray"/>
+
+                        <Label Text="Suas mudanças ficam só na sua cópia."
+                               FontSize="12"
+                               FontAttributes="Italic"
+                               TextColor="Gray"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+
+            <!-- NOME DA MINHA VERSÃO -->
+            <Label Text="Nome"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   TextColor="Black"/>
+
+            <Border Stroke="#EEEEEE"
+                    StrokeThickness="1"
+                    BackgroundColor="White"
+                    HeightRequest="55"
+                    StrokeShape="RoundRectangle 18"
+                    Padding="15,0">
+
+                <Entry x:Name="txTitulo"
+                       Text="{Binding Titulo}"
+                       Placeholder="Nome da sua versão"
+                       PlaceholderColor="Gray"
+                       TextColor="Black"
+                       FontSize="14"
+                       MaxLength="80"
+                       VerticalOptions="Center"/>
+            </Border>
+
+
+            <!-- INGREDIENTES -->
+            <Label Text="Ingredientes"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   TextColor="Black"/>
+
+            <VerticalStackLayout x:Name="slIngredientes"
+                                 Spacing="10"
+                                 BindableLayout.ItemsSource="{Binding Ingredientes}">
+
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="models:IngredienteDaReceita">
+
+                        <Border Stroke="#EEEEEE"
+                                StrokeThickness="1"
+                                BackgroundColor="#F8F8F8"
+                                StrokeShape="RoundRectangle 14"
+                                Padding="15,10">
+
+                            <Grid ColumnDefinitions="*,Auto">
+
+                                <Label Text="{Binding Descricao}"
+                                       FontSize="14"
+                                       TextColor="Black"
+                                       VerticalOptions="Center"/>
+
+                                <Label Grid.Column="1"
+                                       Text="✕"
+                                       FontSize="18"
+                                       TextColor="Gray"
+                                       Padding="10,0,0,0"
+                                       VerticalOptions="Center">
+
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="RemoverIngrediente_Tapped"
+                                                              CommandParameter="{Binding .}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </Grid>
+                        </Border>
+
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+
+            <!-- Campos para adicionar um ingrediente -->
+            <Grid RowDefinitions="Auto,Auto"
+                  ColumnDefinitions="*,*,Auto"
+                  RowSpacing="10"
+                  ColumnSpacing="10">
+
+                <Border Grid.Row="0"
+                        Grid.ColumnSpan="3"
+                        Stroke="#EEEEEE"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        HeightRequest="55"
+                        StrokeShape="RoundRectangle 18"
+                        Padding="15,0">
+
+                    <Entry x:Name="txIngredienteNome"
+                           Text="{Binding NovoIngredienteNome}"
+                           Placeholder="Ingrediente (ex.: Mel)"
+                           PlaceholderColor="Gray"
+                           TextColor="Black"
+                           FontSize="14"
+                           VerticalOptions="Center"/>
+                </Border>
+
+                <Border Grid.Row="1"
+                        Grid.Column="0"
+                        Stroke="#EEEEEE"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        HeightRequest="55"
+                        StrokeShape="RoundRectangle 18"
+                        Padding="15,0">
+
+                    <Entry x:Name="txIngredienteQuantidade"
+                           Text="{Binding NovoIngredienteQuantidade}"
+                           Placeholder="Qtd."
+                           PlaceholderColor="Gray"
+                           TextColor="Black"
+                           FontSize="14"
+                           Keyboard="Numeric"
+                           VerticalOptions="Center"/>
+                </Border>
+
+                <Border Grid.Row="1"
+                        Grid.Column="1"
+                        Stroke="#EEEEEE"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        HeightRequest="55"
+                        StrokeShape="RoundRectangle 18"
+                        Padding="15,0">
+
+                    <Picker x:Name="pkIngredienteUnidade"
+                            ItemsSource="{Binding Unidades}"
+                            SelectedItem="{Binding NovoIngredienteUnidade}"
+                            Title="Unidade"
+                            TitleColor="Gray"
+                            TextColor="Black"
+                            FontSize="14"
+                            VerticalOptions="Center"/>
+                </Border>
+
+                <Button Grid.Row="1"
+                        Grid.Column="2"
+                        x:Name="btAdicionarIngrediente"
+                        Text="+"
+                        FontSize="24"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Black"
+                        WidthRequest="55"
+                        HeightRequest="55"
+                        CornerRadius="18"
+                        Padding="0"
+                        Clicked="btAdicionarIngrediente_Clicked"/>
+            </Grid>
+
+            <Label Text="{Binding ErroIngrediente}"
+                   IsVisible="{Binding TemErroIngrediente}"
+                   FontSize="13"
+                   TextColor="#D32F2F"/>
+
+
+            <!-- MODO DE PREPARO -->
+            <Label Text="Modo de preparo"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   TextColor="Black"/>
+
+            <Border Stroke="#EEEEEE"
+                    StrokeThickness="1"
+                    BackgroundColor="White"
+                    HeightRequest="150"
+                    StrokeShape="RoundRectangle 18"
+                    Padding="15,5">
+
+                <Editor x:Name="edModoPreparo"
+                        Text="{Binding ModoPreparo}"
+                        TextColor="Black"
+                        FontSize="14"/>
+            </Border>
+
+
+            <!-- OBSERVAÇÕES -->
+            <Label Text="O que você mudou? (opcional)"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   TextColor="Black"/>
+
+            <Border Stroke="#EEEEEE"
+                    StrokeThickness="1"
+                    BackgroundColor="White"
+                    HeightRequest="100"
+                    StrokeShape="RoundRectangle 18"
+                    Padding="15,5">
+
+                <Editor x:Name="edObservacoes"
+                        Text="{Binding Observacoes}"
+                        Placeholder="Ex.: troquei o açúcar por mel"
+                        PlaceholderColor="Gray"
+                        TextColor="Black"
+                        FontSize="14"/>
+            </Border>
+
+
+            <!-- MENSAGEM DE ERRO -->
+            <Label x:Name="lbErro"
+                   Text="{Binding MensagemErro}"
+                   IsVisible="{Binding TemErro}"
+                   FontSize="13"
+                   TextColor="#D32F2F"
+                   HorizontalOptions="Center"/>
+
+
+            <!-- BOTÕES -->
+            <Button x:Name="btSalvar"
+                    Text="Salvar minha versão"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    TextColor="White"
+                    BackgroundColor="Black"
+                    HeightRequest="55"
+                    CornerRadius="18"
+                    Margin="0,10,0,0"
+                    Clicked="btSalvar_Clicked"/>
+
+            <Button x:Name="btExcluir"
+                    Text="Excluir minha versão"
+                    FontSize="15"
+                    TextColor="#D32F2F"
+                    BackgroundColor="White"
+                    BorderColor="#D32F2F"
+                    BorderWidth="1"
+                    HeightRequest="50"
+                    CornerRadius="18"
+                    Clicked="btExcluir_Clicked"/>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>

@@ -19,8 +19,8 @@ public partial class PerfilPage : ContentPage
             return;
         }
 
-        lblNome.Text = SessaoUsuario.UsuarioAtual!.Nome;
-        lblEmail.Text = SessaoUsuario.UsuarioAtual!.Email;
+        lbNome.Text = SessaoUsuario.UsuarioAtual!.Nome;
+        lbEmail.Text = SessaoUsuario.UsuarioAtual!.Email;
     }
 
     // ---------- Ações do perfil ----------
@@ -29,9 +29,10 @@ public partial class PerfilPage : ContentPage
         await DisplayAlertAsync("Minhas receitas", "Funcionalidade ainda não disponível.", "OK");
     }
 
+    // Receitas de outros usuários que eu capturei
     private async void MinhasAdaptacoes_Tapped(object sender, TappedEventArgs e)
     {
-        await DisplayAlertAsync("Minhas adaptações", "Funcionalidade ainda não disponível.", "OK");
+        await Shell.Current.GoToAsync(nameof(CapturasPage));
     }
 
     private async void Sair_Tapped(object sender, TappedEventArgs e)

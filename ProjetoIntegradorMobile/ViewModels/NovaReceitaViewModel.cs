@@ -8,7 +8,8 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.ViewModels
 {
-    // ViewModel da tela Nova receita (NovaReceitaPage)
+    // ViewModel da tela Nova receita (NovaReceitaPage).
+    // A mesma tela serve para EDITAR: basta criar com o id da receita.
     public class NovaReceitaViewModel : BaseViewModel
     {
         private const int TAMANHO_MINIMO_TITULO = 3;
@@ -17,6 +18,21 @@ namespace ProjetoIntegradorMobile.ViewModels
 
         private readonly ReceitaDAO receitaDAO = new ReceitaDAO();
         private readonly CategoriaDAO categoriaDAO = new CategoriaDAO();
+
+        // 0 = receita nova; maior que 0 = editando a receita com esse id
+        private readonly int iIdReceitaEdicao;
+        private bool bReceitaCarregada = false;
+
+        public NovaReceitaViewModel(int iIdReceita = 0)
+        {
+            iIdReceitaEdicao = iIdReceita;
+        }
+
+        public bool EhEdicao => iIdReceitaEdicao > 0;
+
+        // Textos que mudam entre criar e editar
+        public string TituloTela => EhEdicao ? "Editar receita" : "Nova receita";
+        public string TextoBotao => EhEdicao ? "Salvar alterações" : "Salvar receita";
 
         // ---------- Campos da receita (ligados por Binding) ----------
 
@@ -73,12 +89,12 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sDificuldade, value);
         }
 
-        // CheckBox "Favorita" (campo booleano da tabela receita)
-        private bool bFavorita = false;
-        public bool Favorita
+        // CheckBox "Vegetariana" (campo booleano da tabela receita)
+        private bool bVegetariana = false;
+        public bool Vegetariana
         {
-            get => bFavorita;
-            set => SetProperty(ref bFavorita, value);
+            get => bVegetariana;
+            set => SetProperty(ref bVegetariana, value);
         }
 
         // ---------- Foto ----------
@@ -161,6 +177,50 @@ namespace ProjetoIntegradorMobile.ViewModels
             catch (Exception)
             {
                 MensagemErro = "Não foi possível carregar as categorias.";
+            }
+        }
+
+        /// <summary>
+        /// Modo edição: preenche a tela com os dados da receita (só na primeira vez).
+        /// Retorna false se a receita não existe mais ou se o usuário não é o autor.
+        /// </summary>
+        public async Task<bool> CarregarReceitaAsync()
+        {
+            if (!EhEdicao || bReceitaCarregada)
+                return true;
+
+            try
+            {
+                await CarregarCategoriasAsync(); // o Picker precisa das categorias antes de marcar a escolhida
+
+                Receita? receita = await receitaDAO.BuscarPorIdAsync(iIdReceitaEdicao);
+                if (receita == null || receita.IdUsuario != SessaoUsuario.UsuarioAtual?.IdUsuario)
+                    return false;
+
+                Categoria? categoria = receita.IdCategoria.HasValue
+                    ? await categoriaDAO.BuscarPorIdAsync(receita.IdCategoria.Value)
+                    : null;
+
+                Titulo = receita.Titulo;
+                ModoPreparo = receita.ModoPreparo;
+                CategoriaSelecionada = categoria?.Nome;
+                TempoPreparo = TimeSpan.FromMinutes(receita.TempoPreparoMin ?? 0);
+                Porcoes = receita.Porcoes?.ToString() ?? "";
+                Dificuldade = receita.Dificuldade ?? "";
+                Vegetariana = receita.Vegetariana;
+                CaminhoFoto = receita.CaminhoFoto;
+
+                Ingredientes.Clear();
+                foreach (IngredienteDaReceita ingrediente in await receitaDAO.ListarIngredientesAsync(iIdReceitaEdicao))
+                    Ingredientes.Add(ingrediente);
+
+                bReceitaCarregada = true;
+                return true;
+            }
+            catch (Exception)
+            {
+                MensagemErro = "Não foi possível carregar a receita.";
+                return true;
             }
         }
 
@@ -251,7 +311,8 @@ namespace ProjetoIntegradorMobile.ViewModels
         }
 
         /// <summary>
-        /// Valida o formulário e grava a receita com os ingredientes.
+        /// Valida o formulário e grava a receita com os ingredientes
+        /// (insere se for nova, atualiza se estiver editando).
         /// Retorna true se salvou (a tela então mostra o Toast e fecha).
         /// </summary>
         public async Task<bool> SalvarAsync()
@@ -320,21 +381,48 @@ namespace ProjetoIntegradorMobile.ViewModels
             try
             {
                 Categoria? categoria = await categoriaDAO.BuscarPorNomeAsync(CategoriaSelecionada);
+                var lIngredientes = Ingredientes.Select(i => (i.Nome, i.Quantidade, i.Unidade)).ToList();
 
-                Receita receita = new Receita
+                if (EhEdicao)
                 {
-                    IdUsuario = usuario.IdUsuario,
-                    IdCategoria = categoria?.IdCategoria,
-                    Titulo = sTituloDigitado,
-                    ModoPreparo = sModoPreparoDigitado,
-                    TempoPreparoMin = iTempoMin,
-                    Porcoes = iPorcoes,
-                    Dificuldade = Dificuldade,
-                    Favorita = Favorita,
-                    CaminhoFoto = CaminhoFoto
-                };
+                    // UPDATE: parte da receita salva (mantém autor e data de criação) e troca os campos
+                    Receita? receita = await receitaDAO.BuscarPorIdAsync(iIdReceitaEdicao);
+                    if (receita == null || receita.IdUsuario != usuario.IdUsuario)
+                    {
+                        MensagemErro = "Só quem criou a receita pode editá-la.";
+                        return false;
+                    }
 
-                await receitaDAO.InserirAsync(receita, Ingredientes.Select(i => (i.Nome, i.Quantidade, i.Unidade)));
+                    receita.IdCategoria = categoria?.IdCategoria;
+                    receita.Titulo = sTituloDigitado;
+                    receita.ModoPreparo = sModoPreparoDigitado;
+                    receita.TempoPreparoMin = iTempoMin;
+                    receita.Porcoes = iPorcoes;
+                    receita.Dificuldade = Dificuldade;
+                    receita.Vegetariana = Vegetariana;
+                    receita.CaminhoFoto = CaminhoFoto;
+
+                    await receitaDAO.AtualizarAsync(receita, lIngredientes);
+                }
+                else
+                {
+                    // CREATE
+                    Receita receita = new Receita
+                    {
+                        IdUsuario = usuario.IdUsuario,
+                        IdCategoria = categoria?.IdCategoria,
+                        Titulo = sTituloDigitado,
+                        ModoPreparo = sModoPreparoDigitado,
+                        TempoPreparoMin = iTempoMin,
+                        Porcoes = iPorcoes,
+                        Dificuldade = Dificuldade,
+                        Vegetariana = Vegetariana,
+                        CaminhoFoto = CaminhoFoto
+                    };
+
+                    await receitaDAO.InserirAsync(receita, lIngredientes);
+                }
+
                 return true;
             }
             catch (Exception)

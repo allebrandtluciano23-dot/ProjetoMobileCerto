@@ -51,13 +51,13 @@
                                              VerticalOptions="Center"
                                              Spacing="2">
 
-                            <Label x:Name="lblNome"
+                            <Label x:Name="lbNome"
                                    Text="João Silva"
                                    FontSize="18"
                                    FontAttributes="Bold"
                                    TextColor="Black"/>
 
-                            <Label x:Name="lblEmail"
+                            <Label x:Name="lbEmail"
                                    Text="joao@email.com"
                                    FontSize="13"
                                    TextColor="Gray"/>

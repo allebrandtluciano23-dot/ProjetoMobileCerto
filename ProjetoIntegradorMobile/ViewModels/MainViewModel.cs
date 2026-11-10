@@ -58,7 +58,9 @@ namespace ProjetoIntegradorMobile.ViewModels
 
             try
             {
-                lReceitasTodas = await receitaDAO.ListarResumoAsync();
+                // O ♥ dos cards mostra as favoritas de quem está logado (0 = ninguém logado)
+                int iIdUsuario = SessaoUsuario.UsuarioAtual?.IdUsuario ?? 0;
+                lReceitasTodas = await receitaDAO.ListarResumoAsync(iIdUsuario);
                 MensagemErro = "";
             }
             catch (Exception)

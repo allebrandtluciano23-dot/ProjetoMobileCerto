@@ -3,6 +3,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProjetoIntegradorMobile.Views.ExcluirReceitaPage"
+             xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
+             x:DataType="vm:ExcluirReceitaViewModel"
              BackgroundColor="White"
              Shell.NavBarIsVisible="False">
 
@@ -62,8 +64,8 @@
                        TextColor="Black"
                        HorizontalOptions="Center"/>
 
-                <Label x:Name="lblMensagem"
-                       Text="Tem certeza que deseja excluir esta receita? Esta ação não pode ser desfeita."
+                <Label x:Name="lbMensagem"
+                       Text="{Binding Mensagem}"
                        FontSize="14"
                        TextColor="Gray"
                        HorizontalTextAlignment="Center"
@@ -72,49 +74,36 @@
             </VerticalStackLayout>
 
             <!-- Mensagem de erro -->
-            <Label x:Name="lblErro"
-                   Text=""
+            <Label x:Name="lbErro"
+                   Text="{Binding MensagemErro}"
                    FontSize="13"
                    TextColor="#D32F2F"
                    HorizontalOptions="Center"
-                   IsVisible="False"/>
+                   IsVisible="{Binding TemErro}"/>
 
             <!-- Botão excluir -->
-            <Border BackgroundColor="#D32F2F"
-                    StrokeThickness="0"
+            <Button x:Name="btExcluir"
+                    Text="Excluir"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    TextColor="White"
+                    BackgroundColor="#D32F2F"
                     HeightRequest="55"
+                    CornerRadius="18"
                     Margin="0,15,0,0"
-                    StrokeShape="RoundRectangle 18">
-
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Excluir_Tapped"/>
-                </Border.GestureRecognizers>
-
-                <Label Text="Excluir"
-                       FontSize="16"
-                       FontAttributes="Bold"
-                       TextColor="White"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"/>
-            </Border>
+                    Clicked="btExcluir_Clicked"/>
 
             <!-- Botão cancelar -->
-            <Border Stroke="#EEEEEE"
-                    StrokeThickness="1"
+            <Button x:Name="btCancelar"
+                    Text="Cancelar"
+                    FontSize="16"
+                    TextColor="Black"
                     BackgroundColor="#F3F3F3"
+                    BorderColor="#EEEEEE"
+                    BorderWidth="1"
                     HeightRequest="55"
-                    StrokeShape="RoundRectangle 18">
-
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Cancelar_Tapped"/>
-                </Border.GestureRecognizers>
-
-                <Label Text="Cancelar"
-                       FontSize="16"
-                       TextColor="Black"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"/>
-            </Border>
+                    CornerRadius="18"
+                    Clicked="btCancelar_Clicked"/>
 
         </VerticalStackLayout>
 

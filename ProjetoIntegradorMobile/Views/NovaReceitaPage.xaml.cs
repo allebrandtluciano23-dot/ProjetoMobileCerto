@@ -4,15 +4,18 @@ using ProjetoIntegradorMobile.ViewModels;
 
 namespace ProjetoIntegradorMobile.Views;
 
-// Tela aberta como MODAL a partir da tela inicial (Navigation.PushModalAsync)
+// Tela aberta como MODAL (Navigation.PushModalAsync).
+// new NovaReceitaPage()   -> cria uma receita nova (tela inicial)
+// new NovaReceitaPage(id) -> edita a receita com esse id (tela de detalhe)
 public partial class NovaReceitaPage : ContentPage
 {
     // Os dados, a validação e a gravação ficam no ViewModel
-    NovaReceitaViewModel vm = new NovaReceitaViewModel();
+    NovaReceitaViewModel vm;
 
-    public NovaReceitaPage()
+    public NovaReceitaPage(int iIdReceita = 0)
     {
         InitializeComponent();
+        vm = new NovaReceitaViewModel(iIdReceita);
         BindingContext = vm;
     }
 
@@ -20,9 +23,30 @@ public partial class NovaReceitaPage : ContentPage
     {
         base.OnAppearing();
         await vm.CarregarCategoriasAsync();
+
+        if (vm.EhEdicao)
+        {
+            bool bPodeEditar = await vm.CarregarReceitaAsync();
+            if (!bPodeEditar)
+            {
+                await DisplayAlertAsync("Editar receita", "Não foi possível abrir esta receita para edição.", "OK");
+                await Navigation.PopModalAsync();
+                return;
+            }
+
+            MarcarDificuldade(vm.Dificuldade);
+        }
     }
 
-    // Fecha o modal e volta para a tela inicial
+    // Modo edição: marca o RadioButton da dificuldade que veio do banco
+    private void MarcarDificuldade(string sDificuldade)
+    {
+        rbFacil.IsChecked = sDificuldade == "Fácil";
+        rbMedia.IsChecked = sDificuldade == "Média";
+        rbDificil.IsChecked = sDificuldade == "Difícil";
+    }
+
+    // Fecha o modal e volta para a tela anterior
     private async void Voltar_Tapped(object sender, TappedEventArgs e)
     {
         await Navigation.PopModalAsync();
@@ -58,7 +82,7 @@ public partial class NovaReceitaPage : ContentPage
         if (!bSucesso)
             return;
 
-        ToastHelper.Mostrar("Receita salva com sucesso!");
+        ToastHelper.Mostrar(vm.EhEdicao ? "Receita atualizada!" : "Receita salva com sucesso!");
         await Navigation.PopModalAsync();
     }
 }

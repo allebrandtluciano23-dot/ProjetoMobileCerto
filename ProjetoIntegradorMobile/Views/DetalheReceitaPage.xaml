@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+    TabbedPage: uma página com ABAS (requisito "Tabbed_Pages").
+    Cada <ContentPage> abaixo vira uma aba: Resumo | Ingredientes | Preparo.
+    É aberta como MODAL a partir da tela inicial, ao tocar numa receita.
+-->
+<TabbedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            x:Class="ProjetoIntegradorMobile.Views.DetalheReceitaPage"
+            xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
+            xmlns:models="clr-namespace:ProjetoIntegradorMobile.Models"
+            x:DataType="vm:DetalheReceitaViewModel"
+            BarBackgroundColor="White"
+            SelectedTabColor="Black"
+            UnselectedTabColor="Gray">
+
+    <!-- ===================== ABA 1: RESUMO ===================== -->
+    <ContentPage Title="Resumo" BackgroundColor="White">
+
+        <ScrollView>
+            <VerticalStackLayout Padding="25,20,25,30" Spacing="12">
+
+                <!-- Foto (ou um prato, se a receita não tiver foto) -->
+                <Border HeightRequest="200"
+                        StrokeThickness="0"
+                        BackgroundColor="#F3F3F3"
+                        StrokeShape="RoundRectangle 18">
+                    <Grid>
+                        <Label Text="🍽"
+                               FontSize="60"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               IsVisible="{Binding SemFoto}"/>
+
+                        <Image x:Name="imFoto"
+                               Source="{Binding CaminhoFoto}"
+                               Aspect="AspectFill"
+                               IsVisible="{Binding TemFoto}"/>
+                    </Grid>
+                </Border>
+
+                <!-- Título + coração se o usuário logado favoritou -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label x:Name="lbTitulo"
+                           Text="{Binding Titulo}"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="Black"/>
+
+                    <Label Grid.Column="1"
+                           Text="♥"
+                           FontSize="24"
+                           TextColor="#D32F2F"
+                           VerticalOptions="Center"
+                           IsVisible="{Binding Favorita}"/>
+                </Grid>
+
+                <Label Text="{Binding NomeCategoria}"
+                       FontSize="14"
+                       TextColor="Gray"/>
+
+                <Label Text="{Binding Detalhes}"
+                       FontSize="14"
+                       TextColor="Black"/>
+
+                <Label Text="🌱 Vegetariana"
+                       FontSize="14"
+                       TextColor="#2E7D32"
+                       IsVisible="{Binding Vegetariana}"/>
+
+                <Label Text="{Binding Autor}"
+                       FontSize="13"
+                       FontAttributes="Italic"
+                       TextColor="Gray"/>
+
+                <!-- Favoritar: para qualquer usuário logado (cada um tem os seus favoritos) -->
+                <Button x:Name="btFavoritar"
+                        Text="{Binding TextoFavorito}"
+                        FontSize="15"
+                        TextColor="#D32F2F"
+                        BackgroundColor="White"
+                        BorderColor="#D32F2F"
+                        BorderWidth="1"
+                        HeightRequest="50"
+                        CornerRadius="16"
+                        Margin="0,10,0,0"
+                        IsVisible="{Binding EstaLogado}"
+                        Clicked="btFavoritar_Clicked"/>
+
+                <Label Text="{Binding MensagemErro}"
+                       IsVisible="{Binding TemErro}"
+                       FontSize="13"
+                       TextColor="#D32F2F"/>
+
+                <!-- Capturar: para quem NÃO é o autor. Cria uma cópia só sua, que você pode editar.
+                     Se já capturou, o botão abre a sua versão. -->
+                <Button x:Name="btCapturar"
+                        Text="{Binding TextoCaptura}"
+                        FontSize="15"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Black"
+                        HeightRequest="50"
+                        CornerRadius="16"
+                        Margin="0,5,0,0"
+                        IsVisible="{Binding PodeCapturar}"
+                        Clicked="btCapturar_Clicked"/>
+
+                <!-- Editar e Excluir: só aparecem para quem criou a receita -->
+                <Grid ColumnDefinitions="*,*"
+                      ColumnSpacing="12"
+                      Margin="0,15,0,0"
+                      IsVisible="{Binding EhAutor}">
+
+                    <Button x:Name="btEditar"
+                            Text="Editar"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            BackgroundColor="Black"
+                            HeightRequest="50"
+                            CornerRadius="16"
+                            Clicked="btEditar_Clicked"/>
+
+                    <Button Grid.Column="1"
+                            x:Name="btExcluir"
+                            Text="Excluir"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            BackgroundColor="#D32F2F"
+                            HeightRequest="50"
+                            CornerRadius="16"
+                            Clicked="btExcluir_Clicked"/>
+                </Grid>
+
+                <Button x:Name="btFechar"
+                        Text="Fechar"
+                        FontSize="15"
+                        TextColor="Black"
+                        BackgroundColor="#F3F3F3"
+                        HeightRequest="50"
+                        CornerRadius="16"
+                        Clicked="btFechar_Clicked"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </ContentPage>
+
+
+    <!-- ===================== ABA 2: INGREDIENTES ===================== -->
+    <ContentPage Title="Ingredientes" BackgroundColor="White">
+
+        <Grid RowDefinitions="Auto,*" Padding="25,20,25,0">
+
+            <Label Text="{Binding Titulo}"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="Black"
+                   Margin="0,0,0,15"/>
+
+            <CollectionView Grid.Row="1"
+                            x:Name="cvIngredientes"
+                            ItemsSource="{Binding Ingredientes}"
+                            SelectionMode="None">
+
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.EmptyView>
+                    <Label Text="Nenhum ingrediente cadastrado."
+                           TextColor="Gray"
+                           HorizontalOptions="Center"
+                           Margin="0,30"/>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:IngredienteDaReceita">
+                        <Border Stroke="#EEEEEE"
+                                StrokeThickness="1"
+                                BackgroundColor="#F8F8F8"
+                                StrokeShape="RoundRectangle 14"
+                                Padding="15,12">
+
+                            <Label Text="{Binding Descricao}"
+                                   FontSize="15"
+                                   TextColor="Black"/>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </ContentPage>
+
+
+    <!-- ===================== ABA 3: MODO DE PREPARO ===================== -->
+    <ContentPage Title="Preparo" BackgroundColor="White">
+
+        <ScrollView>
+            <VerticalStackLayout Padding="25,20,25,30" Spacing="15">
+
+                <Label Text="{Binding Titulo}"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="Black"/>
+
+                <Label x:Name="lbModoPreparo"
+                       Text="{Binding ModoPreparo}"
+                       FontSize="15"
+                       LineHeight="1.4"
+                       TextColor="Black"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </ContentPage>
+
+</TabbedPage>

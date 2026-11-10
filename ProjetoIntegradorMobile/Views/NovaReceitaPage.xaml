@@ -27,7 +27,7 @@
                 </Label>
 
                 <Label Grid.Column="1"
-                       Text="Nova receita"
+                       Text="{Binding TituloTela}"
                        FontSize="21"
                        FontAttributes="Bold"
                        TextColor="Black"
@@ -53,13 +53,13 @@
                 <Grid>
 
                     <!-- Foto escolhida -->
-                    <Image x:Name="imgReceita"
+                    <Image x:Name="imFoto"
                            Source="{Binding CaminhoFoto}"
                            Aspect="AspectFill"
                            IsVisible="{Binding TemFoto}"/>
 
                     <!-- Texto padrão (enquanto não tem foto) -->
-                    <VerticalStackLayout x:Name="stackFotoVazia"
+                    <VerticalStackLayout x:Name="slFotoVazia"
                                          IsVisible="{Binding SemFoto}"
                                          Spacing="8"
                                          HorizontalOptions="Center"
@@ -87,7 +87,7 @@
                     StrokeShape="RoundRectangle 18"
                     Padding="15,0">
 
-                <Entry x:Name="nomeEntry"
+                <Entry x:Name="txTitulo"
                        Text="{Binding Titulo}"
                        Placeholder="Nome da receita"
                        PlaceholderColor="Gray"
@@ -116,7 +116,7 @@
                             StrokeShape="RoundRectangle 18"
                             Padding="15,0">
 
-                        <Picker x:Name="categoriaPicker"
+                        <Picker x:Name="pkCategoria"
                                 ItemsSource="{Binding Categorias}"
                                 SelectedItem="{Binding CategoriaSelecionada}"
                                 Title="Selecione"
@@ -144,7 +144,7 @@
                             StrokeShape="RoundRectangle 18"
                             Padding="15,0">
 
-                        <TimePicker x:Name="tempoPicker"
+                        <TimePicker x:Name="tpTempo"
                                     Time="{Binding TempoPreparo}"
                                     Format="HH:mm"
                                     TextColor="Black"
@@ -157,7 +157,7 @@
             </Grid>
 
 
-            <!-- PORÇÕES E FAVORITA -->
+            <!-- PORÇÕES E VEGETARIANA -->
             <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
 
                 <VerticalStackLayout Grid.Column="0" Spacing="5">
@@ -174,7 +174,7 @@
                             StrokeShape="RoundRectangle 18"
                             Padding="15,0">
 
-                        <Entry x:Name="porcoesEntry"
+                        <Entry x:Name="txPorcoes"
                                Text="{Binding Porcoes}"
                                Placeholder="Ex.: 4"
                                PlaceholderColor="Gray"
@@ -187,18 +187,18 @@
 
                 </VerticalStackLayout>
 
-                <!-- CheckBox: campo booleano "favorita" -->
+                <!-- CheckBox: campo booleano "vegetariana" -->
                 <HorizontalStackLayout Grid.Column="1"
                                        Spacing="5"
                                        VerticalOptions="End"
                                        HeightRequest="55">
 
-                    <CheckBox x:Name="cbFavorita"
-                              IsChecked="{Binding Favorita}"
+                    <CheckBox x:Name="cbVegetariana"
+                              IsChecked="{Binding Vegetariana}"
                               Color="Black"
                               VerticalOptions="Center"/>
 
-                    <Label Text="Favorita ♥"
+                    <Label Text="Vegetariana 🌱"
                            FontSize="14"
                            TextColor="Black"
                            VerticalOptions="Center"/>
@@ -245,7 +245,7 @@
                    TextColor="Black"/>
 
             <!-- Lista dos ingredientes já adicionados -->
-            <VerticalStackLayout x:Name="listaIngredientes"
+            <VerticalStackLayout x:Name="slIngredientes"
                                  Spacing="10"
                                  BindableLayout.ItemsSource="{Binding Ingredientes}">
 
@@ -300,7 +300,7 @@
                         StrokeShape="RoundRectangle 18"
                         Padding="15,0">
 
-                    <Entry x:Name="ingredienteNomeEntry"
+                    <Entry x:Name="txIngredienteNome"
                            Text="{Binding NovoIngredienteNome}"
                            Placeholder="Ingrediente (ex.: Farinha)"
                            PlaceholderColor="Gray"
@@ -318,7 +318,7 @@
                         StrokeShape="RoundRectangle 18"
                         Padding="15,0">
 
-                    <Entry x:Name="ingredienteQuantidadeEntry"
+                    <Entry x:Name="txIngredienteQuantidade"
                            Text="{Binding NovoIngredienteQuantidade}"
                            Placeholder="Qtd."
                            PlaceholderColor="Gray"
@@ -337,7 +337,7 @@
                         StrokeShape="RoundRectangle 18"
                         Padding="15,0">
 
-                    <Picker x:Name="ingredienteUnidadePicker"
+                    <Picker x:Name="pkIngredienteUnidade"
                             ItemsSource="{Binding Unidades}"
                             SelectedItem="{Binding NovoIngredienteUnidade}"
                             Title="Unidade"
@@ -381,7 +381,7 @@
                     StrokeShape="RoundRectangle 18"
                     Padding="15,5">
 
-                <Editor x:Name="descricaoEditor"
+                <Editor x:Name="edModoPreparo"
                         Text="{Binding ModoPreparo}"
                         Placeholder="1. Misture os ingredientes...&#10;2. Leve ao forno..."
                         PlaceholderColor="Gray"
@@ -391,7 +391,7 @@
 
 
             <!-- MENSAGEM DE ERRO -->
-            <Label x:Name="lblErro"
+            <Label x:Name="lbErro"
                    Text="{Binding MensagemErro}"
                    IsVisible="{Binding TemErro}"
                    FontSize="13"
@@ -401,7 +401,7 @@
 
             <!-- BOTÃO SALVAR -->
             <Button x:Name="btSalvar"
-                    Text="Salvar receita"
+                    Text="{Binding TextoBotao}"
                     FontSize="16"
                     FontAttributes="Bold"
                     TextColor="White"

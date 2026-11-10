@@ -70,7 +70,7 @@ namespace ProjetoIntegradorMobile.Data
                     modo_preparo TEXT NOT NULL,
                     tempo_preparo_min INTEGER,
                     porcoes INTEGER,
-                    favorita INTEGER NOT NULL DEFAULT 0,
+                    vegetariana INTEGER NOT NULL DEFAULT 0,
                     dificuldade TEXT,
                     caminho_foto TEXT,
                     data_criacao TEXT NOT NULL DEFAULT (datetime('now')),
@@ -86,7 +86,7 @@ namespace ProjetoIntegradorMobile.Data
             ");
 
             // Bancos criados antes destas colunas existirem: adiciona as colunas que faltam
-            await AdicionarColunaAsync("receita", "favorita INTEGER NOT NULL DEFAULT 0");
+            await AdicionarColunaAsync("receita", "vegetariana INTEGER NOT NULL DEFAULT 0");
             await AdicionarColunaAsync("receita", "dificuldade TEXT");
             await AdicionarColunaAsync("receita", "caminho_foto TEXT");
 
@@ -263,6 +263,26 @@ namespace ProjetoIntegradorMobile.Data
                 );
             ");
 
+            // FAVORITO: cada usuário favorita as receitas que quiser (inclusive as de outros usuários).
+            // Substitui a antiga coluna receita.favorita, que valia para todo mundo.
+            await _database.ExecuteAsync(@"
+                CREATE TABLE IF NOT EXISTS favorito (
+                    id_usuario INTEGER NOT NULL,
+                    id_receita INTEGER NOT NULL,
+                    data_favoritado TEXT NOT NULL DEFAULT (datetime('now')),
+
+                    PRIMARY KEY (id_usuario, id_receita),
+
+                    FOREIGN KEY (id_usuario)
+                        REFERENCES usuario(id_usuario)
+                        ON DELETE CASCADE,
+
+                    FOREIGN KEY (id_receita)
+                        REFERENCES receita(id_receita)
+                        ON DELETE CASCADE
+                );
+            ");
+
             // ÍNDICES
             await _database.ExecuteAsync(@"
                 CREATE INDEX IF NOT EXISTS idx_receita_usuario
@@ -321,102 +341,7 @@ namespace ProjetoIntegradorMobile.Data
 
         // Usuário, categoria, ingrediente e receita: ver a pasta DAO
 
-        // =====================================================================
-        // RECEITA PERSONALIZADA (adaptação de uma receita por um usuário)
-        // =====================================================================
-
-        /// <summary>
-        /// Cria a adaptação copiando título, modo de preparo e ingredientes da receita original.
-        /// Retorna null se o usuário já tiver uma adaptação dessa receita ou se a receita não existir.
-        /// </summary>
-        public async Task<ReceitaPersonalizada?> CriarAdaptacaoAsync(int idReceitaOriginal, int idUsuario)
-        {
-            var db = await Conexao();
-
-            var original = await db.FindAsync<Receita>(idReceitaOriginal);
-            if (original == null)
-                return null;
-
-            var jaExiste = await db.Table<ReceitaPersonalizada>()
-                .CountAsync(r => r.IdReceitaOriginal == idReceitaOriginal && r.IdUsuario == idUsuario);
-            if (jaExiste > 0)
-                return null;
-
-            var adaptacao = new ReceitaPersonalizada
-            {
-                IdReceitaOriginal = idReceitaOriginal,
-                IdUsuario = idUsuario,
-                Titulo = original.Titulo,
-                ModoPreparo = original.ModoPreparo,
-                DataCaptura = Agora()
-            };
-
-            await db.RunInTransactionAsync(conn =>
-            {
-                conn.Insert(adaptacao);
-                conn.Execute(@"
-                    INSERT INTO receita_personalizada_ingrediente
-                        (id_receita_personalizada, id_ingrediente, quantidade, unidade)
-                    SELECT ?, id_ingrediente, quantidade, unidade
-                    FROM receita_ingrediente WHERE id_receita = ?",
-                    adaptacao.IdReceitaPersonalizada, idReceitaOriginal);
-            });
-
-            return adaptacao;
-        }
-
-        public async Task<int> AtualizarAdaptacaoAsync(ReceitaPersonalizada adaptacao)
-        {
-            var db = await Conexao();
-            return await db.UpdateAsync(adaptacao);
-        }
-
-        public async Task<int> ExcluirAdaptacaoAsync(int idReceitaPersonalizada)
-        {
-            var db = await Conexao();
-            return await db.DeleteAsync<ReceitaPersonalizada>(idReceitaPersonalizada);
-        }
-
-        public async Task<ReceitaPersonalizada?> BuscarAdaptacaoPorIdAsync(int idReceitaPersonalizada)
-        {
-            var db = await Conexao();
-            return await db.FindAsync<ReceitaPersonalizada>(idReceitaPersonalizada);
-        }
-
-        public async Task<List<ReceitaPersonalizada>> ListarAdaptacoesPorUsuarioAsync(int idUsuario)
-        {
-            var db = await Conexao();
-            return await db.QueryAsync<ReceitaPersonalizada>(
-                "SELECT * FROM receita_personalizada WHERE id_usuario = ? ORDER BY data_captura DESC", idUsuario);
-        }
-
-        public async Task AdicionarIngredienteNaAdaptacaoAsync(int idReceitaPersonalizada, int idIngrediente, double quantidade, string? unidade)
-        {
-            var db = await Conexao();
-            await db.ExecuteAsync(
-                "INSERT OR REPLACE INTO receita_personalizada_ingrediente (id_receita_personalizada, id_ingrediente, quantidade, unidade) VALUES (?, ?, ?, ?)",
-                idReceitaPersonalizada, idIngrediente, quantidade, unidade);
-        }
-
-        public async Task RemoverIngredienteDaAdaptacaoAsync(int idReceitaPersonalizada, int idIngrediente)
-        {
-            var db = await Conexao();
-            await db.ExecuteAsync(
-                "DELETE FROM receita_personalizada_ingrediente WHERE id_receita_personalizada = ? AND id_ingrediente = ?",
-                idReceitaPersonalizada, idIngrediente);
-        }
-
-        public async Task<List<IngredienteDaReceita>> ListarIngredientesDaAdaptacaoAsync(int idReceitaPersonalizada)
-        {
-            var db = await Conexao();
-            return await db.QueryAsync<IngredienteDaReceita>(@"
-                SELECT i.id_ingrediente AS IdIngrediente, i.nome AS Nome,
-                       rpi.quantidade AS Quantidade, rpi.unidade AS Unidade
-                FROM receita_personalizada_ingrediente rpi
-                JOIN ingrediente i ON i.id_ingrediente = rpi.id_ingrediente
-                WHERE rpi.id_receita_personalizada = ?
-                ORDER BY i.nome", idReceitaPersonalizada);
-        }
+        // Receita personalizada (adaptação capturada): ver DAO/AdaptacaoDAO.cs
 
         // =====================================================================
         // PLANO ALIMENTAR

@@ -13,6 +13,7 @@ namespace ProjetoIntegradorMobile
             Routing.RegisterRoute(nameof(PerfilPage), typeof(PerfilPage));
             Routing.RegisterRoute(nameof(EntradaPage), typeof(EntradaPage));
             Routing.RegisterRoute(nameof(CadastroPage), typeof(CadastroPage));
+            Routing.RegisterRoute(nameof(CapturasPage), typeof(CapturasPage));
 
         }
     }

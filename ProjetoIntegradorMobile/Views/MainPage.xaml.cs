@@ -1,4 +1,5 @@
 ﻿using ProjetoIntegradorMobile.Helpers;
+using ProjetoIntegradorMobile.Models;
 using ProjetoIntegradorMobile.ViewModels;
 
 namespace ProjetoIntegradorMobile.Views
@@ -44,6 +45,22 @@ namespace ProjetoIntegradorMobile.Views
             await Navigation.PushModalAsync(pagina);
         }
 
+        // ---------- Detalhe da receita ----------
+
+        // Abre o detalhe (TabbedPage com abas Resumo | Ingredientes | Preparo) como MODAL
+        private async void Receita_Tapped(object sender, TappedEventArgs e)
+        {
+            if (e.Parameter is not ReceitaResumo receita)
+                return;
+
+            DetalheReceitaPage pagina = new DetalheReceitaPage(receita.IdReceita);
+
+            // Quando o detalhe fechar, recarrega a lista (a receita pode ter sido editada ou excluída)
+            pagina.Disappearing += async (s, ev) => await vm.CarregarAsync();
+
+            await Navigation.PushModalAsync(pagina);
+        }
+
         // ---------- Categorias ----------
 
         private void Categoria_Tapped(object sender, TappedEventArgs e)
@@ -57,7 +74,7 @@ namespace ProjetoIntegradorMobile.Views
         // Destaca o botão da categoria escolhida (fundo preto) e volta os outros ao normal
         private void MarcarCategoria(Border? bdSelecionada)
         {
-            foreach (var item in hsCategorias.Children)
+            foreach (var item in slCategorias.Children)
             {
                 if (item is Border bd && bd.Content is Label lb)
                 {

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- Lista das receitas que o usuário capturou. Aberta pelo Perfil (navegação em pilha). -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ProjetoIntegradorMobile.Views.CapturasPage"
+             xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
+             xmlns:models="clr-namespace:ProjetoIntegradorMobile.Models"
+             x:DataType="vm:CapturasViewModel"
+             BackgroundColor="White"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="20,50,20,0">
+
+        <!-- CABEÇALHO -->
+        <Grid ColumnDefinitions="Auto,*">
+
+            <Label Text="←"
+                   FontSize="28"
+                   TextColor="Black"
+                   VerticalOptions="Center">
+
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Voltar_Tapped"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+            <Label Grid.Column="1"
+                   Text="Minhas adaptações"
+                   FontSize="21"
+                   FontAttributes="Bold"
+                   TextColor="Black"
+                   Margin="15,0,0,0"
+                   VerticalOptions="Center"/>
+        </Grid>
+
+        <Label Grid.Row="1"
+               Text="Receitas de outros usuários que você capturou e adaptou."
+               FontSize="13"
+               TextColor="Gray"
+               Margin="0,10,0,15"/>
+
+        <Label Grid.Row="2"
+               Text="{Binding MensagemErro}"
+               IsVisible="{Binding TemErro}"
+               FontSize="13"
+               TextColor="#D32F2F"
+               Margin="0,0,0,10"/>
+
+        <CollectionView Grid.Row="3"
+                        x:Name="cvAdaptacoes"
+                        ItemsSource="{Binding Adaptacoes}"
+                        SelectionMode="None">
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="12"/>
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Padding="10,40" Spacing="8">
+                    <Label Text="📋"
+                           FontSize="40"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Você ainda não capturou nenhuma receita."
+                           FontSize="15"
+                           TextColor="Gray"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"/>
+                    <Label Text="Abra uma receita de outro usuário e toque em &quot;Capturar receita&quot;."
+                           FontSize="13"
+                           TextColor="Gray"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:AdaptacaoResumo">
+
+                    <Border Stroke="#EEEEEE"
+                            StrokeThickness="1"
+                            BackgroundColor="White"
+                            StrokeShape="RoundRectangle 18"
+                            Padding="15">
+
+                        <!-- Tocar no card abre "Minha versão" -->
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Adaptacao_Tapped"
+                                                  CommandParameter="{Binding .}"/>
+                        </Border.GestureRecognizers>
+
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+
+                            <Border WidthRequest="64"
+                                    HeightRequest="64"
+                                    StrokeThickness="0"
+                                    BackgroundColor="#F3F3F3"
+                                    StrokeShape="RoundRectangle 14"
+                                    VerticalOptions="Center">
+                                <Grid>
+                                    <Label Text="🍽"
+                                           FontSize="26"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                    <Image Source="{Binding CaminhoFoto}"
+                                           Aspect="AspectFill"
+                                           IsVisible="{Binding TemFoto}"/>
+                                </Grid>
+                            </Border>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+
+                                <Label Text="{Binding Titulo}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="Black"/>
+
+                                <Label Text="{Binding Origem}"
+                                       FontSize="12"
+                                       TextColor="Gray"/>
+
+                                <Label Text="{Binding Detalhes}"
+                                       FontSize="12"
+                                       TextColor="Gray"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+
+</ContentPage>
