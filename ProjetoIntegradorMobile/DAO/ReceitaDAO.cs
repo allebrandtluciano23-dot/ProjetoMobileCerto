@@ -38,13 +38,6 @@ namespace ProjetoIntegradorMobile.DAO
             return await db.FindAsync<Receita>(iIdReceita);
         }
 
-        public async Task<List<Receita>> ListarAsync()
-        {
-            var db = await DatabaseConfig.Database.Conexao();
-            return await db.QueryAsync<Receita>(
-                "SELECT * FROM receita ORDER BY data_criacao DESC");
-        }
-
         /// <summary>
         /// Lista de receitas para os cards: dados da receita + nome da categoria
         /// + nomes dos ingredientes (para o filtro) + se é favorita DO USUÁRIO LOGADO.
@@ -96,33 +89,6 @@ namespace ProjetoIntegradorMobile.DAO
                 ORDER BY r.data_criacao DESC, r.id_receita DESC";
 
             return await db.QueryAsync<ReceitaResumo>(sSql, lParametros.ToArray());
-        }
-
-        public async Task<List<Receita>> ListarPorUsuarioAsync(int iIdUsuario)
-        {
-            var db = await DatabaseConfig.Database.Conexao();
-            return await db.QueryAsync<Receita>(
-                "SELECT * FROM receita WHERE id_usuario = ? ORDER BY data_criacao DESC", iIdUsuario);
-        }
-
-        public async Task<List<Receita>> ListarPorCategoriaAsync(int iIdCategoria)
-        {
-            var db = await DatabaseConfig.Database.Conexao();
-            return await db.QueryAsync<Receita>(
-                "SELECT * FROM receita WHERE id_categoria = ? ORDER BY titulo", iIdCategoria);
-        }
-
-        /// <summary>Filtro da busca: receitas cujo título ou algum ingrediente contém o texto.</summary>
-        public async Task<List<Receita>> BuscarAsync(string sTexto)
-        {
-            var db = await DatabaseConfig.Database.Conexao();
-            string sTermo = "%" + sTexto.Trim() + "%";
-            return await db.QueryAsync<Receita>(@"
-                SELECT DISTINCT r.* FROM receita r
-                LEFT JOIN receita_ingrediente ri ON ri.id_receita = r.id_receita
-                LEFT JOIN ingrediente i ON i.id_ingrediente = ri.id_ingrediente
-                WHERE r.titulo LIKE ? OR i.nome LIKE ?
-                ORDER BY r.titulo", sTermo, sTermo);
         }
 
         public async Task<List<IngredienteDaReceita>> ListarIngredientesAsync(int iIdReceita)

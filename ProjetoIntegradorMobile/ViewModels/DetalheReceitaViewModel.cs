@@ -37,14 +37,6 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sNomeCategoria, value);
         }
 
-        // Ex.: "40 min · 2 porções · Fácil"
-        private string sDetalhes = "";
-        public string Detalhes
-        {
-            get => sDetalhes;
-            set => SetProperty(ref sDetalhes, value);
-        }
-
         // Os três cartõezinhos do Resumo: tempo, porções e dificuldade ("—" quando não informado)
         private string sTextoTempo = "—";
         public string TextoTempo
@@ -250,7 +242,6 @@ namespace ProjetoIntegradorMobile.ViewModels
 
                 Titulo = receita.Titulo;
                 NomeCategoria = categoria?.Nome ?? "";
-                Detalhes = ReceitaResumo.MontarDetalhes(receita.TempoPreparoMin, receita.Porcoes, receita.Dificuldade);
                 TextoTempo = receita.TempoPreparoMin > 0 ? $"{receita.TempoPreparoMin} min" : "—";
                 TextoPorcoes = receita.Porcoes > 0 ? receita.Porcoes.ToString()! : "—";
                 TextoDificuldade = string.IsNullOrEmpty(receita.Dificuldade) ? "—" : receita.Dificuldade;

@@ -36,11 +36,10 @@ namespace ProjetoIntegradorMobile.ViewModels
         /// <summary>Lê a lista do banco. Chamado toda vez que a tela aparece.</summary>
         public async Task CarregarAsync()
         {
-            Receitas.Clear();
-
             Usuario? usuario = SessaoUsuario.UsuarioAtual;
             if (usuario == null)
             {
+                Receitas.Clear();
                 MensagemVazia = tipo == TipoLista.Favoritas
                     ? "Entre na sua conta para ver os seus favoritos."
                     : "Entre na sua conta para ver as suas receitas.";
@@ -58,6 +57,10 @@ namespace ProjetoIntegradorMobile.ViewModels
                     bSoFavoritas: tipo == TipoLista.Favoritas,
                     bSoDoUsuario: tipo == TipoLista.CriadasPorMim);
 
+                // Só limpa DEPOIS de ler do banco: se duas recargas acontecerem ao mesmo tempo
+                // (ex.: ao fechar o detalhe da receita), cada uma troca a lista inteira de uma vez,
+                // em vez de as duas adicionarem os mesmos itens (lista duplicada).
+                Receitas.Clear();
                 foreach (ReceitaResumo receita in lReceitas)
                     Receitas.Add(receita);
 

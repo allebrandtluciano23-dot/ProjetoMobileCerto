@@ -29,7 +29,7 @@ public partial class NovaReceitaPage : ContentPage
             bool bPodeEditar = await vm.CarregarReceitaAsync();
             if (!bPodeEditar)
             {
-                await DisplayAlertAsync("Editar receita", "Não foi possível abrir esta receita para edição.", "OK");
+                await grAviso.MostrarAsync("Editar receita", "Não foi possível abrir esta receita para edição.", "OK");
                 await Navigation.PopModalAsync();
                 return;
             }

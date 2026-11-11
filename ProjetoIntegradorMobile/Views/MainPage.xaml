@@ -1,10 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProjetoIntegradorMobile.Views.MainPage"
              xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
              xmlns:models="clr-namespace:ProjetoIntegradorMobile.Models"
+             xmlns:views="clr-namespace:ProjetoIntegradorMobile.Views"
              x:DataType="vm:MainViewModel"
              BackgroundColor="{StaticResource Fundo}"
              Shell.NavBarIsVisible="False">
@@ -428,70 +429,8 @@
         </Grid>
 
 
-        <!-- ===================== AVISO "ENTRE NA SUA CONTA" =====================
-             Cartão no estilo do app, por cima da tela escurecida.
-             Substitui o alerta padrão do sistema (que no Windows é uma janela escura). -->
-        <Grid x:Name="grAvisoLogin"
-              Grid.RowSpan="3"
-              BackgroundColor="{StaticResource FundoEscurecido}"
-              IsVisible="False">
-
-            <!-- Tocar fora do cartão fecha o aviso -->
-            <Grid.GestureRecognizers>
-                <TapGestureRecognizer Tapped="AvisoFundo_Tapped"/>
-            </Grid.GestureRecognizers>
-
-            <Border BackgroundColor="{StaticResource Fundo}"
-                    StrokeThickness="0"
-                    StrokeShape="RoundRectangle 24"
-                    Padding="24"
-                    Margin="30,0"
-                    MaximumWidthRequest="360"
-                    VerticalOptions="Center">
-
-                <!-- Toque no cartão não fecha o aviso -->
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer/>
-                </Border.GestureRecognizers>
-
-                <VerticalStackLayout Spacing="12">
-
-                    <Border WidthRequest="64"
-                            HeightRequest="64"
-                            StrokeThickness="0"
-                            BackgroundColor="{StaticResource FundoAvatar}"
-                            StrokeShape="RoundRectangle 32"
-                            HorizontalOptions="Center">
-                        <Path Data="{StaticResource IconeChapeu}"
-                              Style="{StaticResource Icone}"
-                              Stroke="{StaticResource Destaque}"
-                              WidthRequest="30"
-                              HeightRequest="30"/>
-                    </Border>
-
-                    <Label Text="Entre na sua conta"
-                           Style="{StaticResource TituloSecao}"
-                           HorizontalOptions="Center"/>
-
-                    <Label Text="Para criar receitas, você precisa entrar na sua conta."
-                           Style="{StaticResource TextoSecundario}"
-                           FontSize="14"
-                           HorizontalTextAlignment="Center"
-                           HorizontalOptions="Center"/>
-
-                    <Button x:Name="btAvisoEntrar"
-                            Text="Entrar"
-                            Style="{StaticResource BotaoPrincipal}"
-                            Margin="0,8,0,0"
-                            Clicked="btAvisoEntrar_Clicked"/>
-
-                    <Button x:Name="btAvisoCancelar"
-                            Text="Agora não"
-                            Style="{StaticResource BotaoSuave}"
-                            Clicked="btAvisoCancelar_Clicked"/>
-                </VerticalStackLayout>
-            </Border>
-        </Grid>
+        <!-- AVISO "ENTRE NA SUA CONTA" (cartão reutilizável, Views/CartaoAviso.xaml) -->
+        <views:CartaoAviso x:Name="grAviso" Grid.RowSpan="3"/>
 
     </Grid>
 

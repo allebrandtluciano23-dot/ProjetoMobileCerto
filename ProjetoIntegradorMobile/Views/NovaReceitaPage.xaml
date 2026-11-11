@@ -4,150 +4,96 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProjetoIntegradorMobile.Views.NovaReceitaPage"
              xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
+             xmlns:views="clr-namespace:ProjetoIntegradorMobile.Views"
              xmlns:models="clr-namespace:ProjetoIntegradorMobile.Models"
              x:DataType="vm:NovaReceitaViewModel"
              BackgroundColor="{StaticResource Fundo}"
              Shell.NavBarIsVisible="False">
 
-    <ScrollView>
+    <Grid>
 
-        <VerticalStackLayout Padding="20,45,20,32" Spacing="20">
+        <ScrollView>
 
-            <!-- CABEÇALHO: botão fechar + título ("Nova receita" ou "Editar receita") -->
-            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+            <VerticalStackLayout Padding="20,45,20,32" Spacing="20">
 
-                <Border WidthRequest="44"
-                        HeightRequest="44"
-                        Stroke="{StaticResource Borda}"
-                        StrokeThickness="1"
+                <!-- CABEÇALHO: botão fechar + título ("Nova receita" ou "Editar receita") -->
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+
+                    <Border WidthRequest="44"
+                            HeightRequest="44"
+                            Stroke="{StaticResource Borda}"
+                            StrokeThickness="1"
+                            BackgroundColor="{StaticResource Cartao}"
+                            StrokeShape="RoundRectangle 14">
+
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Voltar_Tapped"/>
+                        </Border.GestureRecognizers>
+
+                        <Path Data="{StaticResource IconeFechar}"
+                              Style="{StaticResource Icone}"
+                              WidthRequest="16"
+                              HeightRequest="16"/>
+                    </Border>
+
+                    <Label Grid.Column="1"
+                           Text="{Binding TituloTela}"
+                           Style="{StaticResource TituloTela}"
+                           VerticalOptions="Center"/>
+                </Grid>
+
+
+                <!-- ADICIONAR FOTO -->
+                <Border Stroke="{StaticResource Gray300}"
+                        StrokeThickness="1.5"
+                        StrokeDashArray="4,3"
                         BackgroundColor="{StaticResource Cartao}"
-                        StrokeShape="RoundRectangle 14">
+                        HeightRequest="150"
+                        StrokeShape="RoundRectangle 20">
 
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Voltar_Tapped"/>
+                        <TapGestureRecognizer Tapped="AdicionarFoto_Tapped"/>
                     </Border.GestureRecognizers>
 
-                    <Path Data="{StaticResource IconeFechar}"
-                          Style="{StaticResource Icone}"
-                          WidthRequest="16"
-                          HeightRequest="16"/>
-                </Border>
+                    <Grid>
 
-                <Label Grid.Column="1"
-                       Text="{Binding TituloTela}"
-                       Style="{StaticResource TituloTela}"
-                       VerticalOptions="Center"/>
-            </Grid>
+                        <!-- Foto escolhida -->
+                        <Image x:Name="imFoto"
+                               Source="{Binding CaminhoFoto}"
+                               Aspect="AspectFill"
+                               IsVisible="{Binding TemFoto}"/>
 
+                        <!-- Texto padrão (enquanto não tem foto) -->
+                        <VerticalStackLayout x:Name="slFotoVazia"
+                                             IsVisible="{Binding SemFoto}"
+                                             Spacing="8"
+                                             HorizontalOptions="Center"
+                                             VerticalOptions="Center">
 
-            <!-- ADICIONAR FOTO -->
-            <Border Stroke="{StaticResource Gray300}"
-                    StrokeThickness="1.5"
-                    StrokeDashArray="4,3"
-                    BackgroundColor="{StaticResource Cartao}"
-                    HeightRequest="150"
-                    StrokeShape="RoundRectangle 20">
+                            <Border WidthRequest="48"
+                                    HeightRequest="48"
+                                    StrokeThickness="0"
+                                    BackgroundColor="{StaticResource Chip}"
+                                    StrokeShape="RoundRectangle 24"
+                                    HorizontalOptions="Center">
+                                <Path Data="{StaticResource IconeCamera}"
+                                      Style="{StaticResource Icone}"
+                                      Stroke="{StaticResource Destaque}"/>
+                            </Border>
 
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="AdicionarFoto_Tapped"/>
-                </Border.GestureRecognizers>
+                            <Label Text="Adicionar foto (opcional)"
+                                   Style="{StaticResource TextoSecundario}"
+                                   FontSize="14"
+                                   HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
 
-                <Grid>
-
-                    <!-- Foto escolhida -->
-                    <Image x:Name="imFoto"
-                           Source="{Binding CaminhoFoto}"
-                           Aspect="AspectFill"
-                           IsVisible="{Binding TemFoto}"/>
-
-                    <!-- Texto padrão (enquanto não tem foto) -->
-                    <VerticalStackLayout x:Name="slFotoVazia"
-                                         IsVisible="{Binding SemFoto}"
-                                         Spacing="8"
-                                         HorizontalOptions="Center"
-                                         VerticalOptions="Center">
-
-                        <Border WidthRequest="48"
-                                HeightRequest="48"
-                                StrokeThickness="0"
-                                BackgroundColor="{StaticResource Chip}"
-                                StrokeShape="RoundRectangle 24"
-                                HorizontalOptions="Center">
-                            <Path Data="{StaticResource IconeCamera}"
-                                  Style="{StaticResource Icone}"
-                                  Stroke="{StaticResource Destaque}"/>
-                        </Border>
-
-                        <Label Text="Adicionar foto (opcional)"
-                               Style="{StaticResource TextoSecundario}"
-                               FontSize="14"
-                               HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
-
-                </Grid>
-            </Border>
-
-
-            <!-- NOME DA RECEITA -->
-            <VerticalStackLayout Spacing="8">
-                <Label Text="Nome da receita" Style="{StaticResource Rotulo}"/>
-
-                <Border Stroke="{StaticResource Borda}"
-                        StrokeThickness="1"
-                        BackgroundColor="{StaticResource Cartao}"
-                        HeightRequest="50"
-                        StrokeShape="RoundRectangle 14"
-                        Padding="14,0">
-
-                    <Entry x:Name="txTitulo"
-                           Text="{Binding Titulo}"
-                           Placeholder="Ex.: Bolo de cenoura"
-                           FontSize="15"
-                           MaxLength="80"
-                           VerticalOptions="Center"/>
-                </Border>
-            </VerticalStackLayout>
-
-
-            <!-- CATEGORIA -->
-            <VerticalStackLayout Spacing="8">
-                <Label Text="Categoria" Style="{StaticResource Rotulo}"/>
-
-                <Border Stroke="{StaticResource Borda}"
-                        StrokeThickness="1"
-                        BackgroundColor="{StaticResource Cartao}"
-                        HeightRequest="50"
-                        StrokeShape="RoundRectangle 14"
-                        Padding="14,0">
-
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Picker x:Name="pkCategoria"
-                                ItemsSource="{Binding Categorias}"
-                                SelectedItem="{Binding CategoriaSelecionada}"
-                                Title="Selecione"
-                                TitleColor="{StaticResource TextoFraco}"
-                                FontSize="15"
-                                VerticalOptions="Center"/>
-
-                        <!-- Setinha (no Windows a própria lista já mostra uma) -->
-                        <Path Grid.Column="1"
-                              Data="{StaticResource IconeSetaBaixo}"
-                              Style="{StaticResource Icone}"
-                              Stroke="{StaticResource TextoSuave}"
-                              WidthRequest="16"
-                              HeightRequest="16"
-                              InputTransparent="True"
-                              IsVisible="{OnPlatform Android=True, Default=False}"/>
                     </Grid>
                 </Border>
-            </VerticalStackLayout>
 
 
-            <!-- TEMPO DE PREPARO E PORÇÕES -->
-            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-
-                <VerticalStackLayout Grid.Column="0" Spacing="8">
-                    <Label Text="Tempo (h:min)" Style="{StaticResource Rotulo}"/>
+                <!-- NOME DA RECEITA -->
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Nome da receita" Style="{StaticResource Rotulo}"/>
 
                     <Border Stroke="{StaticResource Borda}"
                             StrokeThickness="1"
@@ -156,268 +102,329 @@
                             StrokeShape="RoundRectangle 14"
                             Padding="14,0">
 
-                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                            <Path Data="{StaticResource IconeRelogio}"
+                        <Entry x:Name="txTitulo"
+                               Text="{Binding Titulo}"
+                               Placeholder="Ex.: Bolo de cenoura"
+                               FontSize="15"
+                               MaxLength="80"
+                               VerticalOptions="Center"/>
+                    </Border>
+                </VerticalStackLayout>
+
+
+                <!-- CATEGORIA -->
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Categoria" Style="{StaticResource Rotulo}"/>
+
+                    <Border Stroke="{StaticResource Borda}"
+                            StrokeThickness="1"
+                            BackgroundColor="{StaticResource Cartao}"
+                            HeightRequest="50"
+                            StrokeShape="RoundRectangle 14"
+                            Padding="14,0">
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Picker x:Name="pkCategoria"
+                                    ItemsSource="{Binding Categorias}"
+                                    SelectedItem="{Binding CategoriaSelecionada}"
+                                    Title="Selecione"
+                                    TitleColor="{StaticResource TextoFraco}"
+                                    FontSize="15"
+                                    VerticalOptions="Center"/>
+
+                            <!-- Setinha (no Windows a própria lista já mostra uma) -->
+                            <Path Grid.Column="1"
+                                  Data="{StaticResource IconeSetaBaixo}"
                                   Style="{StaticResource Icone}"
                                   Stroke="{StaticResource TextoSuave}"
-                                  WidthRequest="17"
-                                  HeightRequest="17"/>
-
-                            <TimePicker Grid.Column="1"
-                                        x:Name="tpTempo"
-                                        Time="{Binding TempoPreparo}"
-                                        Format="HH:mm"
-                                        FontSize="15"
-                                        VerticalOptions="Center"/>
+                                  WidthRequest="16"
+                                  HeightRequest="16"
+                                  InputTransparent="True"
+                                  IsVisible="{OnPlatform Android=True, Default=False}"/>
                         </Grid>
                     </Border>
                 </VerticalStackLayout>
 
-                <VerticalStackLayout Grid.Column="1" Spacing="8">
-                    <Label Text="Porções" Style="{StaticResource Rotulo}"/>
 
+                <!-- TEMPO DE PREPARO E PORÇÕES -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+
+                    <VerticalStackLayout Grid.Column="0" Spacing="8">
+                        <Label Text="Tempo (h:min)" Style="{StaticResource Rotulo}"/>
+
+                        <Border Stroke="{StaticResource Borda}"
+                                StrokeThickness="1"
+                                BackgroundColor="{StaticResource Cartao}"
+                                HeightRequest="50"
+                                StrokeShape="RoundRectangle 14"
+                                Padding="14,0">
+
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                <Path Data="{StaticResource IconeRelogio}"
+                                      Style="{StaticResource Icone}"
+                                      Stroke="{StaticResource TextoSuave}"
+                                      WidthRequest="17"
+                                      HeightRequest="17"/>
+
+                                <TimePicker Grid.Column="1"
+                                            x:Name="tpTempo"
+                                            Time="{Binding TempoPreparo}"
+                                            Format="HH:mm"
+                                            FontSize="15"
+                                            VerticalOptions="Center"/>
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="1" Spacing="8">
+                        <Label Text="Porções" Style="{StaticResource Rotulo}"/>
+
+                        <Border Stroke="{StaticResource Borda}"
+                                StrokeThickness="1"
+                                BackgroundColor="{StaticResource Cartao}"
+                                HeightRequest="50"
+                                StrokeShape="RoundRectangle 14"
+                                Padding="14,0">
+
+                            <Entry x:Name="txPorcoes"
+                                   Text="{Binding Porcoes}"
+                                   Placeholder="Ex.: 4"
+                                   FontSize="15"
+                                   Keyboard="Numeric"
+                                   MaxLength="2"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                    </VerticalStackLayout>
+                </Grid>
+
+
+                <!-- DIFICULDADE (RadioButton: só uma opção pode ser escolhida).
+                     O desenho de cada opção vem do estilo "OpcaoDificuldade" (Styles.xaml). -->
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Dificuldade" Style="{StaticResource Rotulo}"/>
+
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+
+                        <RadioButton x:Name="rbFacil"
+                                     Content="Fácil"
+                                     Value="Fácil"
+                                     GroupName="Dificuldade"
+                                     Style="{StaticResource OpcaoDificuldade}"
+                                     CheckedChanged="Dificuldade_CheckedChanged"/>
+
+                        <RadioButton Grid.Column="1"
+                                     x:Name="rbMedia"
+                                     Content="Média"
+                                     Value="Média"
+                                     GroupName="Dificuldade"
+                                     Style="{StaticResource OpcaoDificuldade}"
+                                     CheckedChanged="Dificuldade_CheckedChanged"/>
+
+                        <RadioButton Grid.Column="2"
+                                     x:Name="rbDificil"
+                                     Content="Difícil"
+                                     Value="Difícil"
+                                     GroupName="Dificuldade"
+                                     Style="{StaticResource OpcaoDificuldade}"
+                                     CheckedChanged="Dificuldade_CheckedChanged"/>
+                    </Grid>
+                </VerticalStackLayout>
+
+
+                <!-- VEGETARIANA (CheckBox: campo booleano "vegetariana") -->
+                <Border Stroke="{StaticResource Borda}"
+                        StrokeThickness="1"
+                        BackgroundColor="{StaticResource Cartao}"
+                        StrokeShape="RoundRectangle 14"
+                        Padding="8,2,14,2">
+
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="4">
+                        <CheckBox x:Name="cbVegetariana"
+                                  IsChecked="{Binding Vegetariana}"
+                                  Color="{StaticResource Vegetariana}"
+                                  VerticalOptions="Center"/>
+
+                        <Label Grid.Column="1"
+                               Text="Receita vegetariana"
+                               FontSize="15"
+                               VerticalOptions="Center"/>
+
+                        <Path Grid.Column="2"
+                              Data="{StaticResource IconeFolha}"
+                              Style="{StaticResource Icone}"
+                              Stroke="{StaticResource Vegetariana}"
+                              WidthRequest="18"
+                              HeightRequest="18"/>
+                    </Grid>
+                </Border>
+
+
+                <!-- INGREDIENTES -->
+                <VerticalStackLayout Spacing="10">
+
+                    <Label Text="Ingredientes" Style="{StaticResource TituloSecao}"/>
+
+                    <!-- Campos para adicionar um ingrediente -->
                     <Border Stroke="{StaticResource Borda}"
                             StrokeThickness="1"
                             BackgroundColor="{StaticResource Cartao}"
-                            HeightRequest="50"
+                            HeightRequest="48"
                             StrokeShape="RoundRectangle 14"
                             Padding="14,0">
 
-                        <Entry x:Name="txPorcoes"
-                               Text="{Binding Porcoes}"
-                               Placeholder="Ex.: 4"
+                        <Entry x:Name="txIngredienteNome"
+                               Text="{Binding NovoIngredienteNome}"
+                               Placeholder="Ingrediente (ex.: Farinha)"
                                FontSize="15"
-                               Keyboard="Numeric"
-                               MaxLength="2"
                                VerticalOptions="Center"/>
                     </Border>
+
+                    <Grid ColumnDefinitions="90,*,48" ColumnSpacing="8">
+
+                        <Border Stroke="{StaticResource Borda}"
+                                StrokeThickness="1"
+                                BackgroundColor="{StaticResource Cartao}"
+                                HeightRequest="48"
+                                StrokeShape="RoundRectangle 14"
+                                Padding="12,0">
+
+                            <Entry x:Name="txIngredienteQuantidade"
+                                   Text="{Binding NovoIngredienteQuantidade}"
+                                   Placeholder="Qtd."
+                                   FontSize="15"
+                                   Keyboard="Numeric"
+                                   VerticalOptions="Center"/>
+                        </Border>
+
+                        <Border Grid.Column="1"
+                                Stroke="{StaticResource Borda}"
+                                StrokeThickness="1"
+                                BackgroundColor="{StaticResource Cartao}"
+                                HeightRequest="48"
+                                StrokeShape="RoundRectangle 14"
+                                Padding="12,0">
+
+                            <Picker x:Name="pkIngredienteUnidade"
+                                    ItemsSource="{Binding Unidades}"
+                                    SelectedItem="{Binding NovoIngredienteUnidade}"
+                                    Title="Unidade"
+                                    TitleColor="{StaticResource TextoFraco}"
+                                    FontSize="15"
+                                    VerticalOptions="Center"/>
+                        </Border>
+
+                        <Button Grid.Column="2"
+                                x:Name="btAdicionarIngrediente"
+                                Text="+"
+                                Style="{StaticResource BotaoPrincipal}"
+                                FontSize="22"
+                                WidthRequest="48"
+                                HeightRequest="48"
+                                CornerRadius="14"
+                                Padding="0"
+                                Clicked="btAdicionarIngrediente_Clicked"/>
+                    </Grid>
+
+                    <Label Text="{Binding ErroIngrediente}"
+                           IsVisible="{Binding TemErroIngrediente}"
+                           Style="{StaticResource TextoErro}"/>
+
+                    <!-- Lista dos ingredientes já adicionados -->
+                    <VerticalStackLayout x:Name="slIngredientes"
+                                         Spacing="8"
+                                         BindableLayout.ItemsSource="{Binding Ingredientes}">
+
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="models:IngredienteDaReceita">
+
+                                <Border Stroke="{StaticResource BordaCartao}"
+                                        StrokeThickness="1"
+                                        BackgroundColor="{StaticResource Cartao}"
+                                        StrokeShape="RoundRectangle 14"
+                                        Padding="14,8">
+
+                                    <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+
+                                        <Label Text="{Binding Nome}"
+                                               FontSize="14"
+                                               VerticalOptions="Center"/>
+
+                                        <Label Grid.Column="1"
+                                               Text="{Binding QuantidadeTexto}"
+                                               Style="{StaticResource TextoSecundario}"
+                                               VerticalOptions="Center"/>
+
+                                        <!-- Remover ingrediente -->
+                                        <Border Grid.Column="2"
+                                                WidthRequest="30"
+                                                HeightRequest="30"
+                                                StrokeThickness="0"
+                                                BackgroundColor="{StaticResource Chip}"
+                                                StrokeShape="RoundRectangle 15">
+
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="RemoverIngrediente_Tapped"
+                                                                      CommandParameter="{Binding .}"/>
+                                            </Border.GestureRecognizers>
+
+                                            <Path Data="{StaticResource IconeFechar}"
+                                                  Style="{StaticResource Icone}"
+                                                  Stroke="{StaticResource TextoSuave}"
+                                                  StrokeThickness="2.5"
+                                                  WidthRequest="11"
+                                                  HeightRequest="11"/>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
-            </Grid>
 
 
-            <!-- DIFICULDADE (RadioButton: só uma opção pode ser escolhida).
-                 O desenho de cada opção vem do estilo "OpcaoDificuldade" (Styles.xaml). -->
-            <VerticalStackLayout Spacing="8">
-                <Label Text="Dificuldade" Style="{StaticResource Rotulo}"/>
+                <!-- MODO DE PREPARO -->
+                <VerticalStackLayout Spacing="10">
 
-                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
-
-                    <RadioButton x:Name="rbFacil"
-                                 Content="Fácil"
-                                 Value="Fácil"
-                                 GroupName="Dificuldade"
-                                 Style="{StaticResource OpcaoDificuldade}"
-                                 CheckedChanged="Dificuldade_CheckedChanged"/>
-
-                    <RadioButton Grid.Column="1"
-                                 x:Name="rbMedia"
-                                 Content="Média"
-                                 Value="Média"
-                                 GroupName="Dificuldade"
-                                 Style="{StaticResource OpcaoDificuldade}"
-                                 CheckedChanged="Dificuldade_CheckedChanged"/>
-
-                    <RadioButton Grid.Column="2"
-                                 x:Name="rbDificil"
-                                 Content="Difícil"
-                                 Value="Difícil"
-                                 GroupName="Dificuldade"
-                                 Style="{StaticResource OpcaoDificuldade}"
-                                 CheckedChanged="Dificuldade_CheckedChanged"/>
-                </Grid>
-            </VerticalStackLayout>
-
-
-            <!-- VEGETARIANA (CheckBox: campo booleano "vegetariana") -->
-            <Border Stroke="{StaticResource Borda}"
-                    StrokeThickness="1"
-                    BackgroundColor="{StaticResource Cartao}"
-                    StrokeShape="RoundRectangle 14"
-                    Padding="8,2,14,2">
-
-                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="4">
-                    <CheckBox x:Name="cbVegetariana"
-                              IsChecked="{Binding Vegetariana}"
-                              Color="{StaticResource Vegetariana}"
-                              VerticalOptions="Center"/>
-
-                    <Label Grid.Column="1"
-                           Text="Receita vegetariana"
-                           FontSize="15"
-                           VerticalOptions="Center"/>
-
-                    <Path Grid.Column="2"
-                          Data="{StaticResource IconeFolha}"
-                          Style="{StaticResource Icone}"
-                          Stroke="{StaticResource Vegetariana}"
-                          WidthRequest="18"
-                          HeightRequest="18"/>
-                </Grid>
-            </Border>
-
-
-            <!-- INGREDIENTES -->
-            <VerticalStackLayout Spacing="10">
-
-                <Label Text="Ingredientes" Style="{StaticResource TituloSecao}"/>
-
-                <!-- Campos para adicionar um ingrediente -->
-                <Border Stroke="{StaticResource Borda}"
-                        StrokeThickness="1"
-                        BackgroundColor="{StaticResource Cartao}"
-                        HeightRequest="48"
-                        StrokeShape="RoundRectangle 14"
-                        Padding="14,0">
-
-                    <Entry x:Name="txIngredienteNome"
-                           Text="{Binding NovoIngredienteNome}"
-                           Placeholder="Ingrediente (ex.: Farinha)"
-                           FontSize="15"
-                           VerticalOptions="Center"/>
-                </Border>
-
-                <Grid ColumnDefinitions="90,*,48" ColumnSpacing="8">
+                    <Label Text="Modo de preparo" Style="{StaticResource TituloSecao}"/>
 
                     <Border Stroke="{StaticResource Borda}"
                             StrokeThickness="1"
                             BackgroundColor="{StaticResource Cartao}"
-                            HeightRequest="48"
+                            HeightRequest="160"
                             StrokeShape="RoundRectangle 14"
-                            Padding="12,0">
+                            Padding="12,6">
 
-                        <Entry x:Name="txIngredienteQuantidade"
-                               Text="{Binding NovoIngredienteQuantidade}"
-                               Placeholder="Qtd."
-                               FontSize="15"
-                               Keyboard="Numeric"
-                               VerticalOptions="Center"/>
+                        <Editor x:Name="edModoPreparo"
+                                Text="{Binding ModoPreparo}"
+                                Placeholder="1. Misture os ingredientes...&#10;2. Leve ao forno..."
+                                FontSize="15"/>
                     </Border>
-
-                    <Border Grid.Column="1"
-                            Stroke="{StaticResource Borda}"
-                            StrokeThickness="1"
-                            BackgroundColor="{StaticResource Cartao}"
-                            HeightRequest="48"
-                            StrokeShape="RoundRectangle 14"
-                            Padding="12,0">
-
-                        <Picker x:Name="pkIngredienteUnidade"
-                                ItemsSource="{Binding Unidades}"
-                                SelectedItem="{Binding NovoIngredienteUnidade}"
-                                Title="Unidade"
-                                TitleColor="{StaticResource TextoFraco}"
-                                FontSize="15"
-                                VerticalOptions="Center"/>
-                    </Border>
-
-                    <Button Grid.Column="2"
-                            x:Name="btAdicionarIngrediente"
-                            Text="+"
-                            Style="{StaticResource BotaoPrincipal}"
-                            FontSize="22"
-                            WidthRequest="48"
-                            HeightRequest="48"
-                            CornerRadius="14"
-                            Padding="0"
-                            Clicked="btAdicionarIngrediente_Clicked"/>
-                </Grid>
-
-                <Label Text="{Binding ErroIngrediente}"
-                       IsVisible="{Binding TemErroIngrediente}"
-                       Style="{StaticResource TextoErro}"/>
-
-                <!-- Lista dos ingredientes já adicionados -->
-                <VerticalStackLayout x:Name="slIngredientes"
-                                     Spacing="8"
-                                     BindableLayout.ItemsSource="{Binding Ingredientes}">
-
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="models:IngredienteDaReceita">
-
-                            <Border Stroke="{StaticResource BordaCartao}"
-                                    StrokeThickness="1"
-                                    BackgroundColor="{StaticResource Cartao}"
-                                    StrokeShape="RoundRectangle 14"
-                                    Padding="14,8">
-
-                                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
-
-                                    <Label Text="{Binding Nome}"
-                                           FontSize="14"
-                                           VerticalOptions="Center"/>
-
-                                    <Label Grid.Column="1"
-                                           Text="{Binding QuantidadeTexto}"
-                                           Style="{StaticResource TextoSecundario}"
-                                           VerticalOptions="Center"/>
-
-                                    <!-- Remover ingrediente -->
-                                    <Border Grid.Column="2"
-                                            WidthRequest="30"
-                                            HeightRequest="30"
-                                            StrokeThickness="0"
-                                            BackgroundColor="{StaticResource Chip}"
-                                            StrokeShape="RoundRectangle 15">
-
-                                        <Border.GestureRecognizers>
-                                            <TapGestureRecognizer Tapped="RemoverIngrediente_Tapped"
-                                                                  CommandParameter="{Binding .}"/>
-                                        </Border.GestureRecognizers>
-
-                                        <Path Data="{StaticResource IconeFechar}"
-                                              Style="{StaticResource Icone}"
-                                              Stroke="{StaticResource TextoSuave}"
-                                              StrokeThickness="2.5"
-                                              WidthRequest="11"
-                                              HeightRequest="11"/>
-                                    </Border>
-                                </Grid>
-                            </Border>
-
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
                 </VerticalStackLayout>
+
+
+                <!-- MENSAGEM DE ERRO -->
+                <Label x:Name="lbErro"
+                       Text="{Binding MensagemErro}"
+                       IsVisible="{Binding TemErro}"
+                       Style="{StaticResource TextoErro}"
+                       HorizontalOptions="Center"/>
+
+
+                <!-- BOTÃO SALVAR ("Salvar receita" ou "Salvar alterações") -->
+                <Button x:Name="btSalvar"
+                        Text="{Binding TextoBotao}"
+                        Style="{StaticResource BotaoPrincipal}"
+                        FontSize="16"
+                        HeightRequest="54"
+                        Clicked="btSalvar_Clicked"/>
+
             </VerticalStackLayout>
 
+        </ScrollView>
 
-            <!-- MODO DE PREPARO -->
-            <VerticalStackLayout Spacing="10">
-
-                <Label Text="Modo de preparo" Style="{StaticResource TituloSecao}"/>
-
-                <Border Stroke="{StaticResource Borda}"
-                        StrokeThickness="1"
-                        BackgroundColor="{StaticResource Cartao}"
-                        HeightRequest="160"
-                        StrokeShape="RoundRectangle 14"
-                        Padding="12,6">
-
-                    <Editor x:Name="edModoPreparo"
-                            Text="{Binding ModoPreparo}"
-                            Placeholder="1. Misture os ingredientes...&#10;2. Leve ao forno..."
-                            FontSize="15"/>
-                </Border>
-            </VerticalStackLayout>
-
-
-            <!-- MENSAGEM DE ERRO -->
-            <Label x:Name="lbErro"
-                   Text="{Binding MensagemErro}"
-                   IsVisible="{Binding TemErro}"
-                   Style="{StaticResource TextoErro}"
-                   HorizontalOptions="Center"/>
-
-
-            <!-- BOTÃO SALVAR ("Salvar receita" ou "Salvar alterações") -->
-            <Button x:Name="btSalvar"
-                    Text="{Binding TextoBotao}"
-                    Style="{StaticResource BotaoPrincipal}"
-                    FontSize="16"
-                    HeightRequest="54"
-                    Clicked="btSalvar_Clicked"/>
-
-        </VerticalStackLayout>
-
-    </ScrollView>
+        <!-- Cartão de aviso (no lugar do alerta padrão do sistema) -->
+        <views:CartaoAviso x:Name="grAviso"/>
+    </Grid>
 
 </ContentPage>

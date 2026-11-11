@@ -11,9 +11,6 @@ namespace ProjetoIntegradorMobile
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-
                     fonts.AddFont("Inter-Regular.otf", "Inter");                    
                     fonts.AddFont("Inter-SemiBold.otf", "InterSemiBold");           
                     fonts.AddFont("BricolageGrotesque-Bold.ttf", "Bricolage");      

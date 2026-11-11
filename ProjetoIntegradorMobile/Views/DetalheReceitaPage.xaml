@@ -9,6 +9,7 @@
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
             x:Class="ProjetoIntegradorMobile.Views.DetalheReceitaPage"
             xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
+            xmlns:views="clr-namespace:ProjetoIntegradorMobile.Views"
             xmlns:models="clr-namespace:ProjetoIntegradorMobile.Models"
             x:DataType="vm:DetalheReceitaViewModel"
             BarBackgroundColor="{StaticResource Fundo}"
@@ -18,175 +19,181 @@
     <!-- ===================== ABA 1: RESUMO ===================== -->
     <ContentPage Title="Resumo" BackgroundColor="{StaticResource Fundo}">
 
-        <ScrollView>
-            <VerticalStackLayout Padding="20,18,20,28" Spacing="14">
+        <Grid>
 
-                <!-- Foto (ou o desenho de um prato, se a receita não tiver foto) -->
-                <Border HeightRequest="190"
-                        StrokeThickness="0"
-                        BackgroundColor="{StaticResource FotoVazia}"
-                        StrokeShape="RoundRectangle 22">
-                    <Grid>
-                        <Path Data="{StaticResource IconePrato}"
+            <ScrollView>
+                <VerticalStackLayout Padding="20,18,20,28" Spacing="14">
+
+                    <!-- Foto (ou o desenho de um prato, se a receita não tiver foto) -->
+                    <Border HeightRequest="190"
+                            StrokeThickness="0"
+                            BackgroundColor="{StaticResource FotoVazia}"
+                            StrokeShape="RoundRectangle 22">
+                        <Grid>
+                            <Path Data="{StaticResource IconePrato}"
+                                  Style="{StaticResource Icone}"
+                                  Stroke="White"
+                                  WidthRequest="64"
+                                  HeightRequest="64"
+                                  IsVisible="{Binding SemFoto}"/>
+
+                            <Image x:Name="imFoto"
+                                   Source="{Binding CaminhoFoto}"
+                                   Aspect="AspectFill"
+                                   IsVisible="{Binding TemFoto}"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Categoria, título e autor -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="{Binding NomeCategoria}"
+                               Style="{StaticResource Sobrelinha}"/>
+
+                        <Label x:Name="lbTitulo"
+                               Text="{Binding Titulo}"
+                               Style="{StaticResource TituloTela}"/>
+
+                        <Label Text="{Binding Autor}"
+                               Style="{StaticResource TextoSecundario}"/>
+                    </VerticalStackLayout>
+
+                    <!-- Tempo | Porções | Dificuldade -->
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+
+                        <Border BackgroundColor="{StaticResource Cartao}"
+                                Stroke="{StaticResource BordaCartao}"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 16"
+                                Padding="6,12">
+                            <VerticalStackLayout Spacing="4">
+                                <Path Data="{StaticResource IconeRelogio}"
+                                      Style="{StaticResource Icone}"
+                                      Stroke="{StaticResource Destaque}"
+                                      WidthRequest="20"
+                                      HeightRequest="20"/>
+                                <Label Text="{Binding TextoTempo}"
+                                       FontFamily="InterSemiBold"
+                                       FontSize="14"
+                                       HorizontalOptions="Center"/>
+                                <Label Text="Tempo"
+                                       Style="{StaticResource TextoSecundario}"
+                                       FontSize="11"
+                                       HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="1"
+                                BackgroundColor="{StaticResource Cartao}"
+                                Stroke="{StaticResource BordaCartao}"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 16"
+                                Padding="6,12">
+                            <VerticalStackLayout Spacing="4">
+                                <Path Data="{StaticResource IconePorcoes}"
+                                      Style="{StaticResource Icone}"
+                                      Stroke="{StaticResource Destaque}"
+                                      WidthRequest="20"
+                                      HeightRequest="20"/>
+                                <Label Text="{Binding TextoPorcoes}"
+                                       FontFamily="InterSemiBold"
+                                       FontSize="14"
+                                       HorizontalOptions="Center"/>
+                                <Label Text="Porções"
+                                       Style="{StaticResource TextoSecundario}"
+                                       FontSize="11"
+                                       HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="2"
+                                BackgroundColor="{StaticResource Cartao}"
+                                Stroke="{StaticResource BordaCartao}"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 16"
+                                Padding="6,12">
+                            <VerticalStackLayout Spacing="4">
+                                <Path Data="{StaticResource IconeNivel}"
+                                      Style="{StaticResource Icone}"
+                                      Stroke="{StaticResource Destaque}"
+                                      WidthRequest="20"
+                                      HeightRequest="20"/>
+                                <Label Text="{Binding TextoDificuldade}"
+                                       FontFamily="InterSemiBold"
+                                       FontSize="14"
+                                       HorizontalOptions="Center"/>
+                                <Label Text="Dificuldade"
+                                       Style="{StaticResource TextoSecundario}"
+                                       FontSize="11"
+                                       HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <!-- Selo vegetariana -->
+                    <HorizontalStackLayout Spacing="6" IsVisible="{Binding Vegetariana}">
+                        <Path Data="{StaticResource IconeFolha}"
                               Style="{StaticResource Icone}"
-                              Stroke="White"
-                              WidthRequest="64"
-                              HeightRequest="64"
-                              IsVisible="{Binding SemFoto}"/>
+                              Stroke="{StaticResource Vegetariana}"
+                              WidthRequest="16"
+                              HeightRequest="16"/>
+                        <Label Text="Receita vegetariana"
+                               FontFamily="InterSemiBold"
+                               FontSize="14"
+                               TextColor="{StaticResource Vegetariana}"
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
 
-                        <Image x:Name="imFoto"
-                               Source="{Binding CaminhoFoto}"
-                               Aspect="AspectFill"
-                               IsVisible="{Binding TemFoto}"/>
-                    </Grid>
-                </Border>
+                    <Label Text="{Binding MensagemErro}"
+                           IsVisible="{Binding TemErro}"
+                           Style="{StaticResource TextoErro}"/>
 
-                <!-- Categoria, título e autor -->
-                <VerticalStackLayout Spacing="4">
-                    <Label Text="{Binding NomeCategoria}"
-                           Style="{StaticResource Sobrelinha}"/>
+                    <!-- Botões -->
+                    <VerticalStackLayout Spacing="10" Margin="0,6,0,0">
 
-                    <Label x:Name="lbTitulo"
-                           Text="{Binding Titulo}"
-                           Style="{StaticResource TituloTela}"/>
+                        <!-- Favoritar: para qualquer usuário logado (cada um tem os seus favoritos) -->
+                        <Button x:Name="btFavoritar"
+                                Text="{Binding TextoFavorito}"
+                                Style="{StaticResource BotaoContorno}"
+                                IsVisible="{Binding EstaLogado}"
+                                Clicked="btFavoritar_Clicked"/>
 
-                    <Label Text="{Binding Autor}"
-                           Style="{StaticResource TextoSecundario}"/>
-                </VerticalStackLayout>
-
-                <!-- Tempo | Porções | Dificuldade -->
-                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
-
-                    <Border BackgroundColor="{StaticResource Cartao}"
-                            Stroke="{StaticResource BordaCartao}"
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 16"
-                            Padding="6,12">
-                        <VerticalStackLayout Spacing="4">
-                            <Path Data="{StaticResource IconeRelogio}"
-                                  Style="{StaticResource Icone}"
-                                  Stroke="{StaticResource Destaque}"
-                                  WidthRequest="20"
-                                  HeightRequest="20"/>
-                            <Label Text="{Binding TextoTempo}"
-                                   FontFamily="InterSemiBold"
-                                   FontSize="14"
-                                   HorizontalOptions="Center"/>
-                            <Label Text="Tempo"
-                                   Style="{StaticResource TextoSecundario}"
-                                   FontSize="11"
-                                   HorizontalOptions="Center"/>
-                        </VerticalStackLayout>
-                    </Border>
-
-                    <Border Grid.Column="1"
-                            BackgroundColor="{StaticResource Cartao}"
-                            Stroke="{StaticResource BordaCartao}"
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 16"
-                            Padding="6,12">
-                        <VerticalStackLayout Spacing="4">
-                            <Path Data="{StaticResource IconePorcoes}"
-                                  Style="{StaticResource Icone}"
-                                  Stroke="{StaticResource Destaque}"
-                                  WidthRequest="20"
-                                  HeightRequest="20"/>
-                            <Label Text="{Binding TextoPorcoes}"
-                                   FontFamily="InterSemiBold"
-                                   FontSize="14"
-                                   HorizontalOptions="Center"/>
-                            <Label Text="Porções"
-                                   Style="{StaticResource TextoSecundario}"
-                                   FontSize="11"
-                                   HorizontalOptions="Center"/>
-                        </VerticalStackLayout>
-                    </Border>
-
-                    <Border Grid.Column="2"
-                            BackgroundColor="{StaticResource Cartao}"
-                            Stroke="{StaticResource BordaCartao}"
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 16"
-                            Padding="6,12">
-                        <VerticalStackLayout Spacing="4">
-                            <Path Data="{StaticResource IconeNivel}"
-                                  Style="{StaticResource Icone}"
-                                  Stroke="{StaticResource Destaque}"
-                                  WidthRequest="20"
-                                  HeightRequest="20"/>
-                            <Label Text="{Binding TextoDificuldade}"
-                                   FontFamily="InterSemiBold"
-                                   FontSize="14"
-                                   HorizontalOptions="Center"/>
-                            <Label Text="Dificuldade"
-                                   Style="{StaticResource TextoSecundario}"
-                                   FontSize="11"
-                                   HorizontalOptions="Center"/>
-                        </VerticalStackLayout>
-                    </Border>
-                </Grid>
-
-                <!-- Selo vegetariana -->
-                <HorizontalStackLayout Spacing="6" IsVisible="{Binding Vegetariana}">
-                    <Path Data="{StaticResource IconeFolha}"
-                          Style="{StaticResource Icone}"
-                          Stroke="{StaticResource Vegetariana}"
-                          WidthRequest="16"
-                          HeightRequest="16"/>
-                    <Label Text="Receita vegetariana"
-                           FontFamily="InterSemiBold"
-                           FontSize="14"
-                           TextColor="{StaticResource Vegetariana}"
-                           VerticalOptions="Center"/>
-                </HorizontalStackLayout>
-
-                <Label Text="{Binding MensagemErro}"
-                       IsVisible="{Binding TemErro}"
-                       Style="{StaticResource TextoErro}"/>
-
-                <!-- Botões -->
-                <VerticalStackLayout Spacing="10" Margin="0,6,0,0">
-
-                    <!-- Favoritar: para qualquer usuário logado (cada um tem os seus favoritos) -->
-                    <Button x:Name="btFavoritar"
-                            Text="{Binding TextoFavorito}"
-                            Style="{StaticResource BotaoContorno}"
-                            IsVisible="{Binding EstaLogado}"
-                            Clicked="btFavoritar_Clicked"/>
-
-                    <!-- Capturar: para quem NÃO é o autor. Cria uma cópia só sua, que você pode editar.
-                         Se já capturou, o botão abre a sua versão. -->
-                    <Button x:Name="btCapturar"
-                            Text="{Binding TextoCaptura}"
-                            Style="{StaticResource BotaoEscuro}"
-                            IsVisible="{Binding PodeCapturar}"
-                            Clicked="btCapturar_Clicked"/>
-
-                    <!-- Editar e Excluir: só aparecem para quem criou a receita -->
-                    <Grid ColumnDefinitions="*,*"
-                          ColumnSpacing="10"
-                          IsVisible="{Binding EhAutor}">
-
-                        <Button x:Name="btEditar"
-                                Text="Editar"
+                        <!-- Capturar: para quem NÃO é o autor. Cria uma cópia só sua, que você pode editar.
+                             Se já capturou, o botão abre a sua versão. -->
+                        <Button x:Name="btCapturar"
+                                Text="{Binding TextoCaptura}"
                                 Style="{StaticResource BotaoEscuro}"
-                                Clicked="btEditar_Clicked"/>
+                                IsVisible="{Binding PodeCapturar}"
+                                Clicked="btCapturar_Clicked"/>
 
-                        <Button Grid.Column="1"
-                                x:Name="btExcluir"
-                                Text="Excluir"
-                                Style="{StaticResource BotaoPerigo}"
-                                Clicked="btExcluir_Clicked"/>
-                    </Grid>
+                        <!-- Editar e Excluir: só aparecem para quem criou a receita -->
+                        <Grid ColumnDefinitions="*,*"
+                              ColumnSpacing="10"
+                              IsVisible="{Binding EhAutor}">
 
-                    <Button x:Name="btFechar"
-                            Text="Fechar"
-                            Style="{StaticResource BotaoSuave}"
-                            Clicked="btFechar_Clicked"/>
+                            <Button x:Name="btEditar"
+                                    Text="Editar"
+                                    Style="{StaticResource BotaoEscuro}"
+                                    Clicked="btEditar_Clicked"/>
+
+                            <Button Grid.Column="1"
+                                    x:Name="btExcluir"
+                                    Text="Excluir"
+                                    Style="{StaticResource BotaoPerigo}"
+                                    Clicked="btExcluir_Clicked"/>
+                        </Grid>
+
+                        <Button x:Name="btFechar"
+                                Text="Fechar"
+                                Style="{StaticResource BotaoSuave}"
+                                Clicked="btFechar_Clicked"/>
+                    </VerticalStackLayout>
+
                 </VerticalStackLayout>
+            </ScrollView>
 
-            </VerticalStackLayout>
-        </ScrollView>
+            <!-- Cartão de aviso (no lugar do alerta padrão do sistema) -->
+            <views:CartaoAviso x:Name="grAviso"/>
+        </Grid>
     </ContentPage>
 
 

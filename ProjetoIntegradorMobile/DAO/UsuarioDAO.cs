@@ -62,37 +62,12 @@ namespace ProjetoIntegradorMobile.DAO
             return await db.Table<Usuario>().CountAsync(u => u.Email == sEmail) > 0;
         }
 
-        public async Task<int> AtualizarAsync(Usuario usuario)
-        {
-            var db = await DatabaseConfig.Database.Conexao();
-            return await db.UpdateAsync(usuario);
-        }
-
         // Grava o caminho da foto do perfil
         public async Task AlterarFotoAsync(int iIdUsuario, string? sCaminhoFoto)
         {
             var db = await DatabaseConfig.Database.Conexao();
             await db.ExecuteAsync(
                 "UPDATE usuario SET caminho_foto = ? WHERE id_usuario = ?", sCaminhoFoto, iIdUsuario);
-        }
-
-        public async Task<bool> AlterarSenhaAsync(int iIdUsuario, string sSenhaAtual, string sNovaSenha)
-        {
-            var db = await DatabaseConfig.Database.Conexao();
-            Usuario? usuario = await db.FindAsync<Usuario>(iIdUsuario);
-            if (usuario == null || !SenhaHelper.Verificar(sSenhaAtual, usuario.SenhaHash))
-                return false;
-
-            usuario.SenhaHash = SenhaHelper.GerarHash(sNovaSenha);
-            await db.UpdateAsync(usuario);
-            return true;
-        }
-
-        // Apaga o usuário e, em cascata, tudo o que é dele (receitas etc.)
-        public async Task<int> ExcluirAsync(int iIdUsuario)
-        {
-            var db = await DatabaseConfig.Database.Conexao();
-            return await db.DeleteAsync<Usuario>(iIdUsuario);
         }
     }
 }

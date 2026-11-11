@@ -16,13 +16,19 @@ namespace ProjetoIntegradorMobile.ViewModels
         public async Task CarregarAsync()
         {
             Usuario? usuario = SessaoUsuario.UsuarioAtual;
-            Adaptacoes.Clear();
             if (usuario == null)
+            {
+                Adaptacoes.Clear();
                 return;
+            }
 
             try
             {
-                foreach (AdaptacaoResumo adaptacao in await adaptacaoDAO.ListarResumoDoUsuarioAsync(usuario.IdUsuario))
+                List<AdaptacaoResumo> lAdaptacoes = await adaptacaoDAO.ListarResumoDoUsuarioAsync(usuario.IdUsuario);
+
+                // Só limpa DEPOIS de ler do banco (evita lista duplicada quando duas recargas se cruzam)
+                Adaptacoes.Clear();
+                foreach (AdaptacaoResumo adaptacao in lAdaptacoes)
                     Adaptacoes.Add(adaptacao);
                 MensagemErro = "";
             }

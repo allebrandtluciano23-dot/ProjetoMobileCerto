@@ -28,7 +28,7 @@ public partial class DetalheReceitaPage : TabbedPage
         bool bExiste = await vm.CarregarAsync();
         if (!bExiste)
         {
-            await DisplayAlertAsync("Receita", "Esta receita não existe mais.", "OK");
+            await grAviso.MostrarAsync("Receita", "Esta receita não existe mais.", "OK");
             await Navigation.PopModalAsync();
         }
     }

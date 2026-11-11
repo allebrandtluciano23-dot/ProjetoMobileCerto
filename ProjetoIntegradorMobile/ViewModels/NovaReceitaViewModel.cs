@@ -1,7 +1,3 @@
-using System.Collections.ObjectModel;
-using System.Globalization;
-using Microsoft.Maui.Media;
-using Microsoft.Maui.Storage;
 using ProjetoIntegradorMobile.DAO;
 using ProjetoIntegradorMobile.Helpers;
 using ProjetoIntegradorMobile.Models;
@@ -10,7 +6,7 @@ namespace ProjetoIntegradorMobile.ViewModels
 {
     // ViewModel da tela Nova receita (NovaReceitaPage).
     // A mesma tela serve para EDITAR: basta criar com o id da receita.
-    public class NovaReceitaViewModel : BaseViewModel
+    public class NovaReceitaViewModel : IngredientesViewModel
     {
         private const int TAMANHO_MINIMO_TITULO = 3;
         private const int TAMANHO_MAXIMO_TITULO = 80;
@@ -116,50 +112,7 @@ namespace ProjetoIntegradorMobile.ViewModels
         public bool TemFoto => !string.IsNullOrEmpty(CaminhoFoto);
         public bool SemFoto => !TemFoto;
 
-        // ---------- Ingredientes ----------
-
-        // Lista que aparece na tela (BindableLayout). ObservableCollection avisa a tela quando muda.
-        public ObservableCollection<IngredienteDaReceita> Ingredientes { get; } = new ObservableCollection<IngredienteDaReceita>();
-
-        public List<string> Unidades { get; } = new List<string>
-        {
-            "g", "kg", "ml", "l", "un", "colher (sopa)", "colher (chá)", "xícara", "pitada"
-        };
-
-        private string sNovoIngredienteNome = "";
-        public string NovoIngredienteNome
-        {
-            get => sNovoIngredienteNome;
-            set => SetProperty(ref sNovoIngredienteNome, value);
-        }
-
-        private string sNovoIngredienteQuantidade = "";
-        public string NovoIngredienteQuantidade
-        {
-            get => sNovoIngredienteQuantidade;
-            set => SetProperty(ref sNovoIngredienteQuantidade, value);
-        }
-
-        private string? sNovoIngredienteUnidade;
-        public string? NovoIngredienteUnidade
-        {
-            get => sNovoIngredienteUnidade;
-            set => SetProperty(ref sNovoIngredienteUnidade, value);
-        }
-
-        // Erro dos campos de ingrediente (aparece logo abaixo deles)
-        private string sErroIngrediente = "";
-        public string ErroIngrediente
-        {
-            get => sErroIngrediente;
-            set
-            {
-                if (SetProperty(ref sErroIngrediente, value))
-                    OnPropertyChanged(nameof(TemErroIngrediente));
-            }
-        }
-
-        public bool TemErroIngrediente => !string.IsNullOrEmpty(ErroIngrediente);
+        // Ingredientes (lista, campos, adicionar e remover): herdados de IngredientesViewModel
 
         // ---------- Ações ----------
 
@@ -232,82 +185,14 @@ namespace ProjetoIntegradorMobile.ViewModels
         {
             try
             {
-                FileResult? foto = await MediaPicker.Default.PickPhotoAsync();
-                if (foto == null)
-                    return; // usuário cancelou
-
-                string sPasta = Path.Combine(FileSystem.AppDataDirectory, "fotos");
-                Directory.CreateDirectory(sPasta);
-
-                string sExtensao = Path.GetExtension(foto.FileName);
-                if (string.IsNullOrEmpty(sExtensao))
-                    sExtensao = ".jpg";
-
-                string sDestino = Path.Combine(sPasta, Guid.NewGuid().ToString("N") + sExtensao);
-
-                using (Stream origem = await foto.OpenReadAsync())
-                using (FileStream destino = File.Create(sDestino))
-                {
-                    await origem.CopyToAsync(destino);
-                }
-
-                CaminhoFoto = sDestino;
+                string? sNovaFoto = await FotoHelper.EscolherECopiarAsync("fotos");
+                if (sNovaFoto != null) // null = usuário cancelou
+                    CaminhoFoto = sNovaFoto;
             }
             catch (Exception)
             {
                 MensagemErro = "Não foi possível carregar a foto.";
             }
-        }
-
-        /// <summary>Valida os campos de ingrediente e adiciona na lista.</summary>
-        public void AdicionarIngrediente()
-        {
-            ErroIngrediente = "";
-
-            string sNome = NovoIngredienteNome?.Trim() ?? "";
-            string sQuantidade = (NovoIngredienteQuantidade ?? "").Trim().Replace(',', '.');
-
-            if (sNome == "")
-            {
-                ErroIngrediente = "Digite o nome do ingrediente.";
-                return;
-            }
-
-            if (!double.TryParse(sQuantidade, NumberStyles.Float, CultureInfo.InvariantCulture, out double dQuantidade)
-                || dQuantidade <= 0)
-            {
-                ErroIngrediente = "Digite uma quantidade válida (ex.: 200 ou 1,5).";
-                return;
-            }
-
-            if (string.IsNullOrEmpty(NovoIngredienteUnidade))
-            {
-                ErroIngrediente = "Escolha a unidade.";
-                return;
-            }
-
-            if (Ingredientes.Any(i => string.Equals(i.Nome, sNome, StringComparison.OrdinalIgnoreCase)))
-            {
-                ErroIngrediente = "Esse ingrediente já está na lista.";
-                return;
-            }
-
-            Ingredientes.Add(new IngredienteDaReceita
-            {
-                Nome = sNome,
-                Quantidade = dQuantidade,
-                Unidade = NovoIngredienteUnidade
-            });
-
-            // Limpa os campos para o próximo ingrediente
-            NovoIngredienteNome = "";
-            NovoIngredienteQuantidade = "";
-            NovoIngredienteUnidade = null;
-        }
-
-        public void RemoverIngrediente(IngredienteDaReceita ingrediente)
-        {
-            Ingredientes.Remove(ingrediente);
         }
 
         /// <summary>

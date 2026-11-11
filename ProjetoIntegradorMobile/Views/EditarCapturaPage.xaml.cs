@@ -23,7 +23,7 @@ public partial class EditarCapturaPage : ContentPage
         bool bExiste = await vm.CarregarAsync();
         if (!bExiste)
         {
-            await DisplayAlertAsync("Minha versão", "Esta versão não existe mais.", "OK");
+            await grAviso.MostrarAsync("Minha versão", "Esta versão não existe mais.", "OK");
             await Navigation.PopModalAsync();
         }
     }
@@ -57,9 +57,9 @@ public partial class EditarCapturaPage : ContentPage
     // Confirmação antes de excluir (requisito: confirmação de exclusão)
     private async void btExcluir_Clicked(object sender, EventArgs e)
     {
-        bool bConfirmou = await DisplayAlertAsync("Excluir minha versão",
-            "Tem certeza? Sua cópia e suas mudanças serão apagadas. A receita original não é afetada.",
-            "Excluir", "Cancelar");
+        bool bConfirmou = await grAviso.MostrarAsync("Excluir minha versão?",
+            "Sua cópia e suas mudanças serão apagadas. A receita original não é afetada.",
+            "Excluir", "Cancelar", bPerigo: true);
         if (!bConfirmou)
             return;
 

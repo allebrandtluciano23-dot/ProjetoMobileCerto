@@ -42,7 +42,12 @@ namespace ProjetoIntegradorMobile.Views
             // A receita fica no nome de quem está logado, então precisa entrar antes
             if (!SessaoUsuario.EstaLogado)
             {
-                grAvisoLogin.IsVisible = true; // mostra o aviso "Entre na sua conta"
+                bool bEntrar = await grAviso.MostrarAsync("Entre na sua conta",
+                    "Para criar receitas, você precisa entrar na sua conta.",
+                    "Entrar", "Agora não");
+
+                if (bEntrar)
+                    await Shell.Current.GoToAsync(nameof(EntradaPage));
                 return;
             }
 
@@ -70,24 +75,6 @@ namespace ProjetoIntegradorMobile.Views
             await Navigation.PushModalAsync(pagina);
         }
 
-        // ---------- Aviso "Entre na sua conta" ----------
-
-        private async void btAvisoEntrar_Clicked(object sender, EventArgs e)
-        {
-            grAvisoLogin.IsVisible = false;
-            await Shell.Current.GoToAsync(nameof(EntradaPage));
-        }
-
-        private void btAvisoCancelar_Clicked(object sender, EventArgs e)
-        {
-            grAvisoLogin.IsVisible = false;
-        }
-
-        private void AvisoFundo_Tapped(object sender, TappedEventArgs e)
-        {
-            grAvisoLogin.IsVisible = false;
-        }
-
         // ---------- Categorias ----------
 
         private void Categoria_Tapped(object sender, TappedEventArgs e)
@@ -106,22 +93,11 @@ namespace ProjetoIntegradorMobile.Views
                 if (item is Border bd && bd.Content is Label lb)
                 {
                     bool bSelecionada = bd == bdSelecionada;
-                    bd.BackgroundColor = bSelecionada ? Cor("Destaque") : Cor("Chip");
-                    lb.TextColor = bSelecionada ? Colors.White : Cor("Tinta");
+                    bd.BackgroundColor = bSelecionada ? CorHelper.Buscar("Destaque") : CorHelper.Buscar("Chip");
+                    lb.TextColor = bSelecionada ? Colors.White : CorHelper.Buscar("Tinta");
                     lb.FontFamily = bSelecionada ? "InterSemiBold" : "Inter";
                 }
             }
-        }
-
-        // Busca uma cor de Resources/Styles/Colors.xaml pelo nome (ex.: "Destaque")
-        private static Color Cor(string sNome)
-        {
-            if (Application.Current != null
-                && Application.Current.Resources.TryGetValue(sNome, out object? valor)
-                && valor is Color cor)
-                return cor;
-
-            return Colors.Black;
         }
 
         // ---------- Menu inferior ----------

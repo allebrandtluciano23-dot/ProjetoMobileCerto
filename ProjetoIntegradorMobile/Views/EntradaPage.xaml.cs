@@ -21,7 +21,7 @@ public partial class EntradaPage : ContentPage
 
     private async void EsqueceuSenha_Tapped(object sender, TappedEventArgs e)
     {
-        await DisplayAlertAsync("Esqueceu sua senha", "Funcionalidade ainda não disponível.", "OK");
+        await grAviso.MostrarAsync("Esqueceu sua senha?", "Esta função ainda não está disponível.", "OK");
     }
 
     private async void Entrar_Tapped(object sender, TappedEventArgs e)

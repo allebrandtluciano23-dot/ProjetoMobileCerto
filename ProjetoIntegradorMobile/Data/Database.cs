@@ -1,4 +1,4 @@
-﻿using ProjetoIntegradorMobile.Helpers;
+using ProjetoIntegradorMobile.Helpers;
 using ProjetoIntegradorMobile.Models;
 using SQLite;
 
@@ -345,114 +345,7 @@ namespace ProjetoIntegradorMobile.Data
 
         // Receita personalizada (adaptação capturada): ver DAO/AdaptacaoDAO.cs
 
-        // =====================================================================
-        // PLANO ALIMENTAR
-        // =====================================================================
-
-        public async Task<int> InserirPlanoAsync(PlanoAlimentar plano)
-        {
-            var db = await Conexao();
-            await db.InsertAsync(plano);
-            return plano.IdPlano;
-        }
-
-        public async Task<int> AtualizarPlanoAsync(PlanoAlimentar plano)
-        {
-            var db = await Conexao();
-            return await db.UpdateAsync(plano);
-        }
-
-        // As refeições do plano não são apagadas: ficam sem plano (ON DELETE SET NULL)
-        public async Task<int> ExcluirPlanoAsync(int idPlano)
-        {
-            var db = await Conexao();
-            return await db.DeleteAsync<PlanoAlimentar>(idPlano);
-        }
-
-        public async Task<List<PlanoAlimentar>> ListarPlanosPorUsuarioAsync(int idUsuario)
-        {
-            var db = await Conexao();
-            return await db.Table<PlanoAlimentar>().Where(p => p.IdUsuario == idUsuario).ToListAsync();
-        }
-
-        // =====================================================================
-        // REFEIÇÃO
-        // =====================================================================
-
-        public static readonly string[] TiposRefeicao = { "cafe_da_manha", "almoco", "jantar", "lanche", "ceia" };
-
-        /// <summary>
-        /// Insere a refeição. Preencha só IdReceita OU IdReceitaPersonalizada,
-        /// e TipoRefeicao com um dos valores de TiposRefeicao.
-        /// </summary>
-        public async Task<int> InserirRefeicaoAsync(Refeicao refeicao)
-        {
-            if ((refeicao.IdReceita == null) == (refeicao.IdReceitaPersonalizada == null))
-                throw new ArgumentException("Informe IdReceita ou IdReceitaPersonalizada (apenas um).");
-            if (!TiposRefeicao.Contains(refeicao.TipoRefeicao))
-                throw new ArgumentException("TipoRefeicao inválido: " + refeicao.TipoRefeicao);
-
-            var db = await Conexao();
-            await db.InsertAsync(refeicao);
-            return refeicao.IdRefeicao;
-        }
-
-        public async Task<int> ExcluirRefeicaoAsync(int idRefeicao)
-        {
-            var db = await Conexao();
-            return await db.DeleteAsync<Refeicao>(idRefeicao);
-        }
-
-        /// <param name="data">Formato "yyyy-MM-dd"</param>
-        public async Task<List<Refeicao>> ListarRefeicoesDoDiaAsync(int idUsuario, string data)
-        {
-            var db = await Conexao();
-            return await db.QueryAsync<Refeicao>(
-                "SELECT * FROM refeicao WHERE id_usuario = ? AND data = ? ORDER BY horario", idUsuario, data);
-        }
-
-        public async Task<List<Refeicao>> ListarRefeicoesDoPlanoAsync(int idPlano)
-        {
-            var db = await Conexao();
-            return await db.QueryAsync<Refeicao>(
-                "SELECT * FROM refeicao WHERE id_plano = ? ORDER BY data, horario", idPlano);
-        }
-
-        // =====================================================================
-        // SUGESTÃO
-        // =====================================================================
-
-        public async Task<int> EnviarSugestaoAsync(Sugestao sugestao)
-        {
-            var db = await Conexao();
-            if (string.IsNullOrEmpty(sugestao.DataEnvio))
-                sugestao.DataEnvio = Agora();
-            sugestao.Status = "pendente";
-            await db.InsertAsync(sugestao);
-            return sugestao.IdSugestao;
-        }
-
-        public async Task<List<Sugestao>> ListarSugestoesDaReceitaAsync(int idReceita)
-        {
-            var db = await Conexao();
-            return await db.QueryAsync<Sugestao>(
-                "SELECT * FROM sugestao WHERE id_receita = ? ORDER BY data_envio DESC", idReceita);
-        }
-
-        /// <param name="status">"pendente", "aceita" ou "rejeitada"</param>
-        public async Task AtualizarStatusSugestaoAsync(int idSugestao, string status)
-        {
-            if (status != "pendente" && status != "aceita" && status != "rejeitada")
-                throw new ArgumentException("Status inválido: " + status);
-
-            var db = await Conexao();
-            await db.ExecuteAsync("UPDATE sugestao SET status = ? WHERE id_sugestao = ?", status, idSugestao);
-        }
-
-        public async Task<int> ExcluirSugestaoAsync(int idSugestao)
-        {
-            var db = await Conexao();
-            return await db.DeleteAsync<Sugestao>(idSugestao);
-        }
+        // Plano alimentar, refeição e sugestão: as tabelas existem no banco (fazem parte do DER do projeto),
+        // mas ainda não têm telas; por isso não há métodos de acesso a elas.
     }
 }

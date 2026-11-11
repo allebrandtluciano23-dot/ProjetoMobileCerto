@@ -4,162 +4,169 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProjetoIntegradorMobile.Views.EntradaPage"
              xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
+             xmlns:views="clr-namespace:ProjetoIntegradorMobile.Views"
              x:DataType="vm:EntradaViewModel"
              BackgroundColor="{StaticResource Fundo}"
              Shell.NavBarIsVisible="False">
 
-    <ScrollView>
+    <Grid>
 
-        <VerticalStackLayout Padding="24,80,24,36" Spacing="24">
+        <ScrollView>
 
-            <!-- MARCA -->
-            <VerticalStackLayout Spacing="10">
+            <VerticalStackLayout Padding="24,80,24,36" Spacing="24">
 
-                <Border WidthRequest="56"
-                        HeightRequest="56"
+                <!-- MARCA -->
+                <VerticalStackLayout Spacing="10">
+
+                    <Border WidthRequest="56"
+                            HeightRequest="56"
+                            StrokeThickness="0"
+                            BackgroundColor="{StaticResource Destaque}"
+                            StrokeShape="RoundRectangle 18"
+                            HorizontalOptions="Start">
+                        <Path Data="{StaticResource IconeChapeu}"
+                              Style="{StaticResource Icone}"
+                              Stroke="White"
+                              WidthRequest="28"
+                              HeightRequest="28"/>
+                    </Border>
+
+                    <Label Text="CheefBook"
+                           FontFamily="Bricolage"
+                           FontSize="38"/>
+
+                    <Label Text="Receitas que se adaptam a você"
+                           Style="{StaticResource TextoSecundario}"
+                           FontSize="15"/>
+                </VerticalStackLayout>
+
+
+                <!-- CAMPOS -->
+                <VerticalStackLayout Spacing="14">
+
+                    <!-- USUÁRIO / E-MAIL -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Usuário ou e-mail" Style="{StaticResource Rotulo}"/>
+
+                        <Border Stroke="{StaticResource Borda}"
+                                StrokeThickness="1"
+                                BackgroundColor="{StaticResource Cartao}"
+                                HeightRequest="52"
+                                StrokeShape="RoundRectangle 14"
+                                Padding="14,0">
+
+                            <Entry x:Name="txEmail"
+                                   Text="{Binding Email}"
+                                   Placeholder="seu@email.com"
+                                   FontSize="15"
+                                   Keyboard="Email"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- SENHA -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Senha" Style="{StaticResource Rotulo}"/>
+
+                        <Border Stroke="{StaticResource Borda}"
+                                StrokeThickness="1"
+                                BackgroundColor="{StaticResource Cartao}"
+                                HeightRequest="52"
+                                StrokeShape="RoundRectangle 14"
+                                Padding="14,0">
+
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+
+                                <Entry x:Name="txSenha"
+                                       Text="{Binding Senha}"
+                                       Placeholder="Sua senha"
+                                       FontSize="15"
+                                       IsPassword="True"
+                                       VerticalOptions="Center"/>
+
+                                <!-- Mostrar / ocultar senha -->
+                                <Image Grid.Column="1"
+                                       x:Name="imOlho"
+                                       Source="eye_off.png"
+                                       WidthRequest="24"
+                                       HeightRequest="24"
+                                       Opacity="0.55"
+                                       VerticalOptions="Center">
+
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="MostrarSenha_Tapped"/>
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- ESQUECEU A SENHA -->
+                    <Label Text="Esqueceu sua senha?"
+                           FontFamily="InterSemiBold"
+                           FontSize="13"
+                           TextColor="{StaticResource Destaque}"
+                           HorizontalOptions="End">
+
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="EsqueceuSenha_Tapped"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </VerticalStackLayout>
+
+
+                <!-- MENSAGEM DE ERRO -->
+                <Label x:Name="lbErro"
+                       Text="{Binding MensagemErro}"
+                       Style="{StaticResource TextoErro}"
+                       HorizontalOptions="Center"
+                       IsVisible="{Binding TemErro}"/>
+
+
+                <!-- BOTÃO ENTRAR -->
+                <Border BackgroundColor="{StaticResource Destaque}"
                         StrokeThickness="0"
-                        BackgroundColor="{StaticResource Destaque}"
-                        StrokeShape="RoundRectangle 18"
-                        HorizontalOptions="Start">
-                    <Path Data="{StaticResource IconeChapeu}"
-                          Style="{StaticResource Icone}"
-                          Stroke="White"
-                          WidthRequest="28"
-                          HeightRequest="28"/>
+                        HeightRequest="54"
+                        StrokeShape="RoundRectangle 16">
+
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Entrar_Tapped"/>
+                    </Border.GestureRecognizers>
+
+                    <Label Text="Entrar"
+                           FontFamily="InterSemiBold"
+                           FontSize="16"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
                 </Border>
 
-                <Label Text="CheefBook"
-                       FontFamily="Bricolage"
-                       FontSize="38"/>
 
-                <Label Text="Receitas que se adaptam a você"
-                       Style="{StaticResource TextoSecundario}"
-                       FontSize="15"/>
+                <!-- CADASTRO -->
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="5" Margin="0,12,0,0">
+
+                    <Label Text="Não tem uma conta?"
+                           Style="{StaticResource TextoSecundario}"
+                           FontSize="14"/>
+
+                    <Label Text="Cadastre-se"
+                           FontFamily="InterSemiBold"
+                           FontSize="14"
+                           TextColor="{StaticResource Destaque}">
+
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Cadastrar_Tapped"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+
+                </HorizontalStackLayout>
+
             </VerticalStackLayout>
 
+        </ScrollView>
 
-            <!-- CAMPOS -->
-            <VerticalStackLayout Spacing="14">
-
-                <!-- USUÁRIO / E-MAIL -->
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="Usuário ou e-mail" Style="{StaticResource Rotulo}"/>
-
-                    <Border Stroke="{StaticResource Borda}"
-                            StrokeThickness="1"
-                            BackgroundColor="{StaticResource Cartao}"
-                            HeightRequest="52"
-                            StrokeShape="RoundRectangle 14"
-                            Padding="14,0">
-
-                        <Entry x:Name="txEmail"
-                               Text="{Binding Email}"
-                               Placeholder="seu@email.com"
-                               FontSize="15"
-                               Keyboard="Email"
-                               VerticalOptions="Center"/>
-                    </Border>
-                </VerticalStackLayout>
-
-                <!-- SENHA -->
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="Senha" Style="{StaticResource Rotulo}"/>
-
-                    <Border Stroke="{StaticResource Borda}"
-                            StrokeThickness="1"
-                            BackgroundColor="{StaticResource Cartao}"
-                            HeightRequest="52"
-                            StrokeShape="RoundRectangle 14"
-                            Padding="14,0">
-
-                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-
-                            <Entry x:Name="txSenha"
-                                   Text="{Binding Senha}"
-                                   Placeholder="Sua senha"
-                                   FontSize="15"
-                                   IsPassword="True"
-                                   VerticalOptions="Center"/>
-
-                            <!-- Mostrar / ocultar senha -->
-                            <Image Grid.Column="1"
-                                   x:Name="imOlho"
-                                   Source="eye_off.png"
-                                   WidthRequest="24"
-                                   HeightRequest="24"
-                                   Opacity="0.55"
-                                   VerticalOptions="Center">
-
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="MostrarSenha_Tapped"/>
-                                </Image.GestureRecognizers>
-                            </Image>
-                        </Grid>
-                    </Border>
-                </VerticalStackLayout>
-
-                <!-- ESQUECEU A SENHA -->
-                <Label Text="Esqueceu sua senha?"
-                       FontFamily="InterSemiBold"
-                       FontSize="13"
-                       TextColor="{StaticResource Destaque}"
-                       HorizontalOptions="End">
-
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="EsqueceuSenha_Tapped"/>
-                    </Label.GestureRecognizers>
-                </Label>
-            </VerticalStackLayout>
-
-
-            <!-- MENSAGEM DE ERRO -->
-            <Label x:Name="lbErro"
-                   Text="{Binding MensagemErro}"
-                   Style="{StaticResource TextoErro}"
-                   HorizontalOptions="Center"
-                   IsVisible="{Binding TemErro}"/>
-
-
-            <!-- BOTÃO ENTRAR -->
-            <Border BackgroundColor="{StaticResource Destaque}"
-                    StrokeThickness="0"
-                    HeightRequest="54"
-                    StrokeShape="RoundRectangle 16">
-
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Entrar_Tapped"/>
-                </Border.GestureRecognizers>
-
-                <Label Text="Entrar"
-                       FontFamily="InterSemiBold"
-                       FontSize="16"
-                       TextColor="White"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"/>
-            </Border>
-
-
-            <!-- CADASTRO -->
-            <HorizontalStackLayout HorizontalOptions="Center" Spacing="5" Margin="0,12,0,0">
-
-                <Label Text="Não tem uma conta?"
-                       Style="{StaticResource TextoSecundario}"
-                       FontSize="14"/>
-
-                <Label Text="Cadastre-se"
-                       FontFamily="InterSemiBold"
-                       FontSize="14"
-                       TextColor="{StaticResource Destaque}">
-
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Cadastrar_Tapped"/>
-                    </Label.GestureRecognizers>
-                </Label>
-
-            </HorizontalStackLayout>
-
-        </VerticalStackLayout>
-
-    </ScrollView>
+        <!-- Cartão de aviso (no lugar do alerta padrão do sistema) -->
+        <views:CartaoAviso x:Name="grAviso"/>
+    </Grid>
 
 </ContentPage>
