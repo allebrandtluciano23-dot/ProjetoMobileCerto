@@ -1,14 +1,84 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+    MENU FLYOUT (requisito "Flyout_Pages"): menu lateral que abre pelo botão de menu da tela inicial
+    ou arrastando a partir da borda esquerda da tela.
+-->
 <Shell
     x:Class="ProjetoIntegradorMobile.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:ProjetoIntegradorMobile.Views"
-    Title="ProjetoIntegradorMobile">
+    Title="CheefBook"
+    FlyoutBehavior="Flyout"
+    FlyoutBackgroundColor="{StaticResource Fundo}">
 
+    <!-- Topo do menu: quem está logado -->
+    <Shell.FlyoutHeader>
+        <VerticalStackLayout Padding="24,50,24,20" Spacing="4">
+
+            <!-- Foto do usuário (sem foto: desenho do chapéu de chef) -->
+            <Border WidthRequest="64"
+                    HeightRequest="64"
+                    StrokeThickness="0"
+                    BackgroundColor="{StaticResource FundoAvatar}"
+                    StrokeShape="RoundRectangle 32"
+                    HorizontalOptions="Start"
+                    Margin="0,0,0,8">
+                <Grid>
+                    <Grid x:Name="grMenuSemFoto">
+                        <Path Data="{StaticResource IconeChapeu}"
+                              Style="{StaticResource Icone}"
+                              Stroke="{StaticResource Destaque}"
+                              WidthRequest="28"
+                              HeightRequest="28"/>
+                    </Grid>
+
+                    <Image x:Name="imMenuFoto"
+                           Aspect="AspectFill"
+                           IsVisible="False"/>
+                </Grid>
+            </Border>
+
+            <Label x:Name="lbMenuNome"
+                   Text="CheefBook"
+                   Style="{StaticResource TituloSecao}"/>
+
+            <Label x:Name="lbMenuEmail"
+                   Text="Entre para criar, favoritar e capturar receitas."
+                   Style="{StaticResource TextoSecundario}"/>
+
+            <BoxView HeightRequest="1"
+                     Color="{StaticResource Borda}"
+                     Margin="0,16,0,0"/>
+        </VerticalStackLayout>
+    </Shell.FlyoutHeader>
+
+    <!-- Visual de cada opção do menu.
+         x:DataType="{x:Null}": o Shell entrega aqui um objeto interno (não o MenuItem),
+         então o Binding não pode ser "tipado" como MenuItem, senão o texto fica vazio. -->
+    <Shell.MenuItemTemplate>
+        <DataTemplate x:DataType="{x:Null}">
+            <Label Text="{Binding Text}"
+                   FontSize="16"
+                   TextColor="{StaticResource Tinta}"
+                   Padding="24,14"/>
+        </DataTemplate>
+    </Shell.MenuItemTemplate>
+
+    <!-- Tela inicial (não aparece como item; o item "Início" abaixo leva até ela) -->
     <ShellContent
-        Title=""
+        Title="Início"
         Route="MainPage"
+        Shell.FlyoutItemIsVisible="False"
         ContentTemplate="{DataTemplate views:MainPage}" />
+
+    <!-- Opções do menu -->
+    <MenuItem Text="Início" Clicked="miInicio_Clicked"/>
+    <MenuItem Text="Favoritos" Clicked="miFavoritos_Clicked"/>
+    <MenuItem Text="Criadas por mim" Clicked="miMinhasReceitas_Clicked"/>
+    <MenuItem Text="Cópias capturadas" Clicked="miCapturas_Clicked"/>
+    <MenuItem Text="Meu perfil" Clicked="miPerfil_Clicked"/>
+    <MenuItem x:Name="miConta" Text="Entrar" Clicked="miConta_Clicked"/>
 
 </Shell>

@@ -26,6 +26,18 @@ namespace ProjetoIntegradorMobile.Models
         [Column("porcoes")]
         public int? Porcoes { get; set; }
 
+        // Campo booleano da tabela (CheckBox "Vegetariana" no formulário)
+        [Column("vegetariana")]
+        public bool Vegetariana { get; set; }
+
+        // Valores usados: "Fácil", "Média", "Difícil"
+        [Column("dificuldade")]
+        public string? Dificuldade { get; set; }
+
+        // Caminho da foto copiada para a pasta do app (null = sem foto)
+        [Column("caminho_foto")]
+        public string? CaminhoFoto { get; set; }
+
         [NotNull, Column("data_criacao")]
         public string DataCriacao { get; set; } = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
     }

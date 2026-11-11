@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- Receitas criadas por você. Lista com o mesmo item da tela inicial. Aberta pelo menu (navegação em pilha). -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ProjetoIntegradorMobile.Views.ReceitasCriadasPage"
+             xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
+             xmlns:models="clr-namespace:ProjetoIntegradorMobile.Models"
+             x:DataType="vm:ListaReceitasViewModel"
+             BackgroundColor="{StaticResource Fundo}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="20,45,20,0">
+
+        <!-- CABEÇALHO: voltar + título + nova receita -->
+        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+
+            <Border WidthRequest="44"
+                    HeightRequest="44"
+                    Stroke="{StaticResource Borda}"
+                    StrokeThickness="1"
+                    BackgroundColor="{StaticResource Cartao}"
+                    StrokeShape="RoundRectangle 14">
+
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Voltar_Tapped"/>
+                </Border.GestureRecognizers>
+
+                <Path Data="{StaticResource IconeVoltar}"
+                      Style="{StaticResource Icone}"
+                      WidthRequest="18"
+                      HeightRequest="18"/>
+            </Border>
+
+            <Label Grid.Column="1"
+                   Text="Criadas por mim"
+                   Style="{StaticResource TituloTela}"
+                   VerticalOptions="Center"/>
+
+            <!-- Abre a tela Nova receita como MODAL -->
+            <Button Grid.Column="2"
+                    x:Name="btNovaReceita"
+                    Text="+  Nova"
+                    Style="{StaticResource BotaoEscuro}"
+                    FontSize="13"
+                    HeightRequest="38"
+                    CornerRadius="14"
+                    Padding="14,0"
+                    Clicked="btNovaReceita_Clicked"/>
+        </Grid>
+
+        <Label Grid.Row="1"
+               Text="Receitas que você publicou."
+               Style="{StaticResource TextoSecundario}"
+               Margin="0,12,0,16"/>
+
+        <Label Grid.Row="2"
+               Text="{Binding MensagemErro}"
+               IsVisible="{Binding TemErro}"
+               Style="{StaticResource TextoErro}"
+               Margin="0,0,0,10"/>
+
+        <CollectionView Grid.Row="3"
+                        x:Name="cvReceitas"
+                        ItemsSource="{Binding Receitas}"
+                        SelectionMode="None">
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Padding="10,40" Spacing="8">
+                    <Path Data="{StaticResource IconeEditar}"
+                          Style="{StaticResource Icone}"
+                          Stroke="{StaticResource TextoFraco}"
+                          WidthRequest="40"
+                          HeightRequest="40"/>
+                    <Label Text="{Binding MensagemVazia}"
+                           Style="{StaticResource TextoSecundario}"
+                           FontSize="14"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:ReceitaResumo">
+
+                    <Border BackgroundColor="{StaticResource Cartao}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 18"
+                            Padding="10">
+
+                        <!-- Tocar no item abre o detalhe da receita -->
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Receita_Tapped"
+                                                  CommandParameter="{Binding .}"/>
+                        </Border.GestureRecognizers>
+
+                        <Grid ColumnDefinitions="72,*,Auto" ColumnSpacing="12">
+
+                            <!-- Foto da receita (o desenho do prato fica por baixo; a foto, se houver, cobre) -->
+                            <Border WidthRequest="72"
+                                    HeightRequest="72"
+                                    StrokeThickness="0"
+                                    BackgroundColor="{StaticResource FotoVazia}"
+                                    StrokeShape="RoundRectangle 14"
+                                    VerticalOptions="Center">
+                                <Grid>
+                                    <Path Data="{StaticResource IconePrato}"
+                                          Style="{StaticResource Icone}"
+                                          Stroke="White"
+                                          WidthRequest="28"
+                                          HeightRequest="28"/>
+                                    <Image Source="{Binding CaminhoFoto}"
+                                           Aspect="AspectFill"
+                                           IsVisible="{Binding TemFoto}"/>
+                                </Grid>
+                            </Border>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+
+                                <Label Text="{Binding Titulo}"
+                                       Style="{StaticResource TituloCartao}"/>
+
+                                <Label Text="{Binding CategoriaEDetalhes}"
+                                       Style="{StaticResource TextoSecundario}"
+                                       FontSize="12"/>
+
+                                <HorizontalStackLayout Spacing="4" IsVisible="{Binding Vegetariana}">
+                                    <Path Data="{StaticResource IconeFolha}"
+                                          Style="{StaticResource Icone}"
+                                          Stroke="{StaticResource Vegetariana}"
+                                          WidthRequest="13"
+                                          HeightRequest="13"/>
+                                    <Label Text="Vegetariana"
+                                           FontFamily="InterSemiBold"
+                                           FontSize="12"
+                                           TextColor="{StaticResource Vegetariana}"
+                                           VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+
+                            <!-- Coração só nas receitas que o usuário logado favoritou -->
+                            <Path Grid.Column="2"
+                                  Data="{StaticResource IconeCoracao}"
+                                  Style="{StaticResource Icone}"
+                                  Stroke="{StaticResource Destaque}"
+                                  Fill="{StaticResource Destaque}"
+                                  WidthRequest="18"
+                                  HeightRequest="18"
+                                  Margin="0,0,6,0"
+                                  IsVisible="{Binding Favorita}"/>
+                        </Grid>
+                    </Border>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+
+</ContentPage>

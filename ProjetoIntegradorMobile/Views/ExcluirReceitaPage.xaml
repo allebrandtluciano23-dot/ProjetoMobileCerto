@@ -3,118 +3,92 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProjetoIntegradorMobile.Views.ExcluirReceitaPage"
-             BackgroundColor="White"
+             xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
+             x:DataType="vm:ExcluirReceitaViewModel"
+             BackgroundColor="{StaticResource Fundo}"
              Shell.NavBarIsVisible="False">
 
     <Grid RowDefinitions="Auto,*">
 
-        <!-- CABEÇALHO -->
-        <Grid Grid.Row="0"
-              ColumnDefinitions="Auto,*"
-              Padding="30,50,30,0">
+        <!-- CABEÇALHO: voltar -->
+        <Border Grid.Row="0"
+                WidthRequest="44"
+                HeightRequest="44"
+                Stroke="{StaticResource Borda}"
+                StrokeThickness="1"
+                BackgroundColor="{StaticResource Cartao}"
+                StrokeShape="RoundRectangle 14"
+                HorizontalOptions="Start"
+                Margin="20,45,20,0">
 
-            <Label Text="←"
-                   FontSize="28"
-                   TextColor="Black"
-                   VerticalOptions="Center">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="Voltar_Tapped"/>
+            </Border.GestureRecognizers>
 
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Voltar_Tapped"/>
-                </Label.GestureRecognizers>
-            </Label>
-
-            <Label Grid.Column="1"
-                   Text="Receitas"
-                   FontSize="16"
-                   TextColor="Black"
-                   Margin="15,0,0,0"
-                   VerticalOptions="Center"/>
-
-        </Grid>
+            <Path Data="{StaticResource IconeVoltar}"
+                  Style="{StaticResource Icone}"
+                  WidthRequest="18"
+                  HeightRequest="18"/>
+        </Border>
 
 
         <!-- CONTEÚDO -->
         <VerticalStackLayout Grid.Row="1"
-                             Padding="30,0,30,30"
-                             Spacing="20"
+                             Padding="24,0,24,30"
+                             Spacing="18"
                              VerticalOptions="Center">
 
             <!-- Ícone -->
-            <Border WidthRequest="100"
-                    HeightRequest="100"
+            <Border WidthRequest="96"
+                    HeightRequest="96"
                     StrokeThickness="0"
-                    BackgroundColor="#F3F3F3"
+                    BackgroundColor="{StaticResource PerigoClaro}"
                     HorizontalOptions="Center"
-                    StrokeShape="RoundRectangle 50">
+                    StrokeShape="RoundRectangle 48">
 
-                <Label Text="🗑"
-                       FontSize="45"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"/>
+                <Path Data="{StaticResource IconeLixeira}"
+                      Style="{StaticResource Icone}"
+                      Stroke="{StaticResource Perigo}"
+                      WidthRequest="40"
+                      HeightRequest="40"/>
             </Border>
 
             <!-- Textos -->
             <VerticalStackLayout Spacing="10">
 
                 <Label Text="Excluir receita?"
-                       FontSize="24"
-                       FontAttributes="Bold"
-                       TextColor="Black"
+                       Style="{StaticResource TituloTela}"
                        HorizontalOptions="Center"/>
 
-                <Label x:Name="lblMensagem"
-                       Text="Tem certeza que deseja excluir esta receita? Esta ação não pode ser desfeita."
+                <Label x:Name="lbMensagem"
+                       Text="{Binding Mensagem}"
+                       Style="{StaticResource TextoSecundario}"
                        FontSize="14"
-                       TextColor="Gray"
                        HorizontalTextAlignment="Center"
                        HorizontalOptions="Center"/>
-
             </VerticalStackLayout>
 
             <!-- Mensagem de erro -->
-            <Label x:Name="lblErro"
-                   Text=""
-                   FontSize="13"
-                   TextColor="#D32F2F"
+            <Label x:Name="lbErro"
+                   Text="{Binding MensagemErro}"
+                   Style="{StaticResource TextoErro}"
                    HorizontalOptions="Center"
-                   IsVisible="False"/>
+                   IsVisible="{Binding TemErro}"/>
 
-            <!-- Botão excluir -->
-            <Border BackgroundColor="#D32F2F"
-                    StrokeThickness="0"
-                    HeightRequest="55"
-                    Margin="0,15,0,0"
-                    StrokeShape="RoundRectangle 18">
-
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Excluir_Tapped"/>
-                </Border.GestureRecognizers>
-
-                <Label Text="Excluir"
-                       FontSize="16"
-                       FontAttributes="Bold"
-                       TextColor="White"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"/>
-            </Border>
+            <!-- Botão excluir (vermelho cheio: é a ação que não tem volta) -->
+            <Button x:Name="btExcluir"
+                    Text="Excluir"
+                    Style="{StaticResource BotaoBase}"
+                    BackgroundColor="{StaticResource Perigo}"
+                    TextColor="White"
+                    Margin="0,12,0,0"
+                    Clicked="btExcluir_Clicked"/>
 
             <!-- Botão cancelar -->
-            <Border Stroke="#EEEEEE"
-                    StrokeThickness="1"
-                    BackgroundColor="#F3F3F3"
-                    HeightRequest="55"
-                    StrokeShape="RoundRectangle 18">
-
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Cancelar_Tapped"/>
-                </Border.GestureRecognizers>
-
-                <Label Text="Cancelar"
-                       FontSize="16"
-                       TextColor="Black"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"/>
-            </Border>
+            <Button x:Name="btCancelar"
+                    Text="Cancelar"
+                    Style="{StaticResource BotaoSuave}"
+                    Clicked="btCancelar_Clicked"/>
 
         </VerticalStackLayout>
 

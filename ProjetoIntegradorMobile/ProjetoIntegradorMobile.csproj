@@ -45,14 +45,13 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.png" ForegroundScale="0.7" Color="#FAF6EF" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\Splash\splash.png" Color="#FAF6EF" BaseSize="240,240" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 		
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -68,9 +67,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\BuscarPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Views\CadastroPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -90,5 +86,14 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
+
+	<!-- WINDOWS: o Windows App SDK 1.8 copia um "resources.pri" próprio para a pasta de saída.
+	     No modo não empacotado (WindowsPackageType=None), o Windows carrega esse arquivo em vez do
+	     ProjetoIntegradorMobile.pri do app e não encontra os recursos do MAUI
+	     (erro "Cannot locate resource ... Resources.xbf"). Apagando-o depois do build,
+	     o app usa o próprio .pri, que já contém tudo. Não afeta o Android. -->
+	<Target Name="RemoverResourcesPriDoWindowsAppSdk" AfterTargets="Build" Condition="'$(TargetPlatformIdentifier)' == 'windows'">
+		<Delete Files="$(OutDir)resources.pri" />
+	</Target>
 
 </Project>
