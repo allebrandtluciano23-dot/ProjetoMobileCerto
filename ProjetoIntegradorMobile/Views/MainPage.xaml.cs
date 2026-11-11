@@ -1,4 +1,4 @@
-﻿using ProjetoIntegradorMobile.Helpers;
+using ProjetoIntegradorMobile.Helpers;
 using ProjetoIntegradorMobile.Models;
 using ProjetoIntegradorMobile.ViewModels;
 
@@ -22,6 +22,18 @@ namespace ProjetoIntegradorMobile.Views
             await vm.CarregarAsync();
         }
 
+        // Usado pelo menu (ex.: depois de sair da conta) para atualizar saudação e favoritos
+        public async Task RecarregarAsync()
+        {
+            await vm.CarregarAsync();
+        }
+
+        // Botão de menu (três linhas): abre o menu lateral (Flyout)
+        private void Menu_Tapped(object sender, TappedEventArgs e)
+        {
+            Shell.Current.FlyoutIsPresented = true;
+        }
+
         // ---------- Nova receita ----------
 
         // Abre a tela Nova receita como MODAL (por cima da tela inicial)
@@ -30,10 +42,7 @@ namespace ProjetoIntegradorMobile.Views
             // A receita fica no nome de quem está logado, então precisa entrar antes
             if (!SessaoUsuario.EstaLogado)
             {
-                bool bEntrar = await DisplayAlertAsync("Entrar",
-                    "Para criar receitas, entre na sua conta.", "Entrar", "Cancelar");
-                if (bEntrar)
-                    await Shell.Current.GoToAsync(nameof(EntradaPage));
+                grAvisoLogin.IsVisible = true; // mostra o aviso "Entre na sua conta"
                 return;
             }
 
@@ -61,6 +70,24 @@ namespace ProjetoIntegradorMobile.Views
             await Navigation.PushModalAsync(pagina);
         }
 
+        // ---------- Aviso "Entre na sua conta" ----------
+
+        private async void btAvisoEntrar_Clicked(object sender, EventArgs e)
+        {
+            grAvisoLogin.IsVisible = false;
+            await Shell.Current.GoToAsync(nameof(EntradaPage));
+        }
+
+        private void btAvisoCancelar_Clicked(object sender, EventArgs e)
+        {
+            grAvisoLogin.IsVisible = false;
+        }
+
+        private void AvisoFundo_Tapped(object sender, TappedEventArgs e)
+        {
+            grAvisoLogin.IsVisible = false;
+        }
+
         // ---------- Categorias ----------
 
         private void Categoria_Tapped(object sender, TappedEventArgs e)
@@ -71,7 +98,7 @@ namespace ProjetoIntegradorMobile.Views
             MarcarCategoria(sender as Border);
         }
 
-        // Destaca o botão da categoria escolhida (fundo preto) e volta os outros ao normal
+        // Destaca o botão da categoria escolhida (cor principal) e volta os outros ao normal
         private void MarcarCategoria(Border? bdSelecionada)
         {
             foreach (var item in slCategorias.Children)
@@ -79,11 +106,22 @@ namespace ProjetoIntegradorMobile.Views
                 if (item is Border bd && bd.Content is Label lb)
                 {
                     bool bSelecionada = bd == bdSelecionada;
-                    bd.BackgroundColor = bSelecionada ? Colors.Black : Color.FromArgb("#F3F3F3");
-                    lb.TextColor = bSelecionada ? Colors.White : Colors.Black;
-                    lb.FontAttributes = bSelecionada ? FontAttributes.Bold : FontAttributes.None;
+                    bd.BackgroundColor = bSelecionada ? Cor("Destaque") : Cor("Chip");
+                    lb.TextColor = bSelecionada ? Colors.White : Cor("Tinta");
+                    lb.FontFamily = bSelecionada ? "InterSemiBold" : "Inter";
                 }
             }
+        }
+
+        // Busca uma cor de Resources/Styles/Colors.xaml pelo nome (ex.: "Destaque")
+        private static Color Cor(string sNome)
+        {
+            if (Application.Current != null
+                && Application.Current.Resources.TryGetValue(sNome, out object? valor)
+                && valor is Color cor)
+                return cor;
+
+            return Colors.Black;
         }
 
         // ---------- Menu inferior ----------
@@ -91,11 +129,6 @@ namespace ProjetoIntegradorMobile.Views
         private async void Inicio_Tapped(object sender, TappedEventArgs e)
         {
             await Shell.Current.GoToAsync("//MainPage");
-        }
-
-        private async void Buscar_Tapped(object sender, TappedEventArgs e)
-        {
-            await Shell.Current.GoToAsync(nameof(BuscarPage));
         }
 
         private async void Favoritos_Tapped(object sender, TappedEventArgs e)

@@ -6,374 +6,492 @@
              xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
              xmlns:models="clr-namespace:ProjetoIntegradorMobile.Models"
              x:DataType="vm:MainViewModel"
-             BackgroundColor="White">
+             BackgroundColor="{StaticResource Fundo}"
+             Shell.NavBarIsVisible="False">
 
     <Grid RowDefinitions="Auto,*,Auto">
 
-        <!-- CABEÇALHO parte pessoal -->
+        <!-- ===================== CABEÇALHO (fica parado no topo) ===================== -->
         <VerticalStackLayout Grid.Row="0"
-                             Padding="20,15,20,5"
-                             Spacing="15">
+                             Padding="20,45,20,12"
+                             Spacing="16">
 
-            <!-- Saudação ola-->
-            <Grid ColumnDefinitions="Auto,*,Auto">
+            <!-- Foto + saudação + botão do menu -->
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
 
-                <!-- Foto do usuário com border???-->
-                <Border WidthRequest="48"
-                        HeightRequest="48"
+                <!-- Foto do usuário (toque: abre o perfil, ou o login se ninguém entrou) -->
+                <Border WidthRequest="46"
+                        HeightRequest="46"
                         StrokeThickness="0"
-                        BackgroundColor="#EEEEEE"
-                        StrokeShape="RoundRectangle 24">
+                        BackgroundColor="{StaticResource FundoAvatar}"
+                        StrokeShape="RoundRectangle 23">
 
-                    <Label Text="👨‍🍳"
-                           FontSize="25"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"/>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Perfil_Tapped"/>
+                    </Border.GestureRecognizers>
+
+                    <Grid>
+                        <Path Data="{StaticResource IconeChapeu}"
+                              Style="{StaticResource Icone}"
+                              Stroke="{StaticResource Destaque}"
+                              IsVisible="{Binding SemFotoUsuario}"/>
+
+                        <Image x:Name="imFotoUsuario"
+                               Source="{Binding FotoUsuario}"
+                               Aspect="AspectFill"
+                               IsVisible="{Binding TemFotoUsuario}"/>
+                    </Grid>
                 </Border>
 
+                <!-- Saudação (toque: abre o perfil, ou o login se ninguém entrou) -->
                 <VerticalStackLayout Grid.Column="1"
-                                     Margin="12,0,0,0"
+                                     Spacing="2"
                                      VerticalOptions="Center">
-
-                    <Label Text="{Binding Saudacao}"
-                           FontSize="18"
-                           FontAttributes="Bold"
-                           TextColor="Black"/>
-
-                    <Label Text="Vamos cozinhar algo delicioso."
-                           FontSize="13"
-                           TextColor="Gray"/>
-                </VerticalStackLayout>
-
-                <!-- Botão menu para busca-->
-                <Border Grid.Column="2"
-                        WidthRequest="45"
-                        HeightRequest="45"
-                        Stroke="#EEEEEE"
-                        StrokeThickness="1"
-                        BackgroundColor="White"
-                        StrokeShape="RoundRectangle 15">
-
-                    <Label Text="☰"
-                           FontSize="20"
-                           TextColor="Black"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"/>
-                </Border>
-
-            </Grid>
-
-
-            <!-- BARRA DE PESQUISA para busca tbmm -->
-            <Border Stroke="#EEEEEE"
-                    StrokeThickness="1"
-                    BackgroundColor="White"
-                    HeightRequest="55"
-                    StrokeShape="RoundRectangle 18"
-                    Padding="15,0">
-
-                <Grid ColumnDefinitions="Auto,*,Auto">
-
-                    <Label Text="⌕"
-                           FontSize="30"
-                           TextColor="Black"
-                           VerticalOptions="Center"/>
-
-                    <Entry Grid.Column="1"
-                           x:Name="txBuscar"
-                           Text="{Binding Filtro}"
-                           Placeholder="Buscar receitas"
-                           PlaceholderColor="Gray"
-                           TextColor="Black"
-                           FontSize="14"
-                           VerticalOptions="Center"/>
-
-                    <Label Grid.Column="2"
-                           Text="☷"
-                           FontSize="22"
-                           TextColor="Black"
-                           VerticalOptions="Center"/>
-
-                </Grid>
-
-            </Border>
-
-
-            <!-- CATEGORIAS divididas, decidir layout -->
-            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
-
-                <HorizontalStackLayout x:Name="slCategorias" Spacing="10">
-
-                    <Border BackgroundColor="Black" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="Categoria_Tapped" CommandParameter="Todos"/>
-                        </Border.GestureRecognizers>
-
-                        <Label Text="Todos"
-                               TextColor="White" FontAttributes="Bold"/>
-                    </Border>
-
-                    <Border BackgroundColor="#F3F3F3" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="Categoria_Tapped" CommandParameter="Rápidos"/>
-                        </Border.GestureRecognizers>
-
-                        <Label Text="Rápidos"
-                               TextColor="Black"/>
-                    </Border>
-
-                    <Border BackgroundColor="#F3F3F3" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="Categoria_Tapped" CommandParameter="Almoço"/>
-                        </Border.GestureRecognizers>
-
-                        <Label Text="Almoço"
-                               TextColor="Black"/>
-                    </Border>
-
-                    <Border BackgroundColor="#F3F3F3" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="Categoria_Tapped" CommandParameter="Jantar"/>
-                        </Border.GestureRecognizers>
-
-                        <Label Text="Jantar"
-                               TextColor="Black"/>
-                    </Border>
-
-                    <Border BackgroundColor="#F3F3F3" StrokeThickness="0" Padding="20,10" StrokeShape="RoundRectangle 20">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="Categoria_Tapped" CommandParameter="Sobremesas"/>
-                        </Border.GestureRecognizers>
-
-                        <Label Text="Sobremesas"
-                               TextColor="Black"/>
-                    </Border>
-
-                </HorizontalStackLayout>
-
-            </ScrollView>
-
-        </VerticalStackLayout>
-
-
-        <!-- CONTEÚDO: receitas do banco, filtradas pela busca e pela categoria -->
-        <Grid Grid.Row="1" RowDefinitions="Auto,Auto,*" Padding="20,10,20,0">
-
-            <!-- Título + botão que abre a tela Nova receita (como Modal) -->
-            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
-
-                <Label Text="Receitas"
-                       FontSize="21"
-                       FontAttributes="Bold"
-                       TextColor="Black"
-                       VerticalOptions="Center"/>
-
-                <Button Grid.Column="1"
-                        x:Name="btNovaReceita"
-                        Text="+ Nova receita"
-                        FontSize="13"
-                        FontAttributes="Bold"
-                        TextColor="White"
-                        BackgroundColor="Black"
-                        CornerRadius="15"
-                        HeightRequest="38"
-                        Padding="15,0"
-                        Clicked="btNovaReceita_Clicked"/>
-            </Grid>
-
-            <!-- Mensagem de erro (só aparece se o banco falhar) -->
-            <Label Grid.Row="1"
-                   Text="{Binding MensagemErro}"
-                   IsVisible="{Binding TemErro}"
-                   FontSize="13"
-                   TextColor="#D32F2F"
-                   Margin="0,0,0,10"/>
-
-            <CollectionView Grid.Row="2"
-                            x:Name="cvReceitas"
-                            ItemsSource="{Binding Receitas}"
-                            SelectionMode="None">
-
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="12"/>
-                </CollectionView.ItemsLayout>
-
-                <!-- Aparece quando não há receita (banco vazio ou filtro sem resultado) -->
-                <CollectionView.EmptyView>
-                    <VerticalStackLayout Padding="0,40" Spacing="5">
-                        <Label Text="🍽"
-                               FontSize="40"
-                               HorizontalOptions="Center"/>
-                        <Label Text="Nenhuma receita encontrada."
-                               FontSize="15"
-                               TextColor="Gray"
-                               HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
-                </CollectionView.EmptyView>
-
-                <!-- Card de cada receita -->
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:ReceitaResumo">
-
-                        <Border Stroke="#EEEEEE"
-                                StrokeThickness="1"
-                                BackgroundColor="White"
-                                StrokeShape="RoundRectangle 18"
-                                Padding="15">
-
-                            <!-- Tocar no card abre o detalhe da receita -->
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="Receita_Tapped"
-                                                      CommandParameter="{Binding .}"/>
-                            </Border.GestureRecognizers>
-
-                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
-
-                                <!-- Foto da receita (ou um prato, se não tiver foto) -->
-                                <Border Grid.Column="0"
-                                        WidthRequest="64"
-                                        HeightRequest="64"
-                                        StrokeThickness="0"
-                                        BackgroundColor="#F3F3F3"
-                                        StrokeShape="RoundRectangle 14"
-                                        VerticalOptions="Center">
-                                    <Grid>
-                                        <Label Text="🍽"
-                                               FontSize="26"
-                                               HorizontalOptions="Center"
-                                               VerticalOptions="Center"/>
-                                        <Image Source="{Binding CaminhoFoto}"
-                                               Aspect="AspectFill"
-                                               IsVisible="{Binding TemFoto}"/>
-                                    </Grid>
-                                </Border>
-
-                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
-
-                                    <Label Text="{Binding Titulo}"
-                                           FontSize="16"
-                                           FontAttributes="Bold"
-                                           TextColor="Black"/>
-
-                                    <Label Text="{Binding NomeCategoria}"
-                                           FontSize="13"
-                                           TextColor="Gray"/>
-
-                                    <Label Text="{Binding Detalhes}"
-                                           FontSize="12"
-                                           TextColor="Gray"/>
-
-                                    <Label Text="🌱 Vegetariana"
-                                           FontSize="12"
-                                           TextColor="#2E7D32"
-                                           IsVisible="{Binding Vegetariana}"/>
-                                </VerticalStackLayout>
-
-                                <!-- Coração só nas receitas que o usuário logado favoritou -->
-                                <Label Grid.Column="2"
-                                       Text="♥"
-                                       FontSize="22"
-                                       TextColor="#D32F2F"
-                                       VerticalOptions="Center"
-                                       IsVisible="{Binding Favorita}"/>
-                            </Grid>
-                        </Border>
-
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-
-            </CollectionView>
-
-        </Grid>
-
-
-        <!-- MENU INFERIOR pra navegação-->
-        <Border Grid.Row="2" BackgroundColor="White" Stroke="#EEEEEE" StrokeThickness="1" Padding="5,8">
-
-            <Grid ColumnDefinitions="*,*,*,*">
-
-                <!-- INÍCIO -->
-                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
-
-                    <VerticalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Inicio_Tapped"/>
-                    </VerticalStackLayout.GestureRecognizers>
-
-                    <Label Text="⌂"
-                           TextColor="Black"
-                           FontSize="25"
-                           HorizontalOptions="Center"/>
-
-                    <Label Text="Início"
-                           FontSize="11"
-                           HorizontalOptions="Center"
-                           TextColor="Black"/>
-
-                </VerticalStackLayout>
-
-
-                <!-- BUSCAR -->
-                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
-
-                    <VerticalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Buscar_Tapped"/>
-                    </VerticalStackLayout.GestureRecognizers>
-
-                    <Label Text="⌕"
-                           FontSize="25"
-                           HorizontalOptions="Center"
-                           TextColor="Black"/>
-
-                    <Label Text="Buscar"
-                           FontSize="11"
-                           TextColor="Black"
-                           HorizontalOptions="Center"/>
-
-                </VerticalStackLayout>
-
-
-                <!-- FAVORITOS -->
-                <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
-
-                    <VerticalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Favoritos_Tapped"/>
-                    </VerticalStackLayout.GestureRecognizers>
-                    
-                    <Label Text="♡"
-                           FontSize="25"
-                           HorizontalOptions="Center"
-                           TextColor="Black"/>
-
-                    <Label Text="Favoritos"
-                           FontSize="11"
-                           TextColor="Black"
-                           HorizontalOptions="Center"/>
-
-                </VerticalStackLayout>
-
-
-                <!-- PERFIL -->
-                <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center">
 
                     <VerticalStackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="Perfil_Tapped"/>
                     </VerticalStackLayout.GestureRecognizers>
-                    
-                    <Label Text="♙"
-                           FontSize="25"
-                           HorizontalOptions="Center"
-                           TextColor="Black"/>
 
-                    <Label Text="Perfil"
-                           FontSize="11"
-                           TextColor="Black"
-                           HorizontalOptions="Center"/>
+                    <Label Text="{Binding Saudacao}"
+                           FontFamily="Bricolage"
+                           FontSize="22"/>
 
+                    <Label Text="O que vamos cozinhar hoje?"
+                           Style="{StaticResource TextoSecundario}"/>
                 </VerticalStackLayout>
 
+                <!-- Botão que abre o menu lateral (Flyout) -->
+                <Border Grid.Column="2"
+                        WidthRequest="44"
+                        HeightRequest="44"
+                        Stroke="{StaticResource Borda}"
+                        StrokeThickness="1"
+                        BackgroundColor="{StaticResource Cartao}"
+                        StrokeShape="RoundRectangle 14">
+
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Menu_Tapped"/>
+                    </Border.GestureRecognizers>
+
+                    <Path Data="{StaticResource IconeMenu}"
+                          Style="{StaticResource Icone}"
+                          WidthRequest="20"
+                          HeightRequest="20"/>
+                </Border>
             </Grid>
 
-        </Border>
+
+            <!-- BARRA DE PESQUISA: filtra pelo nome e pelos ingredientes -->
+            <Border Stroke="{StaticResource Borda}"
+                    StrokeThickness="1"
+                    BackgroundColor="{StaticResource Cartao}"
+                    HeightRequest="50"
+                    StrokeShape="RoundRectangle 16"
+                    Padding="16,0">
+
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+
+                    <Path Data="{StaticResource IconeBusca}"
+                          Style="{StaticResource Icone}"
+                          Stroke="{StaticResource TextoSuave}"
+                          WidthRequest="18"
+                          HeightRequest="18"/>
+
+                    <Entry Grid.Column="1"
+                           x:Name="txBuscar"
+                           Text="{Binding Filtro}"
+                           Placeholder="Buscar por receita ou ingrediente"
+                           VerticalOptions="Center"/>
+                </Grid>
+            </Border>
+
+
+            <!-- CATEGORIAS: a selecionada fica na cor principal (ver MarcarCategoria no .cs) -->
+            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+
+                <HorizontalStackLayout x:Name="slCategorias" Spacing="8">
+
+                    <Border BackgroundColor="{StaticResource Destaque}" StrokeThickness="0" Padding="18,9" StrokeShape="RoundRectangle 18">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Categoria_Tapped" CommandParameter="Todos"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="Todos" FontFamily="InterSemiBold" FontSize="13" TextColor="White"/>
+                    </Border>
+
+                    <Border BackgroundColor="{StaticResource Chip}" StrokeThickness="0" Padding="18,9" StrokeShape="RoundRectangle 18">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Categoria_Tapped" CommandParameter="Rápidos"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="Rápidos" FontSize="13"/>
+                    </Border>
+
+                    <Border BackgroundColor="{StaticResource Chip}" StrokeThickness="0" Padding="18,9" StrokeShape="RoundRectangle 18">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Categoria_Tapped" CommandParameter="Almoço"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="Almoço" FontSize="13"/>
+                    </Border>
+
+                    <Border BackgroundColor="{StaticResource Chip}" StrokeThickness="0" Padding="18,9" StrokeShape="RoundRectangle 18">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Categoria_Tapped" CommandParameter="Jantar"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="Jantar" FontSize="13"/>
+                    </Border>
+
+                    <Border BackgroundColor="{StaticResource Chip}" StrokeThickness="0" Padding="18,9" StrokeShape="RoundRectangle 18">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Categoria_Tapped" CommandParameter="Sobremesas"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="Sobremesas" FontSize="13"/>
+                    </Border>
+
+                </HorizontalStackLayout>
+            </ScrollView>
+        </VerticalStackLayout>
+
+
+        <!-- ===================== CONTEÚDO (rola) =====================
+             Cabeçalho da lista: receita em destaque (cartão grande) + título "Receitas".
+             Itens da lista: as outras receitas encontradas. -->
+        <CollectionView Grid.Row="1"
+                        x:Name="cvReceitas"
+                        ItemsSource="{Binding Receitas}"
+                        SelectionMode="None"
+                        Margin="20,0">
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.Header>
+                <VerticalStackLayout Spacing="16" Padding="0,4,0,12">
+
+                    <!-- Mensagem de erro (só aparece se o banco falhar) -->
+                    <Label Text="{Binding MensagemErro}"
+                           IsVisible="{Binding TemErro}"
+                           Style="{StaticResource TextoErro}"/>
+
+                    <!-- RECEITA EM DESTAQUE (a primeira do resultado) -->
+                    <Border IsVisible="{Binding TemDestaque}"
+                            BackgroundColor="{StaticResource Cartao}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 22">
+
+                        <Border.Shadow>
+                            <Shadow Brush="#503220" Opacity="0.10" Radius="18" Offset="0,6"/>
+                        </Border.Shadow>
+
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Receita_Tapped"
+                                                  CommandParameter="{Binding Destaque}"/>
+                        </Border.GestureRecognizers>
+
+                        <Grid RowDefinitions="160,Auto">
+
+                            <!-- Foto (ou o desenho de um prato, se não tiver foto) -->
+                            <Grid BackgroundColor="{StaticResource FotoVazia}">
+                                <Path Data="{StaticResource IconePrato}"
+                                      Style="{StaticResource Icone}"
+                                      Stroke="White"
+                                      WidthRequest="56"
+                                      HeightRequest="56"
+                                      IsVisible="{Binding Destaque.SemFoto}"/>
+
+                                <Image Source="{Binding Destaque.CaminhoFoto}"
+                                       Aspect="AspectFill"
+                                       IsVisible="{Binding Destaque.TemFoto}"/>
+
+                                <!-- Coração: só se o usuário logado favoritou -->
+                                <Border WidthRequest="38"
+                                        HeightRequest="38"
+                                        StrokeThickness="0"
+                                        BackgroundColor="White"
+                                        StrokeShape="RoundRectangle 19"
+                                        HorizontalOptions="End"
+                                        VerticalOptions="End"
+                                        Margin="12"
+                                        IsVisible="{Binding Destaque.Favorita}">
+                                    <Path Data="{StaticResource IconeCoracao}"
+                                          Style="{StaticResource Icone}"
+                                          Stroke="{StaticResource Destaque}"
+                                          Fill="{StaticResource Destaque}"
+                                          WidthRequest="18"
+                                          HeightRequest="18"/>
+                                </Border>
+                            </Grid>
+
+                            <VerticalStackLayout Grid.Row="1" Padding="16,14,16,16" Spacing="6">
+
+                                <Label Text="{Binding Destaque.NomeCategoria}"
+                                       Style="{StaticResource Sobrelinha}"/>
+
+                                <Label Text="{Binding Destaque.Titulo}"
+                                       Style="{StaticResource TituloSecao}"/>
+
+                                <HorizontalStackLayout Spacing="6">
+                                    <Path Data="{StaticResource IconeRelogio}"
+                                          Style="{StaticResource Icone}"
+                                          Stroke="{StaticResource TextoSuave}"
+                                          WidthRequest="15"
+                                          HeightRequest="15"/>
+                                    <Label Text="{Binding Destaque.Detalhes}"
+                                           Style="{StaticResource TextoSecundario}"
+                                           VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout Spacing="5" IsVisible="{Binding Destaque.Vegetariana}">
+                                    <Path Data="{StaticResource IconeFolha}"
+                                          Style="{StaticResource Icone}"
+                                          Stroke="{StaticResource Vegetariana}"
+                                          WidthRequest="14"
+                                          HeightRequest="14"/>
+                                    <Label Text="Vegetariana"
+                                           FontFamily="InterSemiBold"
+                                           FontSize="12"
+                                           TextColor="{StaticResource Vegetariana}"
+                                           VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <!-- Título + botão que abre a tela Nova receita (como Modal) -->
+                    <Grid ColumnDefinitions="*,Auto">
+
+                        <Label Text="Receitas"
+                               Style="{StaticResource TituloSecao}"
+                               VerticalOptions="Center"/>
+
+                        <Button Grid.Column="1"
+                                x:Name="btNovaReceita"
+                                Text="+  Nova receita"
+                                Style="{StaticResource BotaoEscuro}"
+                                FontSize="13"
+                                HeightRequest="38"
+                                CornerRadius="14"
+                                Padding="14,0"
+                                Clicked="btNovaReceita_Clicked"/>
+                    </Grid>
+
+                    <!-- Nenhuma receita (banco vazio ou busca sem resultado) -->
+                    <VerticalStackLayout IsVisible="{Binding SemReceitas}"
+                                         Padding="0,30"
+                                         Spacing="8">
+                        <Path Data="{StaticResource IconePrato}"
+                              Style="{StaticResource Icone}"
+                              Stroke="{StaticResource TextoFraco}"
+                              WidthRequest="44"
+                              HeightRequest="44"/>
+                        <Label Text="Nenhuma receita encontrada."
+                               Style="{StaticResource TextoSecundario}"
+                               FontSize="15"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </CollectionView.Header>
+
+            <!-- Item de cada receita -->
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:ReceitaResumo">
+
+                    <Border BackgroundColor="{StaticResource Cartao}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 18"
+                            Padding="10">
+
+                        <!-- Tocar no item abre o detalhe da receita -->
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Receita_Tapped"
+                                                  CommandParameter="{Binding .}"/>
+                        </Border.GestureRecognizers>
+
+                        <Grid ColumnDefinitions="72,*,Auto" ColumnSpacing="12">
+
+                            <!-- Foto da receita (ou o desenho de um prato) -->
+                            <Border WidthRequest="72"
+                                    HeightRequest="72"
+                                    StrokeThickness="0"
+                                    BackgroundColor="{StaticResource FotoVazia}"
+                                    StrokeShape="RoundRectangle 14"
+                                    VerticalOptions="Center">
+                                <Grid>
+                                    <Path Data="{StaticResource IconePrato}"
+                                          Style="{StaticResource Icone}"
+                                          Stroke="White"
+                                          WidthRequest="28"
+                                          HeightRequest="28"
+                                          IsVisible="{Binding SemFoto}"/>
+                                    <Image Source="{Binding CaminhoFoto}"
+                                           Aspect="AspectFill"
+                                           IsVisible="{Binding TemFoto}"/>
+                                </Grid>
+                            </Border>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+
+                                <Label Text="{Binding Titulo}"
+                                       Style="{StaticResource TituloCartao}"/>
+
+                                <Label Text="{Binding CategoriaEDetalhes}"
+                                       Style="{StaticResource TextoSecundario}"
+                                       FontSize="12"/>
+
+                                <HorizontalStackLayout Spacing="4" IsVisible="{Binding Vegetariana}">
+                                    <Path Data="{StaticResource IconeFolha}"
+                                          Style="{StaticResource Icone}"
+                                          Stroke="{StaticResource Vegetariana}"
+                                          WidthRequest="13"
+                                          HeightRequest="13"/>
+                                    <Label Text="Vegetariana"
+                                           FontFamily="InterSemiBold"
+                                           FontSize="12"
+                                           TextColor="{StaticResource Vegetariana}"
+                                           VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+
+                            <!-- Coração só nas receitas que o usuário logado favoritou -->
+                            <Path Grid.Column="2"
+                                  Data="{StaticResource IconeCoracao}"
+                                  Style="{StaticResource Icone}"
+                                  Stroke="{StaticResource Destaque}"
+                                  Fill="{StaticResource Destaque}"
+                                  WidthRequest="18"
+                                  HeightRequest="18"
+                                  Margin="0,0,6,0"
+                                  IsVisible="{Binding Favorita}"/>
+                        </Grid>
+                    </Border>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+
+        <!-- ===================== MENU INFERIOR ===================== -->
+        <Grid Grid.Row="2"
+              RowDefinitions="1,Auto"
+              BackgroundColor="{StaticResource Cartao}">
+
+            <BoxView Color="{StaticResource BordaCartao}"/>
+
+            <Grid Grid.Row="1" ColumnDefinitions="*,*,*" Padding="12,10,12,14">
+
+                <!-- INÍCIO (tela atual: na cor principal) -->
+                <VerticalStackLayout Grid.Column="0" Spacing="4" HorizontalOptions="Center">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Inicio_Tapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+
+                    <Path Data="{StaticResource IconeInicio}"
+                          Style="{StaticResource Icone}"
+                          Stroke="{StaticResource Destaque}"/>
+                    <Label Text="Início"
+                           FontFamily="InterSemiBold"
+                           FontSize="11"
+                           TextColor="{StaticResource Destaque}"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <!-- FAVORITOS -->
+                <VerticalStackLayout Grid.Column="1" Spacing="4" HorizontalOptions="Center">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Favoritos_Tapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+
+                    <Path Data="{StaticResource IconeCoracao}"
+                          Style="{StaticResource Icone}"
+                          Stroke="{StaticResource TextoSuave}"/>
+                    <Label Text="Favoritos"
+                           FontSize="11"
+                           TextColor="{StaticResource TextoSuave}"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <!-- PERFIL -->
+                <VerticalStackLayout Grid.Column="2" Spacing="4" HorizontalOptions="Center">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Perfil_Tapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+
+                    <Path Data="{StaticResource IconePerfil}"
+                          Style="{StaticResource Icone}"
+                          Stroke="{StaticResource TextoSuave}"/>
+                    <Label Text="Perfil"
+                           FontSize="11"
+                           TextColor="{StaticResource TextoSuave}"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
+
+
+        <!-- ===================== AVISO "ENTRE NA SUA CONTA" =====================
+             Cartão no estilo do app, por cima da tela escurecida.
+             Substitui o alerta padrão do sistema (que no Windows é uma janela escura). -->
+        <Grid x:Name="grAvisoLogin"
+              Grid.RowSpan="3"
+              BackgroundColor="{StaticResource FundoEscurecido}"
+              IsVisible="False">
+
+            <!-- Tocar fora do cartão fecha o aviso -->
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="AvisoFundo_Tapped"/>
+            </Grid.GestureRecognizers>
+
+            <Border BackgroundColor="{StaticResource Fundo}"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 24"
+                    Padding="24"
+                    Margin="30,0"
+                    MaximumWidthRequest="360"
+                    VerticalOptions="Center">
+
+                <!-- Toque no cartão não fecha o aviso -->
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer/>
+                </Border.GestureRecognizers>
+
+                <VerticalStackLayout Spacing="12">
+
+                    <Border WidthRequest="64"
+                            HeightRequest="64"
+                            StrokeThickness="0"
+                            BackgroundColor="{StaticResource FundoAvatar}"
+                            StrokeShape="RoundRectangle 32"
+                            HorizontalOptions="Center">
+                        <Path Data="{StaticResource IconeChapeu}"
+                              Style="{StaticResource Icone}"
+                              Stroke="{StaticResource Destaque}"
+                              WidthRequest="30"
+                              HeightRequest="30"/>
+                    </Border>
+
+                    <Label Text="Entre na sua conta"
+                           Style="{StaticResource TituloSecao}"
+                           HorizontalOptions="Center"/>
+
+                    <Label Text="Para criar receitas, você precisa entrar na sua conta."
+                           Style="{StaticResource TextoSecundario}"
+                           FontSize="14"
+                           HorizontalTextAlignment="Center"
+                           HorizontalOptions="Center"/>
+
+                    <Button x:Name="btAvisoEntrar"
+                            Text="Entrar"
+                            Style="{StaticResource BotaoPrincipal}"
+                            Margin="0,8,0,0"
+                            Clicked="btAvisoEntrar_Clicked"/>
+
+                    <Button x:Name="btAvisoCancelar"
+                            Text="Agora não"
+                            Style="{StaticResource BotaoSuave}"
+                            Clicked="btAvisoCancelar_Clicked"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
 
     </Grid>
 

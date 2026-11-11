@@ -2,7 +2,7 @@
 
 <!--
     "Minha versão": edição da cópia capturada de uma receita de outro usuário.
-    Aberta como MODAL (pelo detalhe da receita ou por "Minhas adaptações").
+    Aberta como MODAL (pelo detalhe da receita ou por "Cópias capturadas").
     O que é salvo aqui fica só na cópia; a receita original do autor não muda.
 -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -11,56 +11,61 @@
              xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
              xmlns:models="clr-namespace:ProjetoIntegradorMobile.Models"
              x:DataType="vm:EditarCapturaViewModel"
-             BackgroundColor="White"
+             BackgroundColor="{StaticResource Fundo}"
              Shell.NavBarIsVisible="False">
 
     <ScrollView>
 
-        <VerticalStackLayout Padding="30,50,30,30" Spacing="18">
+        <VerticalStackLayout Padding="20,45,20,32" Spacing="20">
 
-            <!-- CABEÇALHO -->
-            <Grid ColumnDefinitions="Auto,*">
+            <!-- CABEÇALHO: fechar + título -->
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
 
-                <Label Text="←"
-                       FontSize="28"
-                       TextColor="Black"
-                       VerticalOptions="Center">
+                <Border WidthRequest="44"
+                        HeightRequest="44"
+                        Stroke="{StaticResource Borda}"
+                        StrokeThickness="1"
+                        BackgroundColor="{StaticResource Cartao}"
+                        StrokeShape="RoundRectangle 14">
 
-                    <Label.GestureRecognizers>
+                    <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="Voltar_Tapped"/>
-                    </Label.GestureRecognizers>
-                </Label>
+                    </Border.GestureRecognizers>
+
+                    <Path Data="{StaticResource IconeFechar}"
+                          Style="{StaticResource Icone}"
+                          WidthRequest="16"
+                          HeightRequest="16"/>
+                </Border>
 
                 <Label Grid.Column="1"
                        Text="Minha versão"
-                       FontSize="21"
-                       FontAttributes="Bold"
-                       TextColor="Black"
-                       Margin="15,0,0,0"
+                       Style="{StaticResource TituloTela}"
                        VerticalOptions="Center"/>
             </Grid>
 
 
             <!-- RECEITA ORIGINAL (só para mostrar de onde veio) -->
-            <Border Stroke="#EEEEEE"
+            <Border BackgroundColor="{StaticResource Cartao}"
+                    Stroke="{StaticResource BordaCartao}"
                     StrokeThickness="1"
-                    BackgroundColor="#F8F8F8"
                     StrokeShape="RoundRectangle 18"
-                    Padding="12">
+                    Padding="10">
 
-                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Grid ColumnDefinitions="64,*" ColumnSpacing="12">
 
-                    <Border WidthRequest="60"
-                            HeightRequest="60"
+                    <Border WidthRequest="64"
+                            HeightRequest="64"
                             StrokeThickness="0"
-                            BackgroundColor="#EEEEEE"
-                            StrokeShape="RoundRectangle 12">
+                            BackgroundColor="{StaticResource FotoVazia}"
+                            StrokeShape="RoundRectangle 14">
                         <Grid>
-                            <Label Text="🍽"
-                                   FontSize="24"
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Center"
-                                   IsVisible="{Binding SemFoto}"/>
+                            <Path Data="{StaticResource IconePrato}"
+                                  Style="{StaticResource Icone}"
+                                  Stroke="White"
+                                  WidthRequest="26"
+                                  HeightRequest="26"
+                                  IsVisible="{Binding SemFoto}"/>
 
                             <Image x:Name="imFoto"
                                    Source="{Binding CaminhoFoto}"
@@ -72,247 +77,227 @@
                     <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
 
                         <Label Text="{Binding Origem}"
-                               FontSize="13"
-                               TextColor="Black"/>
+                               FontFamily="InterSemiBold"
+                               FontSize="13"/>
 
                         <Label Text="{Binding Detalhes}"
-                               FontSize="12"
-                               TextColor="Gray"/>
+                               Style="{StaticResource TextoSecundario}"
+                               FontSize="12"/>
 
                         <Label Text="Suas mudanças ficam só na sua cópia."
                                FontSize="12"
-                               FontAttributes="Italic"
-                               TextColor="Gray"/>
+                               TextColor="{StaticResource Destaque}"/>
                     </VerticalStackLayout>
                 </Grid>
             </Border>
 
 
             <!-- NOME DA MINHA VERSÃO -->
-            <Label Text="Nome"
-                   FontSize="14"
-                   FontAttributes="Bold"
-                   TextColor="Black"/>
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Nome" Style="{StaticResource Rotulo}"/>
 
-            <Border Stroke="#EEEEEE"
-                    StrokeThickness="1"
-                    BackgroundColor="White"
-                    HeightRequest="55"
-                    StrokeShape="RoundRectangle 18"
-                    Padding="15,0">
+                <Border Stroke="{StaticResource Borda}"
+                        StrokeThickness="1"
+                        BackgroundColor="{StaticResource Cartao}"
+                        HeightRequest="50"
+                        StrokeShape="RoundRectangle 14"
+                        Padding="14,0">
 
-                <Entry x:Name="txTitulo"
-                       Text="{Binding Titulo}"
-                       Placeholder="Nome da sua versão"
-                       PlaceholderColor="Gray"
-                       TextColor="Black"
-                       FontSize="14"
-                       MaxLength="80"
-                       VerticalOptions="Center"/>
-            </Border>
+                    <Entry x:Name="txTitulo"
+                           Text="{Binding Titulo}"
+                           Placeholder="Nome da sua versão"
+                           FontSize="15"
+                           MaxLength="80"
+                           VerticalOptions="Center"/>
+                </Border>
+            </VerticalStackLayout>
 
 
             <!-- INGREDIENTES -->
-            <Label Text="Ingredientes"
-                   FontSize="14"
-                   FontAttributes="Bold"
-                   TextColor="Black"/>
+            <VerticalStackLayout Spacing="10">
 
-            <VerticalStackLayout x:Name="slIngredientes"
-                                 Spacing="10"
-                                 BindableLayout.ItemsSource="{Binding Ingredientes}">
+                <Label Text="Ingredientes" Style="{StaticResource TituloSecao}"/>
 
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="models:IngredienteDaReceita">
-
-                        <Border Stroke="#EEEEEE"
-                                StrokeThickness="1"
-                                BackgroundColor="#F8F8F8"
-                                StrokeShape="RoundRectangle 14"
-                                Padding="15,10">
-
-                            <Grid ColumnDefinitions="*,Auto">
-
-                                <Label Text="{Binding Descricao}"
-                                       FontSize="14"
-                                       TextColor="Black"
-                                       VerticalOptions="Center"/>
-
-                                <Label Grid.Column="1"
-                                       Text="✕"
-                                       FontSize="18"
-                                       TextColor="Gray"
-                                       Padding="10,0,0,0"
-                                       VerticalOptions="Center">
-
-                                    <Label.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="RemoverIngrediente_Tapped"
-                                                              CommandParameter="{Binding .}"/>
-                                    </Label.GestureRecognizers>
-                                </Label>
-                            </Grid>
-                        </Border>
-
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </VerticalStackLayout>
-
-            <!-- Campos para adicionar um ingrediente -->
-            <Grid RowDefinitions="Auto,Auto"
-                  ColumnDefinitions="*,*,Auto"
-                  RowSpacing="10"
-                  ColumnSpacing="10">
-
-                <Border Grid.Row="0"
-                        Grid.ColumnSpan="3"
-                        Stroke="#EEEEEE"
+                <!-- Campos para adicionar um ingrediente -->
+                <Border Stroke="{StaticResource Borda}"
                         StrokeThickness="1"
-                        BackgroundColor="White"
-                        HeightRequest="55"
-                        StrokeShape="RoundRectangle 18"
-                        Padding="15,0">
+                        BackgroundColor="{StaticResource Cartao}"
+                        HeightRequest="48"
+                        StrokeShape="RoundRectangle 14"
+                        Padding="14,0">
 
                     <Entry x:Name="txIngredienteNome"
                            Text="{Binding NovoIngredienteNome}"
                            Placeholder="Ingrediente (ex.: Mel)"
-                           PlaceholderColor="Gray"
-                           TextColor="Black"
-                           FontSize="14"
+                           FontSize="15"
                            VerticalOptions="Center"/>
                 </Border>
 
-                <Border Grid.Row="1"
-                        Grid.Column="0"
-                        Stroke="#EEEEEE"
-                        StrokeThickness="1"
-                        BackgroundColor="White"
-                        HeightRequest="55"
-                        StrokeShape="RoundRectangle 18"
-                        Padding="15,0">
+                <Grid ColumnDefinitions="90,*,48" ColumnSpacing="8">
 
-                    <Entry x:Name="txIngredienteQuantidade"
-                           Text="{Binding NovoIngredienteQuantidade}"
-                           Placeholder="Qtd."
-                           PlaceholderColor="Gray"
-                           TextColor="Black"
-                           FontSize="14"
-                           Keyboard="Numeric"
-                           VerticalOptions="Center"/>
-                </Border>
+                    <Border Stroke="{StaticResource Borda}"
+                            StrokeThickness="1"
+                            BackgroundColor="{StaticResource Cartao}"
+                            HeightRequest="48"
+                            StrokeShape="RoundRectangle 14"
+                            Padding="12,0">
 
-                <Border Grid.Row="1"
-                        Grid.Column="1"
-                        Stroke="#EEEEEE"
-                        StrokeThickness="1"
-                        BackgroundColor="White"
-                        HeightRequest="55"
-                        StrokeShape="RoundRectangle 18"
-                        Padding="15,0">
+                        <Entry x:Name="txIngredienteQuantidade"
+                               Text="{Binding NovoIngredienteQuantidade}"
+                               Placeholder="Qtd."
+                               FontSize="15"
+                               Keyboard="Numeric"
+                               VerticalOptions="Center"/>
+                    </Border>
 
-                    <Picker x:Name="pkIngredienteUnidade"
-                            ItemsSource="{Binding Unidades}"
-                            SelectedItem="{Binding NovoIngredienteUnidade}"
-                            Title="Unidade"
-                            TitleColor="Gray"
-                            TextColor="Black"
-                            FontSize="14"
-                            VerticalOptions="Center"/>
-                </Border>
+                    <Border Grid.Column="1"
+                            Stroke="{StaticResource Borda}"
+                            StrokeThickness="1"
+                            BackgroundColor="{StaticResource Cartao}"
+                            HeightRequest="48"
+                            StrokeShape="RoundRectangle 14"
+                            Padding="12,0">
 
-                <Button Grid.Row="1"
-                        Grid.Column="2"
-                        x:Name="btAdicionarIngrediente"
-                        Text="+"
-                        FontSize="24"
-                        FontAttributes="Bold"
-                        TextColor="White"
-                        BackgroundColor="Black"
-                        WidthRequest="55"
-                        HeightRequest="55"
-                        CornerRadius="18"
-                        Padding="0"
-                        Clicked="btAdicionarIngrediente_Clicked"/>
-            </Grid>
+                        <Picker x:Name="pkIngredienteUnidade"
+                                ItemsSource="{Binding Unidades}"
+                                SelectedItem="{Binding NovoIngredienteUnidade}"
+                                Title="Unidade"
+                                TitleColor="{StaticResource TextoFraco}"
+                                FontSize="15"
+                                VerticalOptions="Center"/>
+                    </Border>
 
-            <Label Text="{Binding ErroIngrediente}"
-                   IsVisible="{Binding TemErroIngrediente}"
-                   FontSize="13"
-                   TextColor="#D32F2F"/>
+                    <Button Grid.Column="2"
+                            x:Name="btAdicionarIngrediente"
+                            Text="+"
+                            Style="{StaticResource BotaoPrincipal}"
+                            FontSize="22"
+                            WidthRequest="48"
+                            HeightRequest="48"
+                            CornerRadius="14"
+                            Padding="0"
+                            Clicked="btAdicionarIngrediente_Clicked"/>
+                </Grid>
+
+                <Label Text="{Binding ErroIngrediente}"
+                       IsVisible="{Binding TemErroIngrediente}"
+                       Style="{StaticResource TextoErro}"/>
+
+                <!-- Lista dos ingredientes da minha versão -->
+                <VerticalStackLayout x:Name="slIngredientes"
+                                     Spacing="8"
+                                     BindableLayout.ItemsSource="{Binding Ingredientes}">
+
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:IngredienteDaReceita">
+
+                            <Border Stroke="{StaticResource BordaCartao}"
+                                    StrokeThickness="1"
+                                    BackgroundColor="{StaticResource Cartao}"
+                                    StrokeShape="RoundRectangle 14"
+                                    Padding="14,8">
+
+                                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+
+                                    <Label Text="{Binding Nome}"
+                                           FontSize="14"
+                                           VerticalOptions="Center"/>
+
+                                    <Label Grid.Column="1"
+                                           Text="{Binding QuantidadeTexto}"
+                                           Style="{StaticResource TextoSecundario}"
+                                           VerticalOptions="Center"/>
+
+                                    <!-- Remover ingrediente -->
+                                    <Border Grid.Column="2"
+                                            WidthRequest="30"
+                                            HeightRequest="30"
+                                            StrokeThickness="0"
+                                            BackgroundColor="{StaticResource Chip}"
+                                            StrokeShape="RoundRectangle 15">
+
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="RemoverIngrediente_Tapped"
+                                                                  CommandParameter="{Binding .}"/>
+                                        </Border.GestureRecognizers>
+
+                                        <Path Data="{StaticResource IconeFechar}"
+                                              Style="{StaticResource Icone}"
+                                              Stroke="{StaticResource TextoSuave}"
+                                              StrokeThickness="2.5"
+                                              WidthRequest="11"
+                                              HeightRequest="11"/>
+                                    </Border>
+                                </Grid>
+                            </Border>
+
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
 
 
             <!-- MODO DE PREPARO -->
-            <Label Text="Modo de preparo"
-                   FontSize="14"
-                   FontAttributes="Bold"
-                   TextColor="Black"/>
+            <VerticalStackLayout Spacing="10">
 
-            <Border Stroke="#EEEEEE"
-                    StrokeThickness="1"
-                    BackgroundColor="White"
-                    HeightRequest="150"
-                    StrokeShape="RoundRectangle 18"
-                    Padding="15,5">
+                <Label Text="Modo de preparo" Style="{StaticResource TituloSecao}"/>
 
-                <Editor x:Name="edModoPreparo"
-                        Text="{Binding ModoPreparo}"
-                        TextColor="Black"
-                        FontSize="14"/>
-            </Border>
+                <Border Stroke="{StaticResource Borda}"
+                        StrokeThickness="1"
+                        BackgroundColor="{StaticResource Cartao}"
+                        HeightRequest="160"
+                        StrokeShape="RoundRectangle 14"
+                        Padding="12,6">
+
+                    <Editor x:Name="edModoPreparo"
+                            Text="{Binding ModoPreparo}"
+                            FontSize="15"/>
+                </Border>
+            </VerticalStackLayout>
 
 
             <!-- OBSERVAÇÕES -->
-            <Label Text="O que você mudou? (opcional)"
-                   FontSize="14"
-                   FontAttributes="Bold"
-                   TextColor="Black"/>
+            <VerticalStackLayout Spacing="8">
+                <Label Text="O que você mudou? (opcional)" Style="{StaticResource Rotulo}"/>
 
-            <Border Stroke="#EEEEEE"
-                    StrokeThickness="1"
-                    BackgroundColor="White"
-                    HeightRequest="100"
-                    StrokeShape="RoundRectangle 18"
-                    Padding="15,5">
+                <Border Stroke="{StaticResource Borda}"
+                        StrokeThickness="1"
+                        BackgroundColor="{StaticResource Cartao}"
+                        HeightRequest="100"
+                        StrokeShape="RoundRectangle 14"
+                        Padding="12,6">
 
-                <Editor x:Name="edObservacoes"
-                        Text="{Binding Observacoes}"
-                        Placeholder="Ex.: troquei o açúcar por mel"
-                        PlaceholderColor="Gray"
-                        TextColor="Black"
-                        FontSize="14"/>
-            </Border>
+                    <Editor x:Name="edObservacoes"
+                            Text="{Binding Observacoes}"
+                            Placeholder="Ex.: troquei o açúcar por mel"
+                            FontSize="15"/>
+                </Border>
+            </VerticalStackLayout>
 
 
             <!-- MENSAGEM DE ERRO -->
             <Label x:Name="lbErro"
                    Text="{Binding MensagemErro}"
                    IsVisible="{Binding TemErro}"
-                   FontSize="13"
-                   TextColor="#D32F2F"
+                   Style="{StaticResource TextoErro}"
                    HorizontalOptions="Center"/>
 
 
             <!-- BOTÕES -->
-            <Button x:Name="btSalvar"
-                    Text="Salvar minha versão"
-                    FontSize="16"
-                    FontAttributes="Bold"
-                    TextColor="White"
-                    BackgroundColor="Black"
-                    HeightRequest="55"
-                    CornerRadius="18"
-                    Margin="0,10,0,0"
-                    Clicked="btSalvar_Clicked"/>
+            <VerticalStackLayout Spacing="10">
 
-            <Button x:Name="btExcluir"
-                    Text="Excluir minha versão"
-                    FontSize="15"
-                    TextColor="#D32F2F"
-                    BackgroundColor="White"
-                    BorderColor="#D32F2F"
-                    BorderWidth="1"
-                    HeightRequest="50"
-                    CornerRadius="18"
-                    Clicked="btExcluir_Clicked"/>
+                <Button x:Name="btSalvar"
+                        Text="Salvar minha versão"
+                        Style="{StaticResource BotaoPrincipal}"
+                        FontSize="16"
+                        HeightRequest="54"
+                        Clicked="btSalvar_Clicked"/>
+
+                <Button x:Name="btExcluir"
+                        Text="Excluir minha versão"
+                        Style="{StaticResource BotaoPerigo}"
+                        Clicked="btExcluir_Clicked"/>
+            </VerticalStackLayout>
 
         </VerticalStackLayout>
 

@@ -7,44 +7,46 @@
              xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
              xmlns:models="clr-namespace:ProjetoIntegradorMobile.Models"
              x:DataType="vm:CapturasViewModel"
-             BackgroundColor="White"
+             BackgroundColor="{StaticResource Fundo}"
              Shell.NavBarIsVisible="False">
 
-    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="20,50,20,0">
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="20,45,20,0">
 
-        <!-- CABEÇALHO -->
-        <Grid ColumnDefinitions="Auto,*">
+        <!-- CABEÇALHO: voltar + título -->
+        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
 
-            <Label Text="←"
-                   FontSize="28"
-                   TextColor="Black"
-                   VerticalOptions="Center">
+            <Border WidthRequest="44"
+                    HeightRequest="44"
+                    Stroke="{StaticResource Borda}"
+                    StrokeThickness="1"
+                    BackgroundColor="{StaticResource Cartao}"
+                    StrokeShape="RoundRectangle 14">
 
-                <Label.GestureRecognizers>
+                <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Voltar_Tapped"/>
-                </Label.GestureRecognizers>
-            </Label>
+                </Border.GestureRecognizers>
+
+                <Path Data="{StaticResource IconeVoltar}"
+                      Style="{StaticResource Icone}"
+                      WidthRequest="18"
+                      HeightRequest="18"/>
+            </Border>
 
             <Label Grid.Column="1"
-                   Text="Minhas adaptações"
-                   FontSize="21"
-                   FontAttributes="Bold"
-                   TextColor="Black"
-                   Margin="15,0,0,0"
+                   Text="Cópias capturadas"
+                   Style="{StaticResource TituloTela}"
                    VerticalOptions="Center"/>
         </Grid>
 
         <Label Grid.Row="1"
                Text="Receitas de outros usuários que você capturou e adaptou."
-               FontSize="13"
-               TextColor="Gray"
-               Margin="0,10,0,15"/>
+               Style="{StaticResource TextoSecundario}"
+               Margin="0,12,0,16"/>
 
         <Label Grid.Row="2"
                Text="{Binding MensagemErro}"
                IsVisible="{Binding TemErro}"
-               FontSize="13"
-               TextColor="#D32F2F"
+               Style="{StaticResource TextoErro}"
                Margin="0,0,0,10"/>
 
         <CollectionView Grid.Row="3"
@@ -53,22 +55,24 @@
                         SelectionMode="None">
 
             <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical" ItemSpacing="12"/>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
             </CollectionView.ItemsLayout>
 
             <CollectionView.EmptyView>
                 <VerticalStackLayout Padding="10,40" Spacing="8">
-                    <Label Text="📋"
-                           FontSize="40"
-                           HorizontalOptions="Center"/>
+                    <Path Data="{StaticResource IconeCopiar}"
+                          Style="{StaticResource Icone}"
+                          Stroke="{StaticResource TextoFraco}"
+                          WidthRequest="40"
+                          HeightRequest="40"/>
                     <Label Text="Você ainda não capturou nenhuma receita."
+                           Style="{StaticResource TextoSecundario}"
                            FontSize="15"
-                           TextColor="Gray"
                            HorizontalOptions="Center"
                            HorizontalTextAlignment="Center"/>
-                    <Label Text="Abra uma receita de outro usuário e toque em &quot;Capturar receita&quot;."
+                    <Label Text="Abra uma receita de outro usuário e toque em &quot;Capturar&quot;."
+                           Style="{StaticResource TextoSecundario}"
                            FontSize="13"
-                           TextColor="Gray"
                            HorizontalOptions="Center"
                            HorizontalTextAlignment="Center"/>
                 </VerticalStackLayout>
@@ -77,52 +81,59 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:AdaptacaoResumo">
 
-                    <Border Stroke="#EEEEEE"
-                            StrokeThickness="1"
-                            BackgroundColor="White"
+                    <Border BackgroundColor="{StaticResource Cartao}"
+                            StrokeThickness="0"
                             StrokeShape="RoundRectangle 18"
-                            Padding="15">
+                            Padding="10">
 
-                        <!-- Tocar no card abre "Minha versão" -->
+                        <!-- Tocar no item abre a sua versão -->
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="Adaptacao_Tapped"
                                                   CommandParameter="{Binding .}"/>
                         </Border.GestureRecognizers>
 
-                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Grid ColumnDefinitions="72,*,Auto" ColumnSpacing="12">
 
-                            <Border WidthRequest="64"
-                                    HeightRequest="64"
+                            <!-- Foto da receita (o desenho do prato fica por baixo; a foto, se houver, cobre) -->
+                            <Border WidthRequest="72"
+                                    HeightRequest="72"
                                     StrokeThickness="0"
-                                    BackgroundColor="#F3F3F3"
+                                    BackgroundColor="{StaticResource FotoVazia}"
                                     StrokeShape="RoundRectangle 14"
                                     VerticalOptions="Center">
                                 <Grid>
-                                    <Label Text="🍽"
-                                           FontSize="26"
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="Center"/>
+                                    <Path Data="{StaticResource IconePrato}"
+                                          Style="{StaticResource Icone}"
+                                          Stroke="White"
+                                          WidthRequest="28"
+                                          HeightRequest="28"/>
                                     <Image Source="{Binding CaminhoFoto}"
                                            Aspect="AspectFill"
                                            IsVisible="{Binding TemFoto}"/>
                                 </Grid>
                             </Border>
 
-                            <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                            <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
 
                                 <Label Text="{Binding Titulo}"
-                                       FontSize="16"
-                                       FontAttributes="Bold"
-                                       TextColor="Black"/>
+                                       Style="{StaticResource TituloCartao}"/>
 
                                 <Label Text="{Binding Origem}"
-                                       FontSize="12"
-                                       TextColor="Gray"/>
+                                       Style="{StaticResource TextoSecundario}"
+                                       FontSize="12"/>
 
                                 <Label Text="{Binding Detalhes}"
-                                       FontSize="12"
-                                       TextColor="Gray"/>
+                                       Style="{StaticResource TextoSecundario}"
+                                       FontSize="12"/>
                             </VerticalStackLayout>
+
+                            <Path Grid.Column="2"
+                                  Data="{StaticResource IconeSeta}"
+                                  Style="{StaticResource Icone}"
+                                  Stroke="{StaticResource TextoFraco}"
+                                  WidthRequest="16"
+                                  HeightRequest="16"
+                                  Margin="0,0,6,0"/>
                         </Grid>
                     </Border>
 

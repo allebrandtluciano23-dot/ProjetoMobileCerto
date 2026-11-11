@@ -14,7 +14,28 @@ namespace ProjetoIntegradorMobile.ViewModels
         private List<ReceitaResumo> lReceitasTodas = new List<ReceitaResumo>();
 
         // O que aparece na tela (CollectionView). ObservableCollection avisa a tela quando muda.
+        // A primeira receita do resultado vai para o cartão grande (Destaque); as outras ficam aqui.
         public ObservableCollection<ReceitaResumo> Receitas { get; } = new ObservableCollection<ReceitaResumo>();
+
+        // Receita mostrada no cartão grande do topo (null = nenhuma receita encontrada)
+        private ReceitaResumo? receitaDestaque;
+        public ReceitaResumo? Destaque
+        {
+            get => receitaDestaque;
+            set
+            {
+                if (SetProperty(ref receitaDestaque, value))
+                {
+                    OnPropertyChanged(nameof(TemDestaque));
+                    OnPropertyChanged(nameof(SemReceitas));
+                }
+            }
+        }
+
+        public bool TemDestaque => Destaque != null;
+
+        // Mostra "Nenhuma receita encontrada" (banco vazio ou busca sem resultado)
+        public bool SemReceitas => Destaque == null;
 
         // ---------- Campos da tela (ligados por Binding) ----------
 
@@ -24,6 +45,24 @@ namespace ProjetoIntegradorMobile.ViewModels
             get => sSaudacao;
             set => SetProperty(ref sSaudacao, value);
         }
+
+        // Foto do usuário logado no topo da tela (sem foto: mostra o desenho do chapéu de chef)
+        private string? sFotoUsuario;
+        public string? FotoUsuario
+        {
+            get => sFotoUsuario;
+            set
+            {
+                if (SetProperty(ref sFotoUsuario, value))
+                {
+                    OnPropertyChanged(nameof(TemFotoUsuario));
+                    OnPropertyChanged(nameof(SemFotoUsuario));
+                }
+            }
+        }
+
+        public bool TemFotoUsuario => !string.IsNullOrEmpty(FotoUsuario);
+        public bool SemFotoUsuario => !TemFotoUsuario;
 
         // Texto da barra de pesquisa: a cada letra digitada, a lista é filtrada
         private string sFiltro = "";
@@ -58,7 +97,7 @@ namespace ProjetoIntegradorMobile.ViewModels
 
             try
             {
-                // O ♥ dos cards mostra as favoritas de quem está logado (0 = ninguém logado)
+                // O coração dos itens mostra as favoritas de quem está logado (0 = ninguém logado)
                 int iIdUsuario = SessaoUsuario.UsuarioAtual?.IdUsuario ?? 0;
                 lReceitasTodas = await receitaDAO.ListarResumoAsync(iIdUsuario);
                 MensagemErro = "";
@@ -79,6 +118,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             string sTermo = (Filtro ?? "").Trim().ToLowerInvariant();
 
             Receitas.Clear();
+            ReceitaResumo? primeira = null;
 
             foreach (ReceitaResumo receita in lReceitasTodas)
             {
@@ -88,15 +128,25 @@ namespace ProjetoIntegradorMobile.ViewModels
                     || receita.Titulo.ToLowerInvariant().Contains(sTermo)
                     || (receita.NomesIngredientes ?? "").ToLowerInvariant().Contains(sTermo);
 
-                if (bCategoriaOk && bTextoOk)
+                if (!bCategoriaOk || !bTextoOk)
+                    continue;
+
+                // A primeira que combinar vai para o cartão grande; as demais, para a lista
+                if (primeira == null)
+                    primeira = receita;
+                else
                     Receitas.Add(receita);
             }
+
+            Destaque = primeira;
         }
 
         // "Olá, Luciano!" se houver alguém logado; senão "Olá, Chefe!"
         private void AtualizarSaudacao()
         {
             Usuario? usuario = SessaoUsuario.UsuarioAtual;
+            FotoUsuario = usuario?.CaminhoFoto;
+
             if (usuario == null || string.IsNullOrWhiteSpace(usuario.Nome))
             {
                 Saudacao = "Olá, Chefe!";

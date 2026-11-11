@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    ÍCONES DO CHEEFBOOK: desenhos de linha (24x24) usados com <Path>, no lugar dos emojis.
+    Uso numa tela:
+        <Path Data="{StaticResource IconeCoracao}" Style="{StaticResource Icone}"/>
+    Para trocar a cor: Stroke="..." (linha) e Fill="..." (preenchimento, ex.: coração cheio).
+-->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Navegação -->
+    <PathGeometry x:Key="IconeMenu" Figures="M4 7h16M4 12h16M4 17h10"/>
+    <PathGeometry x:Key="IconeInicio" Figures="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>
+    <PathGeometry x:Key="IconePerfil" Figures="M12 4a4 4 0 1 0 0 8a4 4 0 1 0 0-8M4 21a8 8 0 0 1 16 0"/>
+    <PathGeometry x:Key="IconeCoracao" Figures="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>
+    <PathGeometry x:Key="IconeBusca" Figures="M11 4a7 7 0 1 0 0 14a7 7 0 1 0 0-14M20 20l-3.5-3.5"/>
+    <PathGeometry x:Key="IconeSeta" Figures="M9 6l6 6l-6 6"/>
+    <PathGeometry x:Key="IconeVoltar" Figures="M15 6l-6 6l6 6"/>
+    <PathGeometry x:Key="IconeSetaBaixo" Figures="M6 9l6 6l6-6"/>
+    <PathGeometry x:Key="IconeFechar" Figures="M6 6l12 12M18 6L6 18"/>
+
+    <!-- Ações -->
+    <PathGeometry x:Key="IconeMais" Figures="M12 5v14M5 12h14"/>
+    <PathGeometry x:Key="IconeEditar" Figures="M4 20h4L19 9l-4-4L4 16z"/>
+    <PathGeometry x:Key="IconeLixeira" Figures="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>
+    <PathGeometry x:Key="IconeCopiar" Figures="M10 8h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2zM16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>
+    <PathGeometry x:Key="IconeCamera" Figures="M4 8h3l2-3h6l2 3h3v11H4zM12 9.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7"/>
+    <PathGeometry x:Key="IconeSair" Figures="M15 4h4v16h-4M10 8l-4 4l4 4M6 12h10"/>
+    <PathGeometry x:Key="IconeCheck" Figures="M5 12l5 5l9-10"/>
+
+    <!-- Informações da receita -->
+    <PathGeometry x:Key="IconeRelogio" Figures="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18M12 7v5l3 2"/>
+    <PathGeometry x:Key="IconePorcoes" Figures="M9 4.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 20a6.5 6.5 0 0 0-3-5.5"/>
+    <PathGeometry x:Key="IconeNivel" Figures="M5 20V14M12 20V9M19 20V4"/>
+    <PathGeometry x:Key="IconeFolha" Figures="M5 19c0-8 6-14 15-14c0 9-6 15-14 15H5zM5 19l8-8"/>
+    <PathGeometry x:Key="IconePrato" Figures="M12 4a8 8 0 1 0 0 16a8 8 0 1 0 0-16M12 8.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7"/>
+    <PathGeometry x:Key="IconeChapeu" Figures="M7 14a4 4 0 0 1-1-7.9A5 5 0 0 1 15.5 5a4 4 0 0 1 2.5 9zM7 14v6h11v-6"/>
+
+</ResourceDictionary>

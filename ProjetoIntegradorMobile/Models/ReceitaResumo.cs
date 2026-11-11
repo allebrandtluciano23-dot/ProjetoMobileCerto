@@ -17,12 +17,28 @@ namespace ProjetoIntegradorMobile.Models
         public string? CaminhoFoto { get; set; }
 
         public bool TemFoto => !string.IsNullOrEmpty(CaminhoFoto);
+        public bool SemFoto => !TemFoto;
 
         // Nomes dos ingredientes separados por espaço (usado só pelo filtro de busca)
         public string? NomesIngredientes { get; set; }
 
         // Texto do card, ex.: "40 min · 2 porções · Fácil"
         public string Detalhes => MontarDetalhes(TempoPreparoMin, Porcoes, Dificuldade);
+
+        // Linha do item da lista, ex.: "Almoço · 40 min · 2 porções · Fácil"
+        public string CategoriaEDetalhes
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(NomeCategoria))
+                    return Detalhes;
+
+                if (string.IsNullOrEmpty(Detalhes))
+                    return NomeCategoria;
+
+                return $"{NomeCategoria} · {Detalhes}";
+            }
+        }
 
         // Também usado pela tela de detalhe da receita
         public static string MontarDetalhes(int? iTempoMin, int? iPorcoes, string? sDificuldade)

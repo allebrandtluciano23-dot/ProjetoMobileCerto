@@ -39,6 +39,7 @@ namespace ProjetoIntegradorMobile.Data
                     nome TEXT NOT NULL,
                     email TEXT NOT NULL UNIQUE,
                     senha_hash TEXT NOT NULL,
+                    caminho_foto TEXT,
                     data_cadastro TEXT NOT NULL DEFAULT (datetime('now'))
                 );
             ");
@@ -89,6 +90,7 @@ namespace ProjetoIntegradorMobile.Data
             await AdicionarColunaAsync("receita", "vegetariana INTEGER NOT NULL DEFAULT 0");
             await AdicionarColunaAsync("receita", "dificuldade TEXT");
             await AdicionarColunaAsync("receita", "caminho_foto TEXT");
+            await AdicionarColunaAsync("usuario", "caminho_foto TEXT"); // foto do perfil
 
             // RECEITA_INGREDIENTE
             await _database.ExecuteAsync(@"

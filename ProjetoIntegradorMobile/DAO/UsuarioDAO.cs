@@ -68,6 +68,14 @@ namespace ProjetoIntegradorMobile.DAO
             return await db.UpdateAsync(usuario);
         }
 
+        // Grava o caminho da foto do perfil
+        public async Task AlterarFotoAsync(int iIdUsuario, string? sCaminhoFoto)
+        {
+            var db = await DatabaseConfig.Database.Conexao();
+            await db.ExecuteAsync(
+                "UPDATE usuario SET caminho_foto = ? WHERE id_usuario = ?", sCaminhoFoto, iIdUsuario);
+        }
+
         public async Task<bool> AlterarSenhaAsync(int iIdUsuario, string sSenhaAtual, string sNovaSenha)
         {
             var db = await DatabaseConfig.Database.Conexao();

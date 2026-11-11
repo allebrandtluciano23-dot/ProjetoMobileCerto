@@ -3,289 +3,264 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProjetoIntegradorMobile.Views.PerfilPage"
-             BackgroundColor="White">
+             xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
+             x:DataType="vm:PerfilViewModel"
+             BackgroundColor="{StaticResource Fundo}">
 
-    <Grid RowDefinitions="Auto,*,Auto">
+    <Grid RowDefinitions="*,Auto">
 
-        <!-- CABEÇALHO -->
-        <VerticalStackLayout Grid.Row="0"
-                             Padding="20,15,20,5"
-                             Spacing="15">
+        <ScrollView>
+            <VerticalStackLayout Padding="20,8,20,24" Spacing="22">
 
-            <Label Text="Meu perfil"
-                   FontSize="21"
-                   FontAttributes="Bold"
-                   TextColor="Black"/>
+                <Label Text="Meu perfil" Style="{StaticResource TituloTela}"/>
 
-        </VerticalStackLayout>
+                <!-- FOTO, NOME E E-MAIL -->
+                <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
 
+                    <!-- Toque na foto: escolher uma foto da galeria -->
+                    <Grid WidthRequest="104" HeightRequest="104" HorizontalOptions="Center">
 
-        <!-- CONTEÚDO -->
-        <ScrollView Grid.Row="1">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Foto_Tapped"/>
+                        </Grid.GestureRecognizers>
 
-            <VerticalStackLayout Padding="20,10,20,20" Spacing="20">
+                        <Border StrokeThickness="0"
+                                BackgroundColor="{StaticResource FundoAvatar}"
+                                StrokeShape="RoundRectangle 52">
+                            <Grid>
+                                <Path Data="{StaticResource IconeChapeu}"
+                                      Style="{StaticResource Icone}"
+                                      Stroke="{StaticResource Destaque}"
+                                      WidthRequest="44"
+                                      HeightRequest="44"
+                                      IsVisible="{Binding SemFoto}"/>
 
-                <!-- CARD DO USUÁRIO -->
-                <Border BackgroundColor="#F3F3F3"
-                        StrokeThickness="0"
-                        Padding="20"
-                        StrokeShape="RoundRectangle 18">
-
-                    <Grid ColumnDefinitions="Auto,*,Auto">
-
-                        <!-- Foto do usuário -->
-                        <Border WidthRequest="72"
-                                HeightRequest="72"
-                                StrokeThickness="0"
-                                BackgroundColor="White"
-                                StrokeShape="RoundRectangle 36">
-
-                            <Label Text="👨‍🍳"
-                                   FontSize="36"
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Center"/>
+                                <Image x:Name="imFoto"
+                                       Source="{Binding CaminhoFoto}"
+                                       Aspect="AspectFill"
+                                       IsVisible="{Binding TemFoto}"/>
+                            </Grid>
                         </Border>
 
-                        <VerticalStackLayout Grid.Column="1"
-                                             Margin="15,0,0,0"
-                                             VerticalOptions="Center"
-                                             Spacing="2">
-
-                            <Label x:Name="lbNome"
-                                   Text="João Silva"
-                                   FontSize="18"
-                                   FontAttributes="Bold"
-                                   TextColor="Black"/>
-
-                            <Label x:Name="lbEmail"
-                                   Text="joao@email.com"
-                                   FontSize="13"
-                                   TextColor="Gray"/>
-                        </VerticalStackLayout>
+                        <!-- Selo de câmera -->
+                        <Border WidthRequest="34"
+                                HeightRequest="34"
+                                Stroke="{StaticResource Fundo}"
+                                StrokeThickness="3"
+                                BackgroundColor="{StaticResource Destaque}"
+                                StrokeShape="RoundRectangle 17"
+                                HorizontalOptions="End"
+                                VerticalOptions="End">
+                            <Path Data="{StaticResource IconeCamera}"
+                                  Style="{StaticResource Icone}"
+                                  Stroke="White"
+                                  WidthRequest="15"
+                                  HeightRequest="15"/>
+                        </Border>
                     </Grid>
-                </Border>
+
+                    <Label x:Name="lbNome"
+                           Text="{Binding Nome}"
+                           Style="{StaticResource TituloSecao}"
+                           FontSize="22"
+                           HorizontalOptions="Center"
+                           Margin="0,6,0,0"/>
+
+                    <Label x:Name="lbEmail"
+                           Text="{Binding Email}"
+                           Style="{StaticResource TextoSecundario}"
+                           FontSize="14"
+                           HorizontalOptions="Center"/>
+
+                    <Label Text="Toque na foto para alterar"
+                           FontSize="12"
+                           TextColor="{StaticResource TextoFraco}"
+                           HorizontalOptions="Center"/>
+
+                    <Label Text="{Binding MensagemErro}"
+                           IsVisible="{Binding TemErro}"
+                           Style="{StaticResource TextoErro}"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+
+                <!-- MINHAS RECEITAS -->
+                <VerticalStackLayout Spacing="8">
+
+                    <Label Text="Minhas receitas"
+                           Style="{StaticResource Sobrelinha}"
+                           TextColor="{StaticResource TextoSuave}"
+                           Margin="4,0,0,0"/>
+
+                    <Border BackgroundColor="{StaticResource Cartao}"
+                            Stroke="{StaticResource BordaCartao}"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 20"
+                            Padding="14,0">
+
+                        <VerticalStackLayout>
+
+                            <!-- Criadas por mim -->
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="0,14" BackgroundColor="Transparent">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="MinhasReceitas_Tapped"/>
+                                </Grid.GestureRecognizers>
+
+                                <Border WidthRequest="38" HeightRequest="38" StrokeThickness="0"
+                                        BackgroundColor="{StaticResource FundoIcone}" StrokeShape="RoundRectangle 12">
+                                    <Path Data="{StaticResource IconeEditar}" Style="{StaticResource Icone}"
+                                          Stroke="{StaticResource Destaque}" WidthRequest="18" HeightRequest="18"/>
+                                </Border>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                    <Label Text="Criadas por mim" FontSize="15"/>
+                                    <Label Text="Receitas que você publicou" Style="{StaticResource TextoSecundario}" FontSize="12"/>
+                                </VerticalStackLayout>
+
+                                <Path Grid.Column="2" Data="{StaticResource IconeSeta}" Style="{StaticResource Icone}"
+                                      Stroke="{StaticResource TextoFraco}" WidthRequest="16" HeightRequest="16"/>
+                            </Grid>
+
+                            <BoxView HeightRequest="1" Color="{StaticResource Divisor}"/>
+
+                            <!-- Cópias capturadas -->
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="0,14" BackgroundColor="Transparent">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="MinhasAdaptacoes_Tapped"/>
+                                </Grid.GestureRecognizers>
+
+                                <Border WidthRequest="38" HeightRequest="38" StrokeThickness="0"
+                                        BackgroundColor="{StaticResource FundoIcone}" StrokeShape="RoundRectangle 12">
+                                    <Path Data="{StaticResource IconeCopiar}" Style="{StaticResource Icone}"
+                                          Stroke="{StaticResource Destaque}" WidthRequest="18" HeightRequest="18"/>
+                                </Border>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                    <Label Text="Cópias capturadas" FontSize="15"/>
+                                    <Label Text="Suas versões de receitas de outros" Style="{StaticResource TextoSecundario}" FontSize="12"/>
+                                </VerticalStackLayout>
+
+                                <Path Grid.Column="2" Data="{StaticResource IconeSeta}" Style="{StaticResource Icone}"
+                                      Stroke="{StaticResource TextoFraco}" WidthRequest="16" HeightRequest="16"/>
+                            </Grid>
+
+                            <BoxView HeightRequest="1" Color="{StaticResource Divisor}"/>
+
+                            <!-- Favoritos -->
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="0,14" BackgroundColor="Transparent">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="Favoritos_Tapped"/>
+                                </Grid.GestureRecognizers>
+
+                                <Border WidthRequest="38" HeightRequest="38" StrokeThickness="0"
+                                        BackgroundColor="{StaticResource FundoIcone}" StrokeShape="RoundRectangle 12">
+                                    <Path Data="{StaticResource IconeCoracao}" Style="{StaticResource Icone}"
+                                          Stroke="{StaticResource Destaque}" WidthRequest="18" HeightRequest="18"/>
+                                </Border>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                    <Label Text="Favoritos" FontSize="15"/>
+                                    <Label Text="Receitas que você marcou" Style="{StaticResource TextoSecundario}" FontSize="12"/>
+                                </VerticalStackLayout>
+
+                                <Path Grid.Column="2" Data="{StaticResource IconeSeta}" Style="{StaticResource Icone}"
+                                      Stroke="{StaticResource TextoFraco}" WidthRequest="16" HeightRequest="16"/>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
 
 
                 <!-- MINHA CONTA -->
-                <Label Text="Minha conta"
-                       FontSize="21"
-                       FontAttributes="Bold"
-                       TextColor="Black"/>
+                <VerticalStackLayout Spacing="8">
 
-                <VerticalStackLayout Spacing="12">
+                    <Label Text="Minha conta"
+                           Style="{StaticResource Sobrelinha}"
+                           TextColor="{StaticResource TextoSuave}"
+                           Margin="4,0,0,0"/>
 
-                    <!-- Minhas receitas -->
-                    <Border Stroke="#EEEEEE"
-                            StrokeThickness="1"
-                            BackgroundColor="White"
-                            Padding="15,12"
-                            StrokeShape="RoundRectangle 18">
+                    <Border BackgroundColor="{StaticResource PerigoClaro}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 16"
+                            HeightRequest="52">
 
                         <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="MinhasReceitas_Tapped"/>
+                            <TapGestureRecognizer Tapped="Sair_Tapped"/>
                         </Border.GestureRecognizers>
 
-                        <Grid ColumnDefinitions="Auto,*,Auto">
-
-                            <Border WidthRequest="45"
-                                    HeightRequest="45"
-                                    StrokeThickness="0"
-                                    BackgroundColor="#F3F3F3"
-                                    StrokeShape="RoundRectangle 15">
-
-                                <Label Text="🍳"
-                                       FontSize="20"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center"/>
-                            </Border>
-
-                            <VerticalStackLayout Grid.Column="1"
-                                                 Margin="12,0,0,0"
-                                                 VerticalOptions="Center">
-
-                                <Label Text="Minhas receitas"
-                                       FontSize="16"
-                                       FontAttributes="Bold"
-                                       TextColor="Black"/>
-
-                                <Label Text="Criadas por mim"
-                                       FontSize="13"
-                                       TextColor="Gray"/>
-                            </VerticalStackLayout>
-
-                            <Label Grid.Column="2"
-                                   Text="›"
-                                   FontSize="26"
-                                   TextColor="Gray"
+                        <HorizontalStackLayout Spacing="8" HorizontalOptions="Center" VerticalOptions="Center">
+                            <Path Data="{StaticResource IconeSair}"
+                                  Style="{StaticResource Icone}"
+                                  Stroke="{StaticResource Perigo}"
+                                  WidthRequest="18"
+                                  HeightRequest="18"/>
+                            <Label Text="Sair da conta"
+                                   FontFamily="InterSemiBold"
+                                   FontSize="15"
+                                   TextColor="{StaticResource Perigo}"
                                    VerticalOptions="Center"/>
-
-                        </Grid>
+                        </HorizontalStackLayout>
                     </Border>
-
-
-                    <!-- Minhas adaptações -->
-                    <Border Stroke="#EEEEEE"
-                            StrokeThickness="1"
-                            BackgroundColor="White"
-                            Padding="15,12"
-                            StrokeShape="RoundRectangle 18">
-
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="MinhasAdaptacoes_Tapped"/>
-                        </Border.GestureRecognizers>
-
-                        <Grid ColumnDefinitions="Auto,*,Auto">
-
-                            <Border WidthRequest="45"
-                                    HeightRequest="45"
-                                    StrokeThickness="0"
-                                    BackgroundColor="#F3F3F3"
-                                    StrokeShape="RoundRectangle 15">
-
-                                <Label Text="📋"
-                                       FontSize="20"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center"/>
-                            </Border>
-
-                            <VerticalStackLayout Grid.Column="1"
-                                                 Margin="12,0,0,0"
-                                                 VerticalOptions="Center">
-
-                                <Label Text="Minhas adaptações"
-                                       FontSize="16"
-                                       FontAttributes="Bold"
-                                       TextColor="Black"/>
-
-                                <Label Text="Cópias capturadas"
-                                       FontSize="13"
-                                       TextColor="Gray"/>
-                            </VerticalStackLayout>
-
-                            <Label Grid.Column="2"
-                                   Text="›"
-                                   FontSize="26"
-                                   TextColor="Gray"
-                                   VerticalOptions="Center"/>
-
-                        </Grid>
-                    </Border>
-
                 </VerticalStackLayout>
 
-                <!-- SAIR -->
-                <Border Stroke="#EEEEEE"
-                        StrokeThickness="1"
-                        BackgroundColor="White"
-                        HeightRequest="55"
-                        Margin="0,10,0,0"
-                        StrokeShape="RoundRectangle 18">
-
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Sair_Tapped"/>
-                    </Border.GestureRecognizers>
-
-                    <Label Text="Sair da conta"
-                           FontSize="15"
-                           FontAttributes="Bold"
-                           TextColor="#D32F2F"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"/>
-                </Border>
-
             </VerticalStackLayout>
-
         </ScrollView>
 
 
-        <!-- MENU INFERIOR -->
-        <Border Grid.Row="2" BackgroundColor="White" Stroke="#EEEEEE" StrokeThickness="1" Padding="5,8">
+        <!-- ===================== MENU INFERIOR ===================== -->
+        <Grid Grid.Row="1"
+              RowDefinitions="1,Auto"
+              BackgroundColor="{StaticResource Cartao}">
 
-            <Grid ColumnDefinitions="*,*,*,*">
+            <BoxView Color="{StaticResource BordaCartao}"/>
 
-                <!-- INÍCIO -->
-                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+            <Grid Grid.Row="1" ColumnDefinitions="*,*,*" Padding="12,10,12,14">
 
+                <VerticalStackLayout Grid.Column="0" Spacing="4" HorizontalOptions="Center">
                     <VerticalStackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="Inicio_Tapped"/>
                     </VerticalStackLayout.GestureRecognizers>
 
-                    <Label Text="⌂"
-                           TextColor="Gray"
-                           FontSize="25"
-                           HorizontalOptions="Center"/>
-
+                    <Path Data="{StaticResource IconeInicio}"
+                          Style="{StaticResource Icone}"
+                          Stroke="{StaticResource TextoSuave}"/>
                     <Label Text="Início"
                            FontSize="11"
-                           HorizontalOptions="Center"
-                           TextColor="Gray"/>
-
-                </VerticalStackLayout>
-
-
-                <!-- BUSCAR -->
-                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
-
-                    <VerticalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Buscar_Tapped"/>
-                    </VerticalStackLayout.GestureRecognizers>
-
-                    <Label Text="⌕"
-                           FontSize="25"
-                           HorizontalOptions="Center"
-                           TextColor="Gray"/>
-
-                    <Label Text="Buscar"
-                           FontSize="11"
-                           TextColor="Gray"
+                           TextColor="{StaticResource TextoSuave}"
                            HorizontalOptions="Center"/>
-
                 </VerticalStackLayout>
 
-
-                <!-- FAVORITOS -->
-                <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
-
+                <VerticalStackLayout Grid.Column="1" Spacing="4" HorizontalOptions="Center">
                     <VerticalStackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="Favoritos_Tapped"/>
                     </VerticalStackLayout.GestureRecognizers>
 
-                    <Label Text="♡"
-                           FontSize="25"
-                           HorizontalOptions="Center"
-                           TextColor="Gray"/>
-
+                    <Path Data="{StaticResource IconeCoracao}"
+                          Style="{StaticResource Icone}"
+                          Stroke="{StaticResource TextoSuave}"/>
                     <Label Text="Favoritos"
                            FontSize="11"
-                           TextColor="Gray"
+                           TextColor="{StaticResource TextoSuave}"
                            HorizontalOptions="Center"/>
-
                 </VerticalStackLayout>
 
-
-                <!-- PERFIL (aba ativa) -->
-                <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center">
-
+                <!-- PERFIL (tela atual: na cor principal) -->
+                <VerticalStackLayout Grid.Column="2" Spacing="4" HorizontalOptions="Center">
                     <VerticalStackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="Perfil_Tapped"/>
                     </VerticalStackLayout.GestureRecognizers>
 
-                    <Label Text="♙"
-                           FontSize="25"
-                           HorizontalOptions="Center"
-                           TextColor="Black"/>
-
+                    <Path Data="{StaticResource IconePerfil}"
+                          Style="{StaticResource Icone}"
+                          Stroke="{StaticResource Destaque}"/>
                     <Label Text="Perfil"
+                           FontFamily="InterSemiBold"
                            FontSize="11"
-                           FontAttributes="Bold"
-                           TextColor="Black"
+                           TextColor="{StaticResource Destaque}"
                            HorizontalOptions="Center"/>
-
                 </VerticalStackLayout>
-
             </Grid>
-
-        </Border>
+        </Grid>
 
     </Grid>
 

@@ -5,197 +5,170 @@
              x:Class="ProjetoIntegradorMobile.Views.CadastroPage"
              xmlns:vm="clr-namespace:ProjetoIntegradorMobile.ViewModels"
              x:DataType="vm:CadastroViewModel"
-             BackgroundColor="White"
+             BackgroundColor="{StaticResource Fundo}"
              Shell.NavBarIsVisible="False">
 
     <ScrollView>
 
-        <VerticalStackLayout Padding="30,50,30,30" Spacing="18">
+        <VerticalStackLayout Padding="24,45,24,36" Spacing="22">
 
             <!-- VOLTAR -->
-            <Label Text="←"
-                   FontSize="28"
-                   TextColor="Black"
-                   HorizontalOptions="Start">
+            <Border WidthRequest="44"
+                    HeightRequest="44"
+                    Stroke="{StaticResource Borda}"
+                    StrokeThickness="1"
+                    BackgroundColor="{StaticResource Cartao}"
+                    StrokeShape="RoundRectangle 14"
+                    HorizontalOptions="Start">
 
-                <Label.GestureRecognizers>
+                <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Voltar_Tapped"/>
-                </Label.GestureRecognizers>
-            </Label>
+                </Border.GestureRecognizers>
+
+                <Path Data="{StaticResource IconeVoltar}"
+                      Style="{StaticResource Icone}"
+                      WidthRequest="18"
+                      HeightRequest="18"/>
+            </Border>
+
+            <!-- TÍTULO -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Criar conta"
+                       FontFamily="Bricolage"
+                       FontSize="32"/>
+
+                <Label Text="Junte-se ao CheefBook e comece a sua jornada na cozinha!"
+                       Style="{StaticResource TextoSecundario}"
+                       FontSize="15"/>
+            </VerticalStackLayout>
 
 
-            <!-- CABEÇALHO -->
-            <Grid ColumnDefinitions="*,Auto" Margin="0,5,0,10">
+            <!-- CAMPOS -->
+            <VerticalStackLayout Spacing="14">
 
-                <VerticalStackLayout Spacing="6">
+                <!-- NOME -->
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Nome completo" Style="{StaticResource Rotulo}"/>
 
-                    <Label Text="Criar conta"
-                           FontSize="30"
-                           FontAttributes="Bold"
-                           TextColor="Black"/>
-
-                    <Label Text="Junte-se ao CheefBook e comece a sua jornada na cozinha!"
-                           FontSize="14"
-                           TextColor="Gray"/>
+                    <Border Stroke="{StaticResource Borda}" StrokeThickness="1" BackgroundColor="{StaticResource Cartao}"
+                            HeightRequest="52" StrokeShape="RoundRectangle 14" Padding="14,0">
+                        <Entry x:Name="txNome"
+                               Text="{Binding Nome}"
+                               Placeholder="Seu nome"
+                               FontSize="15"
+                               Keyboard="Text"
+                               VerticalOptions="Center"/>
+                    </Border>
                 </VerticalStackLayout>
 
-            </Grid>
+                <!-- E-MAIL -->
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="E-mail" Style="{StaticResource Rotulo}"/>
 
+                    <Border Stroke="{StaticResource Borda}" StrokeThickness="1" BackgroundColor="{StaticResource Cartao}"
+                            HeightRequest="52" StrokeShape="RoundRectangle 14" Padding="14,0">
+                        <Entry x:Name="txEmail"
+                               Text="{Binding Email}"
+                               Placeholder="seu@email.com"
+                               FontSize="15"
+                               Keyboard="Email"
+                               VerticalOptions="Center"/>
+                    </Border>
+                </VerticalStackLayout>
 
-            <!-- NOME COMPLETO -->
-            <Border Stroke="#EEEEEE"
-                    StrokeThickness="1"
-                    BackgroundColor="White"
-                    HeightRequest="55"
-                    StrokeShape="RoundRectangle 18"
-                    Padding="15,0">
+                <!-- SENHA -->
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Senha" Style="{StaticResource Rotulo}"/>
 
-                <Grid ColumnDefinitions="Auto,*">
+                    <Border Stroke="{StaticResource Borda}" StrokeThickness="1" BackgroundColor="{StaticResource Cartao}"
+                            HeightRequest="52" StrokeShape="RoundRectangle 14" Padding="14,0">
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <Entry x:Name="txSenha"
+                                   Text="{Binding Senha}"
+                                   Placeholder="Crie uma senha"
+                                   FontSize="15"
+                                   IsPassword="True"
+                                   VerticalOptions="Center"/>
 
-                    <Entry Grid.Column="1"
-                           x:Name="txNome"
-                           Text="{Binding Nome}"
-                           Placeholder="Nome completo"
-                           PlaceholderColor="Gray"
-                           TextColor="Black"
-                           FontSize="14"
-                           Keyboard="Text"
-                           VerticalOptions="Center"/>
+                            <!-- Mostrar / ocultar senha -->
+                            <Image Grid.Column="1"
+                                   x:Name="imOlho"
+                                   Source="eye_off.png"
+                                   WidthRequest="24"
+                                   HeightRequest="24"
+                                   Opacity="0.55"
+                                   VerticalOptions="Center">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="MostrarSenha_Tapped"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
 
-                </Grid>
-            </Border>
+                <!-- CONFIRMAR SENHA -->
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Confirmar senha" Style="{StaticResource Rotulo}"/>
 
-            <!-- E-MAIL -->
-            <Border Stroke="#EEEEEE"
-                    StrokeThickness="1"
-                    BackgroundColor="White"
-                    HeightRequest="55"
-                    StrokeShape="RoundRectangle 18"
-                    Padding="15,0">
-
-                <Grid ColumnDefinitions="Auto,*">
-                    
-                    <Entry Grid.Column="1"
-                           x:Name="txEmail"
-                           Text="{Binding Email}"
-                           Placeholder="E-mail"
-                           PlaceholderColor="Gray"
-                           TextColor="Black"
-                           FontSize="14"
-                           Keyboard="Email"
-                           VerticalOptions="Center"/>
-
-                </Grid>
-            </Border>
-
-            <!-- SENHA -->
-            <Border Stroke="#EEEEEE"
-                StrokeThickness="1"
-                BackgroundColor="White"
-                HeightRequest="55"
-                StrokeShape="RoundRectangle 18"
-                Padding="15,0">
-
-                <Grid ColumnDefinitions="Auto,*,Auto">
-
-                    <Entry Grid.Column="1"
-                    x:Name="txSenha"
-                    Text="{Binding Senha}"
-                    Placeholder="Senha"
-                    PlaceholderColor="Gray"
-                    TextColor="Black"
-                    FontSize="14"
-                    IsPassword="True"
-                    VerticalOptions="Center"/>
-
-                    <!-- Mostrar / ocultar senha -->
-                    <Image Grid.Column="2"
-                    x:Name="imOlho"
-                    Source="eye_off.png"
-                    WidthRequest="24"
-                    HeightRequest="24"
-                    VerticalOptions="Center">
-
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="MostrarSenha_Tapped"/>
-                        </Image.GestureRecognizers>
-                    </Image>
-
-                </Grid>
-            </Border>
-
-
-            <!-- CONFIRMAR SENHA -->
-            <Border Stroke="#EEEEEE"
-                    StrokeThickness="1"
-                    BackgroundColor="White"
-                    HeightRequest="55"
-                    StrokeShape="RoundRectangle 18"
-                    Padding="15,0">
-
-                <Grid ColumnDefinitions="Auto,*">
-
-                    <Entry Grid.Column="1"
-                           x:Name="txConfirmarSenha"
-                           Text="{Binding ConfirmarSenha}"
-                           Placeholder="Confirmar senha"
-                           PlaceholderColor="Gray"
-                           TextColor="Black"
-                           FontSize="14"
-                           IsPassword="True"
-                           VerticalOptions="Center"/>
-
-                </Grid>
-            </Border>
+                    <Border Stroke="{StaticResource Borda}" StrokeThickness="1" BackgroundColor="{StaticResource Cartao}"
+                            HeightRequest="52" StrokeShape="RoundRectangle 14" Padding="14,0">
+                        <Entry x:Name="txConfirmarSenha"
+                               Text="{Binding ConfirmarSenha}"
+                               Placeholder="Repita a senha"
+                               FontSize="15"
+                               IsPassword="True"
+                               VerticalOptions="Center"/>
+                    </Border>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
 
 
             <!-- MENSAGEM DE ERRO -->
             <Label x:Name="lbErro"
                    Text="{Binding MensagemErro}"
-                   FontSize="13"
-                   TextColor="#D32F2F"
+                   Style="{StaticResource TextoErro}"
                    HorizontalOptions="Center"
                    IsVisible="{Binding TemErro}"/>
 
 
             <!-- BOTÃO CADASTRAR -->
-            <Border BackgroundColor="Black"
+            <Border BackgroundColor="{StaticResource Destaque}"
                     StrokeThickness="0"
-                    HeightRequest="55"
-                    Margin="0,5,0,0"
-                    StrokeShape="RoundRectangle 18">
+                    HeightRequest="54"
+                    StrokeShape="RoundRectangle 16">
 
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Cadastrar_Tapped"/>
                 </Border.GestureRecognizers>
 
                 <Label Text="Cadastrar"
+                       FontFamily="InterSemiBold"
                        FontSize="16"
-                       FontAttributes="Bold"
                        TextColor="White"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"/>
             </Border>
 
+
             <!-- JÁ TEM CONTA -->
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
 
                 <Label Text="Já tem uma conta?"
-                       FontSize="13"
-                       TextColor="Gray"/>
+                       Style="{StaticResource TextoSecundario}"
+                       FontSize="14"/>
 
                 <Label Text="Entrar"
-                       FontSize="13"
-                       FontAttributes="Bold"
-                       TextColor="Black"
-                       TextDecorations="Underline">
-
+                       FontFamily="InterSemiBold"
+                       FontSize="14"
+                       TextColor="{StaticResource Destaque}">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Tapped="Entrar_Tapped"/>
                     </Label.GestureRecognizers>
                 </Label>
-
             </HorizontalStackLayout>
+
         </VerticalStackLayout>
+
     </ScrollView>
+
 </ContentPage>

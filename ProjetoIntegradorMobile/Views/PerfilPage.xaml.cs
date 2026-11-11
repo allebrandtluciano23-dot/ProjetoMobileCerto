@@ -1,12 +1,17 @@
 using ProjetoIntegradorMobile.Helpers;
+using ProjetoIntegradorMobile.ViewModels;
 
 namespace ProjetoIntegradorMobile.Views;
 
 public partial class PerfilPage : ContentPage
 {
+    // Nome, e-mail e foto ficam no ViewModel
+    PerfilViewModel vm = new PerfilViewModel();
+
     public PerfilPage()
     {
         InitializeComponent();
+        BindingContext = vm;
     }
 
     protected override async void OnAppearing()
@@ -19,14 +24,22 @@ public partial class PerfilPage : ContentPage
             return;
         }
 
-        lbNome.Text = SessaoUsuario.UsuarioAtual!.Nome;
-        lbEmail.Text = SessaoUsuario.UsuarioAtual!.Email;
+        vm.Carregar();
+    }
+
+    // Toque na foto: abre a galeria para escolher a foto do perfil
+    private async void Foto_Tapped(object sender, TappedEventArgs e)
+    {
+        bool bTrocou = await vm.AlterarFotoAsync();
+        if (bTrocou)
+            ToastHelper.Mostrar("Foto do perfil atualizada!");
     }
 
     // ---------- Ações do perfil ----------
+    // Receitas criadas por mim
     private async void MinhasReceitas_Tapped(object sender, TappedEventArgs e)
     {
-        await DisplayAlertAsync("Minhas receitas", "Funcionalidade ainda não disponível.", "OK");
+        await Shell.Current.GoToAsync(nameof(ReceitasCriadasPage));
     }
 
     // Receitas de outros usuários que eu capturei
@@ -45,11 +58,6 @@ public partial class PerfilPage : ContentPage
     private async void Inicio_Tapped(object sender, TappedEventArgs e)
     {
         await Shell.Current.GoToAsync("//MainPage");
-    }
-
-    private async void Buscar_Tapped(object sender, TappedEventArgs e)
-    {
-        await Shell.Current.GoToAsync(nameof(BuscarPage));
     }
 
     private async void Favoritos_Tapped(object sender, TappedEventArgs e)

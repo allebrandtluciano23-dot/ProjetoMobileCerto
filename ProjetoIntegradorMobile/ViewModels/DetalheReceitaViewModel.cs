@@ -45,6 +45,36 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sDetalhes, value);
         }
 
+        // Os três cartõezinhos do Resumo: tempo, porções e dificuldade ("—" quando não informado)
+        private string sTextoTempo = "—";
+        public string TextoTempo
+        {
+            get => sTextoTempo;
+            set => SetProperty(ref sTextoTempo, value);
+        }
+
+        private string sTextoPorcoes = "—";
+        public string TextoPorcoes
+        {
+            get => sTextoPorcoes;
+            set => SetProperty(ref sTextoPorcoes, value);
+        }
+
+        private string sTextoDificuldade = "—";
+        public string TextoDificuldade
+        {
+            get => sTextoDificuldade;
+            set => SetProperty(ref sTextoDificuldade, value);
+        }
+
+        // Linha abaixo do título na aba Ingredientes, ex.: "6 ingredientes · 2 porções"
+        private string sResumoIngredientes = "";
+        public string ResumoIngredientes
+        {
+            get => sResumoIngredientes;
+            set => SetProperty(ref sResumoIngredientes, value);
+        }
+
         // Ex.: "Por Luciano"
         private string sAutor = "";
         public string Autor
@@ -79,7 +109,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             }
         }
 
-        public string TextoFavorito => Favorita ? "♥ Favorita" : "♡ Favoritar";
+        public string TextoFavorito => Favorita ? "Favorita" : "Favoritar";
 
         // Qualquer usuário logado pode favoritar (inclusive receitas de outros usuários)
         private bool bEstaLogado = false;
@@ -136,7 +166,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             }
         }
 
-        public string TextoCaptura => IdAdaptacao > 0 ? "✏️ Ver minha versão" : "📥 Capturar receita";
+        public string TextoCaptura => IdAdaptacao > 0 ? "Minha versão" : "Capturar";
 
         public ObservableCollection<IngredienteDaReceita> Ingredientes { get; } = new ObservableCollection<IngredienteDaReceita>();
 
@@ -160,7 +190,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             try
             {
                 Favorita = await favoritoDAO.AlternarAsync(usuario.IdUsuario, IdReceita);
-                return Favorita ? "Adicionada aos favoritos ♥" : "Removida dos favoritos";
+                return Favorita ? "Adicionada aos favoritos" : "Removida dos favoritos";
             }
             catch (Exception)
             {
@@ -221,7 +251,10 @@ namespace ProjetoIntegradorMobile.ViewModels
                 Titulo = receita.Titulo;
                 NomeCategoria = categoria?.Nome ?? "";
                 Detalhes = ReceitaResumo.MontarDetalhes(receita.TempoPreparoMin, receita.Porcoes, receita.Dificuldade);
-                Autor = autor != null ? $"Por {autor.Nome}" : "";
+                TextoTempo = receita.TempoPreparoMin > 0 ? $"{receita.TempoPreparoMin} min" : "—";
+                TextoPorcoes = receita.Porcoes > 0 ? receita.Porcoes.ToString()! : "—";
+                TextoDificuldade = string.IsNullOrEmpty(receita.Dificuldade) ? "—" : receita.Dificuldade;
+                Autor = autor != null ? $"por {autor.Nome}" : "";
                 ModoPreparo = receita.ModoPreparo;
                 Vegetariana = receita.Vegetariana;
                 CaminhoFoto = receita.CaminhoFoto;
@@ -241,6 +274,9 @@ namespace ProjetoIntegradorMobile.ViewModels
                 Ingredientes.Clear();
                 foreach (IngredienteDaReceita ingrediente in lIngredientes)
                     Ingredientes.Add(ingrediente);
+
+                string sQtdIngredientes = lIngredientes.Count == 1 ? "1 ingrediente" : $"{lIngredientes.Count} ingredientes";
+                ResumoIngredientes = TextoPorcoes == "—" ? sQtdIngredientes : $"{sQtdIngredientes} · {TextoPorcoes} porções";
 
                 MensagemErro = "";
                 return true;

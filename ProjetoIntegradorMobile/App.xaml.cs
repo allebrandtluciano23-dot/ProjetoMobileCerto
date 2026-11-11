@@ -1,4 +1,4 @@
-﻿
+
 using ProjetoIntegradorMobile.Views;
 
 namespace ProjetoIntegradorMobile
@@ -8,6 +8,11 @@ namespace ProjetoIntegradorMobile
         public App()
         {
             InitializeComponent();
+
+            // O visual do app foi feito para o modo claro: mesmo com o celular no modo escuro,
+            // as telas continuam com o fundo creme
+            UserAppTheme = AppTheme.Light;
+
             InicializarBanco();
 
         }

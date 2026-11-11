@@ -49,16 +49,31 @@ namespace ProjetoIntegradorMobile.DAO
         /// Lista de receitas para os cards: dados da receita + nome da categoria
         /// + nomes dos ingredientes (para o filtro) + se é favorita DO USUÁRIO LOGADO.
         /// iIdUsuarioLogado = 0 quando ninguém está logado (aí nenhuma aparece como favorita).
-        /// bSoFavoritas = true traz só as favoritas desse usuário (tela Favoritos).
+        /// bSoFavoritas = true  -> só as favoritas desse usuário (tela Favoritos).
+        /// bSoDoUsuario = true  -> só as receitas criadas por esse usuário (tela Minhas receitas).
         /// Mais recentes primeiro.
         /// </summary>
-        public async Task<List<ReceitaResumo>> ListarResumoAsync(int iIdUsuarioLogado, bool bSoFavoritas = false)
+        public async Task<List<ReceitaResumo>> ListarResumoAsync(int iIdUsuarioLogado, bool bSoFavoritas = false, bool bSoDoUsuario = false)
         {
             var db = await DatabaseConfig.Database.Conexao();
 
-            string sFiltroFavoritas = bSoFavoritas
-                ? "WHERE EXISTS (SELECT 1 FROM favorito f WHERE f.id_receita = r.id_receita AND f.id_usuario = ?)"
-                : "";
+            // O primeiro "?" é o do EXISTS (favorita) e sempre recebe o id do usuário logado
+            List<object> lParametros = new List<object> { iIdUsuarioLogado };
+            List<string> lFiltros = new List<string>();
+
+            if (bSoFavoritas)
+            {
+                lFiltros.Add("EXISTS (SELECT 1 FROM favorito f WHERE f.id_receita = r.id_receita AND f.id_usuario = ?)");
+                lParametros.Add(iIdUsuarioLogado);
+            }
+
+            if (bSoDoUsuario)
+            {
+                lFiltros.Add("r.id_usuario = ?");
+                lParametros.Add(iIdUsuarioLogado);
+            }
+
+            string sWhere = lFiltros.Count > 0 ? "WHERE " + string.Join(" AND ", lFiltros) : "";
 
             string sSql = @"
                 SELECT r.id_receita        AS IdReceita,
@@ -77,12 +92,10 @@ namespace ProjetoIntegradorMobile.DAO
                          WHERE ri.id_receita = r.id_receita) AS NomesIngredientes
                 FROM receita r
                 LEFT JOIN categoria c ON c.id_categoria = r.id_categoria
-                " + sFiltroFavoritas + @"
+                " + sWhere + @"
                 ORDER BY r.data_criacao DESC, r.id_receita DESC";
 
-            return bSoFavoritas
-                ? await db.QueryAsync<ReceitaResumo>(sSql, iIdUsuarioLogado, iIdUsuarioLogado)
-                : await db.QueryAsync<ReceitaResumo>(sSql, iIdUsuarioLogado);
+            return await db.QueryAsync<ReceitaResumo>(sSql, lParametros.ToArray());
         }
 
         public async Task<List<Receita>> ListarPorUsuarioAsync(int iIdUsuario)
