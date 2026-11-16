@@ -4,7 +4,7 @@ namespace ProjetoIntegradorMobile.Views;
 
 public partial class CadastroPage : ContentPage
 {
-    // Os dados, a validação e o cadastro ficam no ViewModel; aqui ficam só eventos de tela e navegação
+    // Lógica no ViewModel; aqui só eventos e navegação
     CadastroViewModel vm = new CadastroViewModel();
 
     public CadastroPage()
@@ -13,9 +13,10 @@ public partial class CadastroPage : ContentPage
         BindingContext = vm;
     }
 
+    // Volta para o login (PopAsync)
     private async void Voltar_Tapped(object sender, TappedEventArgs e)
     {
-        await Shell.Current.GoToAsync("..");
+        await Navigation.PopAsync();
     }
 
     private void MostrarSenha_Tapped(object sender, TappedEventArgs e)
@@ -31,8 +32,9 @@ public partial class CadastroPage : ContentPage
             await Shell.Current.GoToAsync("//MainPage");
     }
 
+    // Volta para o login (já está na pilha)
     private async void Entrar_Tapped(object sender, TappedEventArgs e)
     {
-        await Shell.Current.GoToAsync(nameof(EntradaPage));
+        await Navigation.PopAsync();
     }
 }

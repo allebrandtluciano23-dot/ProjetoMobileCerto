@@ -4,7 +4,7 @@ namespace ProjetoIntegradorMobile.Views;
 
 public partial class EntradaPage : ContentPage
 {
-    // Os dados e a lógica do login ficam no ViewModel; aqui ficam só eventos de tela e navegação
+    // Lógica no ViewModel; aqui só eventos e navegação
     EntradaViewModel vm = new EntradaViewModel();
 
     public EntradaPage()
@@ -31,8 +31,9 @@ public partial class EntradaPage : ContentPage
             await Shell.Current.GoToAsync("//MainPage");
     }
 
+    // Abre o cadastro em pilha (PushAsync)
     private async void Cadastrar_Tapped(object sender, TappedEventArgs e)
     {
-        await Shell.Current.GoToAsync(nameof(CadastroPage));
+        await Navigation.PushAsync(new CadastroPage());
     }
 }

@@ -16,7 +16,7 @@
 
             <VerticalStackLayout Padding="20,45,20,32" Spacing="20">
 
-                <!-- CABEÇALHO: botão fechar + título ("Nova receita" ou "Editar receita") -->
+                <!-- Fechar + título -->
                 <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
 
                     <Border WidthRequest="44"
@@ -42,8 +42,7 @@
                            VerticalOptions="Center"/>
                 </Grid>
 
-
-                <!-- ADICIONAR FOTO -->
+                <!-- Foto -->
                 <Border Stroke="{StaticResource Gray300}"
                         StrokeThickness="1.5"
                         StrokeDashArray="4,3"
@@ -63,7 +62,7 @@
                                Aspect="AspectFill"
                                IsVisible="{Binding TemFoto}"/>
 
-                        <!-- Texto padrão (enquanto não tem foto) -->
+                        <!-- Sem foto -->
                         <VerticalStackLayout x:Name="slFotoVazia"
                                              IsVisible="{Binding SemFoto}"
                                              Spacing="8"
@@ -90,8 +89,7 @@
                     </Grid>
                 </Border>
 
-
-                <!-- NOME DA RECEITA -->
+                <!-- Nome -->
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Nome da receita" Style="{StaticResource Rotulo}"/>
 
@@ -111,8 +109,7 @@
                     </Border>
                 </VerticalStackLayout>
 
-
-                <!-- CATEGORIA -->
+                <!-- Categoria -->
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Categoria" Style="{StaticResource Rotulo}"/>
 
@@ -132,7 +129,7 @@
                                     FontSize="15"
                                     VerticalOptions="Center"/>
 
-                            <!-- Setinha (no Windows a própria lista já mostra uma) -->
+                            <!-- Seta (só Android) -->
                             <Path Grid.Column="1"
                                   Data="{StaticResource IconeSetaBaixo}"
                                   Style="{StaticResource Icone}"
@@ -145,8 +142,7 @@
                     </Border>
                 </VerticalStackLayout>
 
-
-                <!-- TEMPO DE PREPARO E PORÇÕES -->
+                <!-- Tempo e porções -->
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
 
                     <VerticalStackLayout Grid.Column="0" Spacing="8">
@@ -197,9 +193,7 @@
                     </VerticalStackLayout>
                 </Grid>
 
-
-                <!-- DIFICULDADE (RadioButton: só uma opção pode ser escolhida).
-                     O desenho de cada opção vem do estilo "OpcaoDificuldade" (Styles.xaml). -->
+                <!-- Dificuldade (RadioButton) -->
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Dificuldade" Style="{StaticResource Rotulo}"/>
 
@@ -230,8 +224,7 @@
                     </Grid>
                 </VerticalStackLayout>
 
-
-                <!-- VEGETARIANA (CheckBox: campo booleano "vegetariana") -->
+                <!-- Vegetariana (CheckBox) -->
                 <Border Stroke="{StaticResource Borda}"
                         StrokeThickness="1"
                         BackgroundColor="{StaticResource Cartao}"
@@ -258,13 +251,12 @@
                     </Grid>
                 </Border>
 
-
-                <!-- INGREDIENTES -->
+                <!-- Ingredientes -->
                 <VerticalStackLayout Spacing="10">
 
                     <Label Text="Ingredientes" Style="{StaticResource TituloSecao}"/>
 
-                    <!-- Campos para adicionar um ingrediente -->
+                    <!-- Novo ingrediente -->
                     <Border Stroke="{StaticResource Borda}"
                             StrokeThickness="1"
                             BackgroundColor="{StaticResource Cartao}"
@@ -329,7 +321,7 @@
                            IsVisible="{Binding TemErroIngrediente}"
                            Style="{StaticResource TextoErro}"/>
 
-                    <!-- Lista dos ingredientes já adicionados -->
+                    <!-- Ingredientes adicionados -->
                     <VerticalStackLayout x:Name="slIngredientes"
                                          Spacing="8"
                                          BindableLayout.ItemsSource="{Binding Ingredientes}">
@@ -354,7 +346,7 @@
                                                Style="{StaticResource TextoSecundario}"
                                                VerticalOptions="Center"/>
 
-                                        <!-- Remover ingrediente -->
+                                        <!-- Remover -->
                                         <Border Grid.Column="2"
                                                 WidthRequest="30"
                                                 HeightRequest="30"
@@ -382,8 +374,7 @@
                     </VerticalStackLayout>
                 </VerticalStackLayout>
 
-
-                <!-- MODO DE PREPARO -->
+                <!-- Modo de preparo -->
                 <VerticalStackLayout Spacing="10">
 
                     <Label Text="Modo de preparo" Style="{StaticResource TituloSecao}"/>
@@ -402,16 +393,14 @@
                     </Border>
                 </VerticalStackLayout>
 
-
-                <!-- MENSAGEM DE ERRO -->
+                <!-- Erro -->
                 <Label x:Name="lbErro"
                        Text="{Binding MensagemErro}"
                        IsVisible="{Binding TemErro}"
                        Style="{StaticResource TextoErro}"
                        HorizontalOptions="Center"/>
 
-
-                <!-- BOTÃO SALVAR ("Salvar receita" ou "Salvar alterações") -->
+                <!-- Salvar -->
                 <Button x:Name="btSalvar"
                         Text="{Binding TextoBotao}"
                         Style="{StaticResource BotaoPrincipal}"
@@ -423,7 +412,7 @@
 
         </ScrollView>
 
-        <!-- Cartão de aviso (no lugar do alerta padrão do sistema) -->
+        <!-- Cartão de aviso -->
         <views:CartaoAviso x:Name="grAviso"/>
     </Grid>
 

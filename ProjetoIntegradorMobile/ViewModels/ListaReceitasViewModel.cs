@@ -5,14 +5,14 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.ViewModels
 {
-    // Qual lista a tela mostra
+    // Tipo de lista
     public enum TipoLista
     {
-        Favoritas,      // FavoritosPage: receitas que o usuário favoritou
-        CriadasPorMim   // ReceitasCriadasPage: receitas que o usuário criou
+        Favoritas,
+        CriadasPorMim
     }
 
-    // ViewModel das telas Favoritos e Minhas receitas (mesma lista, filtro diferente)
+    // ViewModel de Favoritos e Criadas por mim
     public class ListaReceitasViewModel : BaseViewModel
     {
         private readonly ReceitaDAO receitaDAO = new ReceitaDAO();
@@ -25,7 +25,7 @@ namespace ProjetoIntegradorMobile.ViewModels
 
         public ObservableCollection<ReceitaResumo> Receitas { get; } = new ObservableCollection<ReceitaResumo>();
 
-        // Texto que aparece quando a lista está vazia (muda se não houver login)
+        // Texto da lista vazia
         private string sMensagemVazia = "";
         public string MensagemVazia
         {
@@ -33,7 +33,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sMensagemVazia, value);
         }
 
-        /// <summary>Lê a lista do banco. Chamado toda vez que a tela aparece.</summary>
+        // Carrega a lista do banco
         public async Task CarregarAsync()
         {
             Usuario? usuario = SessaoUsuario.UsuarioAtual;
@@ -57,9 +57,7 @@ namespace ProjetoIntegradorMobile.ViewModels
                     bSoFavoritas: tipo == TipoLista.Favoritas,
                     bSoDoUsuario: tipo == TipoLista.CriadasPorMim);
 
-                // Só limpa DEPOIS de ler do banco: se duas recargas acontecerem ao mesmo tempo
-                // (ex.: ao fechar o detalhe da receita), cada uma troca a lista inteira de uma vez,
-                // em vez de as duas adicionarem os mesmos itens (lista duplicada).
+                // Limpa só depois de ler o banco (evita lista duplicada)
                 Receitas.Clear();
                 foreach (ReceitaResumo receita in lReceitas)
                     Receitas.Add(receita);

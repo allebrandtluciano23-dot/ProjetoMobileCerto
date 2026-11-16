@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!--
-    MENU FLYOUT (requisito "Flyout_Pages"): menu lateral que abre pelo botão de menu da tela inicial
-    ou arrastando a partir da borda esquerda da tela.
--->
+<!-- Menu lateral (Flyout) -->
 <Shell
     x:Class="ProjetoIntegradorMobile.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -13,11 +10,11 @@
     FlyoutBehavior="Flyout"
     FlyoutBackgroundColor="{StaticResource Fundo}">
 
-    <!-- Topo do menu: quem está logado -->
+    <!-- Usuário logado -->
     <Shell.FlyoutHeader>
         <VerticalStackLayout Padding="24,50,24,20" Spacing="4">
 
-            <!-- Foto do usuário (sem foto: desenho do chapéu de chef) -->
+            <!-- Foto (sem foto: chef) -->
             <Border WidthRequest="64"
                     HeightRequest="64"
                     StrokeThickness="0"
@@ -27,11 +24,10 @@
                     Margin="0,0,0,8">
                 <Grid>
                     <Grid x:Name="grMenuSemFoto">
-                        <Path Data="{StaticResource IconeChapeu}"
-                              Style="{StaticResource Icone}"
-                              Stroke="{StaticResource Destaque}"
-                              WidthRequest="28"
-                              HeightRequest="28"/>
+                        <Image Source="chef.png"
+                               WidthRequest="56"
+                               HeightRequest="56"
+                               Aspect="AspectFit"/>
                     </Grid>
 
                     <Image x:Name="imMenuFoto"
@@ -54,9 +50,7 @@
         </VerticalStackLayout>
     </Shell.FlyoutHeader>
 
-    <!-- Visual de cada opção do menu.
-         x:DataType="{x:Null}": o Shell entrega aqui um objeto interno (não o MenuItem),
-         então o Binding não pode ser "tipado" como MenuItem, senão o texto fica vazio. -->
+    <!-- Opção do menu (x:Null: senão o texto some) -->
     <Shell.MenuItemTemplate>
         <DataTemplate x:DataType="{x:Null}">
             <Label Text="{Binding Text}"
@@ -66,7 +60,7 @@
         </DataTemplate>
     </Shell.MenuItemTemplate>
 
-    <!-- Tela inicial (não aparece como item; o item "Início" abaixo leva até ela) -->
+    <!-- Tela inicial (fora do menu) -->
     <ShellContent
         Title="Início"
         Route="MainPage"

@@ -5,7 +5,7 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.ViewModels
 {
-    // ViewModel da tela de detalhe da receita (DetalheReceitaPage, com abas)
+    // ViewModel do detalhe da receita
     public class DetalheReceitaViewModel : BaseViewModel
     {
         private readonly ReceitaDAO receitaDAO = new ReceitaDAO();
@@ -21,7 +21,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             IdReceita = iIdReceita;
         }
 
-        // ---------- Dados mostrados nas abas (ligados por Binding) ----------
+        // Dados mostrados nas abas
 
         private string sTitulo = "";
         public string Titulo
@@ -37,7 +37,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sNomeCategoria, value);
         }
 
-        // Os três cartõezinhos do Resumo: tempo, porções e dificuldade ("—" quando não informado)
+        // Tempo, porções e dificuldade ("—" se vazio)
         private string sTextoTempo = "—";
         public string TextoTempo
         {
@@ -59,7 +59,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sTextoDificuldade, value);
         }
 
-        // Linha abaixo do título na aba Ingredientes, ex.: "6 ingredientes · 2 porções"
+        // Ex.: "6 ingredientes · 2 porções"
         private string sResumoIngredientes = "";
         public string ResumoIngredientes
         {
@@ -67,7 +67,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sResumoIngredientes, value);
         }
 
-        // Ex.: "Por Luciano"
+        // Ex.: "por Luciano"
         private string sAutor = "";
         public string Autor
         {
@@ -89,7 +89,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref bVegetariana, value);
         }
 
-        // Favorita DO USUÁRIO LOGADO (tabela favorito)
+        // Favorita do usuário logado
         private bool bFavorita = false;
         public bool Favorita
         {
@@ -103,7 +103,7 @@ namespace ProjetoIntegradorMobile.ViewModels
 
         public string TextoFavorito => Favorita ? "Favorita" : "Favoritar";
 
-        // Qualquer usuário logado pode favoritar (inclusive receitas de outros usuários)
+        // Só usuário logado pode favoritar
         private bool bEstaLogado = false;
         public bool EstaLogado
         {
@@ -128,7 +128,7 @@ namespace ProjetoIntegradorMobile.ViewModels
         public bool TemFoto => !string.IsNullOrEmpty(CaminhoFoto);
         public bool SemFoto => !TemFoto;
 
-        // Só quem criou a receita vê os botões Editar e Excluir
+        // Só o autor vê Editar e Excluir
         private bool bEhAutor = false;
         public bool EhAutor
         {
@@ -136,9 +136,9 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref bEhAutor, value);
         }
 
-        // ---------- Captura ----------
+        // Captura
 
-        // Quem NÃO é o autor (e está logado) pode capturar a receita
+        // Logado e não autor pode capturar
         private bool bPodeCapturar = false;
         public bool PodeCapturar
         {
@@ -146,7 +146,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref bPodeCapturar, value);
         }
 
-        // Id da cópia que o usuário logado já capturou (0 = ainda não capturou)
+        // Id da cópia do usuário (0 = não capturou)
         private int iIdAdaptacao = 0;
         public int IdAdaptacao
         {
@@ -162,16 +162,9 @@ namespace ProjetoIntegradorMobile.ViewModels
 
         public ObservableCollection<IngredienteDaReceita> Ingredientes { get; } = new ObservableCollection<IngredienteDaReceita>();
 
-        // ---------- Ações ----------
+        // Ações
 
-        /// <summary>
-        /// Lê a receita, a categoria, o autor e os ingredientes do banco.
-        /// Retorna false se a receita não existe mais (ex.: foi excluída).
-        /// </summary>
-        /// <summary>
-        /// Botão de favoritar: liga/desliga o favorito do usuário logado.
-        /// Retorna a mensagem para o Toast (ou "" se não deu).
-        /// </summary>
+        // Liga/desliga o favorito; devolve a mensagem do Toast
         public async Task<string> AlternarFavoritaAsync()
         {
             Usuario? usuario = SessaoUsuario.UsuarioAtual;
@@ -195,10 +188,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             }
         }
 
-        /// <summary>
-        /// Captura a receita (cria a cópia do usuário logado) ou, se já capturou, devolve a cópia existente.
-        /// Retorna o id da cópia, ou 0 se não deu.
-        /// </summary>
+        // Captura a receita (ou devolve a cópia existente); devolve o id
         public async Task<int> CapturarAsync()
         {
             Usuario? usuario = SessaoUsuario.UsuarioAtual;
@@ -275,7 +265,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             catch (Exception)
             {
                 MensagemErro = "Não foi possível carregar a receita.";
-                return true; // a tela continua aberta mostrando o erro
+                return true;  // tela continua aberta mostrando o erro
             }
         }
     }

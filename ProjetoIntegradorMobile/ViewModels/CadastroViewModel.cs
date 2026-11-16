@@ -5,14 +5,14 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.ViewModels
 {
-    // ViewModel da tela de cadastro (CadastroPage)
+    // ViewModel do cadastro
     public class CadastroViewModel : BaseViewModel
     {
         private const int TAMANHO_MINIMO_SENHA = 6;
 
         private readonly UsuarioDAO usuarioDAO = new UsuarioDAO();
 
-        // ---------- Campos da tela (ligados por Binding) ----------
+        // Campos da tela
 
         private string sNome = "";
         public string Nome
@@ -42,12 +42,9 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sConfirmarSenha, value);
         }
 
-        // ---------- Ações ----------
+        // Ações
 
-        /// <summary>
-        /// Valida o formulário e cadastra o usuário.
-        /// Retorna true se deu certo (o usuário já fica logado e a tela navega para a página inicial).
-        /// </summary>
+        // Valida e cadastra o usuário; true = cadastrou
         public async Task<bool> CadastrarAsync()
         {
             if (bProcessando)
@@ -60,7 +57,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             string sSenhaDigitada = Senha ?? "";
             string sConfirmacao = ConfirmarSenha ?? "";
 
-            // ----- Validação do formulário -----
+            // Validação
             if (string.IsNullOrWhiteSpace(sNomeDigitado) ||
                 string.IsNullOrWhiteSpace(sEmailDigitado) ||
                 string.IsNullOrWhiteSpace(sSenhaDigitada))
@@ -87,7 +84,7 @@ namespace ProjetoIntegradorMobile.ViewModels
                 return false;
             }
 
-            // ----- Gravação no banco -----
+            // Gravação
             bProcessando = true;
             try
             {
@@ -112,7 +109,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             }
         }
 
-        // Formato simples: algo@algo.algo, sem espaços
+        // Formato: algo@algo.algo
         private static bool EmailValido(string sEmail)
         {
             return Regex.IsMatch(sEmail, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");

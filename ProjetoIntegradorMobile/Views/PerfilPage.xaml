@@ -14,10 +14,10 @@
 
                 <Label Text="Meu perfil" Style="{StaticResource TituloTela}"/>
 
-                <!-- FOTO, NOME E E-MAIL -->
+                <!-- Foto, nome e e-mail -->
                 <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
 
-                    <!-- Toque na foto: escolher uma foto da galeria -->
+                    <!-- Troca a foto -->
                     <Grid WidthRequest="104" HeightRequest="104" HorizontalOptions="Center">
 
                         <Grid.GestureRecognizers>
@@ -28,12 +28,11 @@
                                 BackgroundColor="{StaticResource FundoAvatar}"
                                 StrokeShape="RoundRectangle 52">
                             <Grid>
-                                <Path Data="{StaticResource IconeChapeu}"
-                                      Style="{StaticResource Icone}"
-                                      Stroke="{StaticResource Destaque}"
-                                      WidthRequest="44"
-                                      HeightRequest="44"
-                                      IsVisible="{Binding SemFoto}"/>
+                                <Image Source="chef.png"
+                                       WidthRequest="92"
+                                       HeightRequest="92"
+                                       Aspect="AspectFit"
+                                       IsVisible="{Binding SemFoto}"/>
 
                                 <Image x:Name="imFoto"
                                        Source="{Binding CaminhoFoto}"
@@ -83,8 +82,7 @@
                            HorizontalOptions="Center"/>
                 </VerticalStackLayout>
 
-
-                <!-- MINHAS RECEITAS -->
+                <!-- Minhas receitas -->
                 <VerticalStackLayout Spacing="8">
 
                     <Label Text="Minhas receitas"
@@ -170,8 +168,7 @@
                     </Border>
                 </VerticalStackLayout>
 
-
-                <!-- MINHA CONTA -->
+                <!-- Minha conta -->
                 <VerticalStackLayout Spacing="8">
 
                     <Label Text="Minha conta"
@@ -206,8 +203,7 @@
             </VerticalStackLayout>
         </ScrollView>
 
-
-        <!-- ===================== MENU INFERIOR ===================== -->
+        <!-- Menu inferior -->
         <Grid Grid.Row="1"
               RowDefinitions="1,Auto"
               BackgroundColor="{StaticResource Cartao}">
@@ -244,7 +240,7 @@
                            HorizontalOptions="Center"/>
                 </VerticalStackLayout>
 
-                <!-- PERFIL (tela atual: na cor principal) -->
+                <!-- Perfil (ativo) -->
                 <VerticalStackLayout Grid.Column="2" Spacing="4" HorizontalOptions="Center">
                     <VerticalStackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="Perfil_Tapped"/>

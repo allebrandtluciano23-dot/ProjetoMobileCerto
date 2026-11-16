@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!--
-    ÍCONES DO CHEEFBOOK: desenhos de linha (24x24) usados com <Path>, no lugar dos emojis.
-    Uso numa tela:
-        <Path Data="{StaticResource IconeCoracao}" Style="{StaticResource Icone}"/>
-    Para trocar a cor: Stroke="..." (linha) e Fill="..." (preenchimento, ex.: coração cheio).
--->
+<!-- Ícones de linha (uso: Path Data="{StaticResource IconeX}") -->
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
@@ -34,7 +29,5 @@
     <PathGeometry x:Key="IconePorcoes" Figures="M9 4.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 20a6.5 6.5 0 0 0-3-5.5"/>
     <PathGeometry x:Key="IconeNivel" Figures="M5 20V14M12 20V9M19 20V4"/>
     <PathGeometry x:Key="IconeFolha" Figures="M5 19c0-8 6-14 15-14c0 9-6 15-14 15H5zM5 19l8-8"/>
-    <PathGeometry x:Key="IconePrato" Figures="M12 4a8 8 0 1 0 0 16a8 8 0 1 0 0-16M12 8.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7"/>
-    <PathGeometry x:Key="IconeChapeu" Figures="M7 14a4 4 0 0 1-1-7.9A5 5 0 0 1 15.5 5a4 4 0 0 1 2.5 9zM7 14v6h11v-6"/>
 
 </ResourceDictionary>

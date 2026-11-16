@@ -14,11 +14,10 @@ namespace ProjetoIntegradorMobile.Data
             _database = new SQLiteAsyncConnection(caminhoBanco);
         }
 
-        // Cria as tabelas uma única vez. Todos os métodos abaixo chamam isto antes de
-        // acessar o banco, então não há problema se uma tela consultar antes do App terminar.
+        // Cria as tabelas uma única vez
         public Task Inicializar() => _inicializacao ??= CriarTabelas();
 
-        // Usado pelos DAOs: garante que as tabelas existem e devolve a conexão
+        // Devolve a conexão (garante que as tabelas existem)
         public async Task<SQLiteAsyncConnection> Conexao()
         {
             await Inicializar();
@@ -86,7 +85,7 @@ namespace ProjetoIntegradorMobile.Data
                 );
             ");
 
-            // Bancos criados antes destas colunas existirem: adiciona as colunas que faltam
+            // Adiciona colunas que faltam em bancos antigos
             await AdicionarColunaAsync("receita", "vegetariana INTEGER NOT NULL DEFAULT 0");
             await AdicionarColunaAsync("receita", "dificuldade TEXT");
             await AdicionarColunaAsync("receita", "caminho_foto TEXT");
@@ -265,8 +264,7 @@ namespace ProjetoIntegradorMobile.Data
                 );
             ");
 
-            // FAVORITO: cada usuário favorita as receitas que quiser (inclusive as de outros usuários).
-            // Substitui a antiga coluna receita.favorita, que valia para todo mundo.
+            // FAVORITO (por usuário)
             await _database.ExecuteAsync(@"
                 CREATE TABLE IF NOT EXISTS favorito (
                     id_usuario INTEGER NOT NULL,
@@ -316,19 +314,17 @@ namespace ProjetoIntegradorMobile.Data
                 ON sugestao(id_receita);
             ");
 
-            // CATEGORIAS PADRÃO (as mesmas usadas na tela Nova Receita)
+            // Categorias padrão
             foreach (var nome in new[] { "Rápidos", "Almoço", "Jantar", "Sobremesas" })
             {
                 await _database.ExecuteAsync(
                     "INSERT OR IGNORE INTO categoria (nome) VALUES (?)", nome);
             }
 
-            // RECEITAS DE EXEMPLO (só na primeira vez que o app abre)
-            await DadosExemplo.InserirAsync(_database);
+            // O app começa sem contas e sem receitas
         }
 
-        // Adiciona uma coluna numa tabela que já existe (para quem já tinha o app instalado).
-        // Se a coluna já existir, o SQLite dá erro de coluna duplicada e só ignoramos.
+        // Adiciona coluna em banco antigo (ignora se já existe)
         private async Task AdicionarColunaAsync(string sTabela, string sDefinicaoColuna)
         {
             try
@@ -341,11 +337,10 @@ namespace ProjetoIntegradorMobile.Data
             }
         }
 
-        // Usuário, categoria, ingrediente e receita: ver a pasta DAO
+        // Usuário, categoria e receita: pasta DAO
 
-        // Receita personalizada (adaptação capturada): ver DAO/AdaptacaoDAO.cs
+        // Cópias capturadas: DAO/AdaptacaoDAO.cs
 
-        // Plano alimentar, refeição e sugestão: as tabelas existem no banco (fazem parte do DER do projeto),
-        // mas ainda não têm telas; por isso não há métodos de acesso a elas.
+        // Plano alimentar, refeição e sugestão: só as tabelas (sem telas ainda)
     }
 }

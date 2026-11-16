@@ -4,7 +4,7 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.ViewModels
 {
-    // ViewModel da tela de Perfil: nome, e-mail e foto do usuário logado
+    // ViewModel do Perfil
     public class PerfilViewModel : BaseViewModel
     {
         private readonly UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -40,7 +40,7 @@ namespace ProjetoIntegradorMobile.ViewModels
         public bool TemFoto => !string.IsNullOrEmpty(CaminhoFoto);
         public bool SemFoto => !TemFoto;
 
-        /// <summary>Mostra os dados de quem está logado.</summary>
+        // Mostra os dados do usuário logado
         public void Carregar()
         {
             Usuario? usuario = SessaoUsuario.UsuarioAtual;
@@ -49,10 +49,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             CaminhoFoto = usuario?.CaminhoFoto;
         }
 
-        /// <summary>
-        /// Abre a galeria e troca a foto do perfil.
-        /// Retorna true se trocou (false se cancelou ou deu erro).
-        /// </summary>
+        // Troca a foto do perfil; true = trocou
         public async Task<bool> AlterarFotoAsync()
         {
             Usuario? usuario = SessaoUsuario.UsuarioAtual;
@@ -65,13 +62,13 @@ namespace ProjetoIntegradorMobile.ViewModels
             {
                 string? sNovaFoto = await FotoHelper.EscolherECopiarAsync("perfil");
                 if (sNovaFoto == null)
-                    return false; // cancelou
+                    return false;  // cancelou
 
                 string? sFotoAntiga = usuario.CaminhoFoto;
 
                 await usuarioDAO.AlterarFotoAsync(usuario.IdUsuario, sNovaFoto);
 
-                usuario.CaminhoFoto = sNovaFoto; // atualiza a sessão (tela inicial e menu usam)
+                usuario.CaminhoFoto = sNovaFoto;  // atualiza a sessão
                 CaminhoFoto = sNovaFoto;
 
                 FotoHelper.Apagar(sFotoAntiga);

@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
-<!--
-    CARTÃO DE AVISO (substitui o DisplayAlertAsync, que no Windows é uma janela escura).
-    Fica escondido por cima da tela; o código da página chama:
-        bool bConfirmou = await grAviso.MostrarAsync("Título", "Mensagem", "Excluir", "Cancelar", bPerigo: true);
-    Mesmo visual do aviso "Entre na sua conta" da tela inicial.
--->
+<!-- Cartão de aviso/confirmação (uso: await grAviso.MostrarAsync(...)) -->
 <Grid xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
       x:Class="ProjetoIntegradorMobile.Views.CartaoAviso"
       BackgroundColor="{StaticResource FundoEscurecido}"
       IsVisible="False">
 
-    <!-- Tocar fora do cartão = cancelar -->
+    <!-- Tocar fora cancela -->
     <Grid.GestureRecognizers>
         <TapGestureRecognizer Tapped="Fundo_Tapped"/>
     </Grid.GestureRecognizers>
@@ -21,18 +16,19 @@
             StrokeThickness="0"
             StrokeShape="RoundRectangle 24"
             Padding="24"
-            Margin="30,0"
-            MaximumWidthRequest="360"
+            Margin="20,0"
+            WidthRequest="320"
+            HorizontalOptions="Center"
             VerticalOptions="Center">
 
-        <!-- Toque no cartão não fecha o aviso -->
+        <!-- Tocar no cartão não fecha -->
         <Border.GestureRecognizers>
             <TapGestureRecognizer/>
         </Border.GestureRecognizers>
 
         <VerticalStackLayout Spacing="12">
 
-            <!-- Ícone: chapéu (aviso comum) ou lixeira (exclusão) -->
+            <!-- Ícone: chef ou lixeira -->
             <Border x:Name="bdIcone"
                     WidthRequest="64"
                     HeightRequest="64"
@@ -40,12 +36,21 @@
                     BackgroundColor="{StaticResource FundoAvatar}"
                     StrokeShape="RoundRectangle 32"
                     HorizontalOptions="Center">
-                <Path x:Name="paIcone"
-                      Data="{StaticResource IconeChapeu}"
-                      Style="{StaticResource Icone}"
-                      Stroke="{StaticResource Destaque}"
-                      WidthRequest="30"
-                      HeightRequest="30"/>
+                <Grid>
+                    <Image x:Name="imIcone"
+                           Source="chef.png"
+                           WidthRequest="54"
+                           HeightRequest="54"
+                           Aspect="AspectFit"/>
+
+                    <Path x:Name="paIcone"
+                          Data="{StaticResource IconeLixeira}"
+                          Style="{StaticResource Icone}"
+                          Stroke="{StaticResource Perigo}"
+                          WidthRequest="30"
+                          HeightRequest="30"
+                          IsVisible="False"/>
+                </Grid>
             </Border>
 
             <Label x:Name="lbTitulo"

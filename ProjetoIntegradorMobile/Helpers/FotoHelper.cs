@@ -3,17 +3,10 @@ using Microsoft.Maui.Storage;
 
 namespace ProjetoIntegradorMobile.Helpers
 {
-    /// <summary>
-    /// Escolher uma foto da galeria e guardar uma cópia na pasta do app
-    /// (assim ela continua aparecendo mesmo se for apagada da galeria).
-    /// </summary>
+    // Escolhe foto da galeria e guarda uma cópia no app
     public static class FotoHelper
     {
-        /// <summary>
-        /// Abre a galeria e copia a foto escolhida para FileSystem.AppDataDirectory/sSubpasta.
-        /// Retorna o caminho da cópia, ou null se o usuário cancelou.
-        /// Se der erro (ex.: permissão negada), a exceção sobe para quem chamou tratar.
-        /// </summary>
+        // Abre a galeria e copia a foto; null = cancelou
         public static async Task<string?> EscolherECopiarAsync(string sSubpasta)
         {
             FileResult? foto = await MediaPicker.Default.PickPhotoAsync();
@@ -38,7 +31,7 @@ namespace ProjetoIntegradorMobile.Helpers
             return sDestino;
         }
 
-        // Apaga um arquivo de foto antigo (se não conseguir, não é problema para o usuário)
+        // Apaga uma foto antiga
         public static void Apagar(string? sCaminho)
         {
             try

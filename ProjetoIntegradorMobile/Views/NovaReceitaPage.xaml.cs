@@ -4,12 +4,10 @@ using ProjetoIntegradorMobile.ViewModels;
 
 namespace ProjetoIntegradorMobile.Views;
 
-// Tela aberta como MODAL (Navigation.PushModalAsync).
-// new NovaReceitaPage()   -> cria uma receita nova (tela inicial)
-// new NovaReceitaPage(id) -> edita a receita com esse id (tela de detalhe)
+// Nova receita (modal); com id, edita
 public partial class NovaReceitaPage : ContentPage
 {
-    // Os dados, a validação e a gravação ficam no ViewModel
+    // Lógica no ViewModel
     NovaReceitaViewModel vm;
 
     public NovaReceitaPage(int iIdReceita = 0)
@@ -38,7 +36,7 @@ public partial class NovaReceitaPage : ContentPage
         }
     }
 
-    // Modo edição: marca o RadioButton da dificuldade que veio do banco
+    // Edição: marca a dificuldade salva
     private void MarcarDificuldade(string sDificuldade)
     {
         rbFacil.IsChecked = sDificuldade == "Fácil";
@@ -46,7 +44,7 @@ public partial class NovaReceitaPage : ContentPage
         rbDificil.IsChecked = sDificuldade == "Difícil";
     }
 
-    // Fecha o modal e volta para a tela anterior
+    // Fecha o modal
     private async void Voltar_Tapped(object sender, TappedEventArgs e)
     {
         await Navigation.PopModalAsync();
@@ -57,7 +55,7 @@ public partial class NovaReceitaPage : ContentPage
         await vm.EscolherFotoAsync();
     }
 
-    // RadioButtons de dificuldade (mesmo jeito da aula de RadioButtons)
+    // Guarda a dificuldade escolhida
     private void Dificuldade_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
         RadioButton? rb = sender as RadioButton;

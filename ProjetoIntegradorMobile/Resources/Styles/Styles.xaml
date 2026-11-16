@@ -376,29 +376,6 @@
         </Setter>
     </Style>
   
-    <!--
-    <Style TargetType="TitleBar">
-        <Setter Property="MinimumHeightRequest" Value="32"/>
-        <Setter Property="VisualStateManager.VisualStateGroups">
-            <VisualStateGroupList>
-                <VisualStateGroup x:Name="TitleActiveStates">
-                    <VisualState x:Name="TitleBarTitleActive">
-                        <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="Transparent" />
-                            <Setter Property="ForegroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
-                        </VisualState.Setters>
-                    </VisualState>
-                    <VisualState x:Name="TitleBarTitleInactive">
-                        <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
-                            <Setter Property="ForegroundColor" Value="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray500}}" />
-                        </VisualState.Setters>
-                    </VisualState>
-                </VisualStateGroup>
-            </VisualStateGroupList>
-        </Setter>
-    </Style>
-    -->
 
     <Style TargetType="Page" ApplyToDerivedTypes="True">
         <Setter Property="Padding" Value="0"/>
@@ -431,12 +408,9 @@
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
     </Style>
 
-    <!-- =====================================================================
-         ESTILOS DO CHEEFBOOK (usados nas telas com Style="{StaticResource Nome}")
-         Fontes: "Bricolage" = títulos | "Inter" = texto | "InterSemiBold" = texto em destaque
-         ===================================================================== -->
+    <!-- Estilos do CheefBook. Fontes: Bricolage (títulos), Inter (texto) -->
 
-    <!-- ===== Textos ===== -->
+    <!-- Textos -->
     <Style TargetType="Label" x:Key="TituloTela">
         <Setter Property="FontFamily" Value="Bricolage" />
         <Setter Property="FontSize" Value="26" />
@@ -481,7 +455,7 @@
         <Setter Property="TextColor" Value="{StaticResource Perigo}" />
     </Style>
 
-    <!-- ===== Botões ===== -->
+    <!-- Botões -->
     <Style TargetType="Button" x:Key="BotaoBase">
         <Setter Property="FontFamily" Value="InterSemiBold" />
         <Setter Property="FontSize" Value="15" />
@@ -491,19 +465,19 @@
         <Setter Property="BorderWidth" Value="0" />
     </Style>
 
-    <!-- Ação principal da tela (Salvar, Entrar...) -->
+    <!-- Ação principal (Salvar, Entrar) -->
     <Style TargetType="Button" x:Key="BotaoPrincipal" BasedOn="{StaticResource BotaoBase}">
         <Setter Property="BackgroundColor" Value="{StaticResource Destaque}" />
         <Setter Property="TextColor" Value="White" />
     </Style>
 
-    <!-- Ação forte, mas não a principal (Capturar, Editar, Nova receita) -->
+    <!-- Ação forte (Capturar, Editar) -->
     <Style TargetType="Button" x:Key="BotaoEscuro" BasedOn="{StaticResource BotaoBase}">
         <Setter Property="BackgroundColor" Value="{StaticResource Tinta}" />
         <Setter Property="TextColor" Value="White" />
     </Style>
 
-    <!-- Contorno na cor principal (Favoritar) -->
+    <!-- Contorno (Favoritar) -->
     <Style TargetType="Button" x:Key="BotaoContorno" BasedOn="{StaticResource BotaoBase}">
         <Setter Property="BackgroundColor" Value="{StaticResource Cartao}" />
         <Setter Property="TextColor" Value="{StaticResource Destaque}" />
@@ -511,7 +485,7 @@
         <Setter Property="BorderWidth" Value="1.5" />
     </Style>
 
-    <!-- Ação secundária (Fechar, Cancelar, Agora não) -->
+    <!-- Ação secundária (Fechar, Cancelar) -->
     <Style TargetType="Button" x:Key="BotaoSuave" BasedOn="{StaticResource BotaoBase}">
         <Setter Property="FontFamily" Value="Inter" />
         <Setter Property="HeightRequest" Value="48" />
@@ -519,16 +493,13 @@
         <Setter Property="TextColor" Value="{StaticResource Tinta}" />
     </Style>
 
-    <!-- Excluir / Sair da conta -->
+    <!-- Excluir / Sair -->
     <Style TargetType="Button" x:Key="BotaoPerigo" BasedOn="{StaticResource BotaoBase}">
         <Setter Property="BackgroundColor" Value="{StaticResource PerigoClaro}" />
         <Setter Property="TextColor" Value="{StaticResource Perigo}" />
     </Style>
 
-    <!-- ===== Opção de escolha única (RadioButton da dificuldade) =====
-         Continua sendo um RadioButton (mesmo GroupName e evento CheckedChanged);
-         o ControlTemplate só troca o desenho: um botão com a bolinha dentro.
-         Marcado: borda e bolinha na cor principal. -->
+    <!-- Visual do RadioButton da dificuldade (bolinha terracota quando marcado) -->
     <ControlTemplate x:Key="ModeloOpcao">
         <Border StrokeThickness="1.5"
                 Stroke="{StaticResource Borda}"
@@ -593,7 +564,7 @@
         <Setter Property="FontSize" Value="14" />
     </Style>
 
-    <!-- ===== Ícones (Path com os desenhos de Icones.xaml) ===== -->
+    <!-- Ícones -->
     <Style TargetType="Path" x:Key="Icone">
         <Setter Property="Stroke" Value="{StaticResource Tinta}" />
         <Setter Property="StrokeThickness" Value="2" />

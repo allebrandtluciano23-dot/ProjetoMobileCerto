@@ -4,7 +4,7 @@ using ProjetoIntegradorMobile.ViewModels;
 
 namespace ProjetoIntegradorMobile.Views;
 
-// Lista "Minhas adaptações". Aberta pelo Perfil com Shell.Current.GoToAsync (navegação em pilha).
+// Lista das cópias capturadas (pilha)
 public partial class CapturasPage : ContentPage
 {
     CapturasViewModel vm = new CapturasViewModel();
@@ -33,7 +33,7 @@ public partial class CapturasPage : ContentPage
         await Shell.Current.GoToAsync("..");
     }
 
-    // Abre "Minha versão" como MODAL; ao voltar, recarrega a lista (pode ter sido editada ou excluída)
+    // Abre a cópia como modal; ao voltar, recarrega
     private async void Adaptacao_Tapped(object sender, TappedEventArgs e)
     {
         if (e.Parameter is not AdaptacaoResumo adaptacao)

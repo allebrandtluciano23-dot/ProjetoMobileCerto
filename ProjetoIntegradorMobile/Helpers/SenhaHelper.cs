@@ -1,11 +1,8 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 
 namespace ProjetoIntegradorMobile.Helpers
 {
-    /// <summary>
-    /// Gera e confere hash de senha com PBKDF2 (SHA-256 + salt aleatório).
-    /// Formato salvo no banco: "iteracoes.saltBase64.hashBase64"
-    /// </summary>
+    // Hash de senha (PBKDF2 + salt)
     public static class SenhaHelper
     {
         private const int TamanhoSalt = 16;

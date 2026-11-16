@@ -3,16 +3,12 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.DAO
 {
-    // Acesso aos dados das tabelas "receita" e "receita_ingrediente"
+    // Acesso às tabelas receita e receita_ingrediente
     public class ReceitaDAO
     {
-        // ---------- CREATE ----------
+        // Create
 
-        /// <summary>
-        /// Salva a receita e os ingredientes de uma vez (se algo falhar, nada é salvo).
-        /// Ingredientes que ainda não existem são criados automaticamente.
-        /// Retorna o id da receita criada.
-        /// </summary>
+        // Salva a receita e os ingredientes numa transação; devolve o id
         public async Task<int> InserirAsync(
             Receita receita,
             IEnumerable<(string Nome, double Quantidade, string? Unidade)> ingredientes)
@@ -23,14 +19,14 @@ namespace ProjetoIntegradorMobile.DAO
 
             await db.RunInTransactionAsync(conn =>
             {
-                conn.Insert(receita); // preenche receita.IdReceita
+                conn.Insert(receita);
                 SalvarIngredientes(conn, receita.IdReceita, ingredientes);
             });
 
             return receita.IdReceita;
         }
 
-        // ---------- READ ----------
+        // Read
 
         public async Task<Receita?> BuscarPorIdAsync(int iIdReceita)
         {
@@ -38,19 +34,12 @@ namespace ProjetoIntegradorMobile.DAO
             return await db.FindAsync<Receita>(iIdReceita);
         }
 
-        /// <summary>
-        /// Lista de receitas para os cards: dados da receita + nome da categoria
-        /// + nomes dos ingredientes (para o filtro) + se é favorita DO USUÁRIO LOGADO.
-        /// iIdUsuarioLogado = 0 quando ninguém está logado (aí nenhuma aparece como favorita).
-        /// bSoFavoritas = true  -> só as favoritas desse usuário (tela Favoritos).
-        /// bSoDoUsuario = true  -> só as receitas criadas por esse usuário (tela Minhas receitas).
-        /// Mais recentes primeiro.
-        /// </summary>
+        // Lista para os cards (filtros: só favoritas / só do usuário)
         public async Task<List<ReceitaResumo>> ListarResumoAsync(int iIdUsuarioLogado, bool bSoFavoritas = false, bool bSoDoUsuario = false)
         {
             var db = await DatabaseConfig.Database.Conexao();
 
-            // O primeiro "?" é o do EXISTS (favorita) e sempre recebe o id do usuário logado
+            // 1º "?" = id do usuário logado (favorita)
             List<object> lParametros = new List<object> { iIdUsuarioLogado };
             List<string> lFiltros = new List<string>();
 
@@ -103,7 +92,7 @@ namespace ProjetoIntegradorMobile.DAO
                 ORDER BY i.nome", iIdReceita);
         }
 
-        /// <summary>Quantas pessoas capturaram (copiaram) esta receita. Usado no aviso antes de excluir.</summary>
+        // Quantas pessoas capturaram a receita
         public async Task<int> ContarCapturasAsync(int iIdReceita)
         {
             var db = await DatabaseConfig.Database.Conexao();
@@ -111,11 +100,9 @@ namespace ProjetoIntegradorMobile.DAO
                 "SELECT COUNT(*) FROM receita_personalizada WHERE id_receita_original = ?", iIdReceita);
         }
 
-        // ---------- UPDATE ----------
+        // Update
 
-        /// <summary>
-        /// Atualiza a receita e troca a lista de ingredientes pela nova (tudo de uma vez).
-        /// </summary>
+        // Atualiza a receita e troca os ingredientes
         public async Task AtualizarAsync(
             Receita receita,
             IEnumerable<(string Nome, double Quantidade, string? Unidade)> ingredientes)
@@ -130,19 +117,18 @@ namespace ProjetoIntegradorMobile.DAO
             });
         }
 
-        // ---------- DELETE ----------
+        // Delete
 
-        // Apaga a receita e, em cascata, os ingredientes ligados a ela
+        // Apaga a receita (ingredientes vão junto)
         public async Task<int> ExcluirAsync(int iIdReceita)
         {
             var db = await DatabaseConfig.Database.Conexao();
             return await db.DeleteAsync<Receita>(iIdReceita);
         }
 
-        // ---------- AUXILIAR ----------
+        // Auxiliar
 
-        // Grava os ingredientes da receita, criando na tabela "ingrediente" os que ainda não existem.
-        // Roda dentro da transação de InserirAsync/AtualizarAsync.
+        // Grava os ingredientes, criando os que não existem
         private static void SalvarIngredientes(
             SQLite.SQLiteConnection conn,
             int iIdReceita,

@@ -3,27 +3,19 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.DAO
 {
-    /// <summary>
-    /// Acesso aos dados das tabelas "receita_personalizada" e "receita_personalizada_ingrediente".
-    /// Uma adaptação é a CÓPIA de uma receita capturada por outro usuário:
-    /// quem capturou pode editar a cópia à vontade, e a receita original do autor não muda.
-    /// </summary>
+    // Acesso às cópias capturadas (receita_personalizada e seus ingredientes)
     public class AdaptacaoDAO
     {
-        // ---------- CREATE (capturar) ----------
+        // Create (capturar)
 
-        /// <summary>
-        /// Captura a receita: copia título, modo de preparo e ingredientes para uma adaptação do usuário.
-        /// Se o usuário já tinha capturado essa receita, devolve a adaptação que já existe.
-        /// Retorna o id da adaptação, ou 0 se a receita não existe.
-        /// </summary>
+        // Copia a receita para o usuário (ou devolve a cópia existente); 0 = receita não existe
         public async Task<int> CapturarAsync(int iIdReceitaOriginal, int iIdUsuario)
         {
             var db = await DatabaseConfig.Database.Conexao();
 
             int iIdExistente = await BuscarIdDoUsuarioAsync(iIdReceitaOriginal, iIdUsuario);
             if (iIdExistente > 0)
-                return iIdExistente; // cada usuário captura cada receita uma vez só (UNIQUE no banco)
+                return iIdExistente;  // cada usuário captura cada receita uma vez
 
             Receita? original = await db.FindAsync<Receita>(iIdReceitaOriginal);
             if (original == null)
@@ -40,9 +32,9 @@ namespace ProjetoIntegradorMobile.DAO
 
             await db.RunInTransactionAsync(conn =>
             {
-                conn.Insert(adaptacao); // preenche adaptacao.IdReceitaPersonalizada
+                conn.Insert(adaptacao);
 
-                // Copia os ingredientes da original para a adaptação
+                // Copia os ingredientes da original
                 conn.Execute(@"
                     INSERT INTO receita_personalizada_ingrediente
                         (id_receita_personalizada, id_ingrediente, quantidade, unidade)
@@ -54,9 +46,9 @@ namespace ProjetoIntegradorMobile.DAO
             return adaptacao.IdReceitaPersonalizada;
         }
 
-        // ---------- READ ----------
+        // Read
 
-        /// <summary>Id da adaptação que o usuário fez dessa receita (0 se ainda não capturou).</summary>
+        // Id da cópia do usuário (0 = não capturou)
         public async Task<int> BuscarIdDoUsuarioAsync(int iIdReceitaOriginal, int iIdUsuario)
         {
             var db = await DatabaseConfig.Database.Conexao();
@@ -71,7 +63,7 @@ namespace ProjetoIntegradorMobile.DAO
             return await db.FindAsync<ReceitaPersonalizada>(iIdAdaptacao);
         }
 
-        /// <summary>Lista "Minhas adaptações": cópias do usuário + dados da receita original. Mais recentes primeiro.</summary>
+        // Lista as cópias do usuário com dados da original
         public async Task<List<AdaptacaoResumo>> ListarResumoDoUsuarioAsync(int iIdUsuario)
         {
             var db = await DatabaseConfig.Database.Conexao();
@@ -104,12 +96,9 @@ namespace ProjetoIntegradorMobile.DAO
                 ORDER BY i.nome", iIdAdaptacao);
         }
 
-        // ---------- UPDATE ----------
+        // Update
 
-        /// <summary>
-        /// Salva a adaptação e troca a lista de ingredientes pela nova (tudo de uma vez).
-        /// Só mexe na cópia do usuário: a receita original não é alterada.
-        /// </summary>
+        // Salva a cópia e troca os ingredientes (a original não muda)
         public async Task AtualizarAsync(
             ReceitaPersonalizada adaptacao,
             IEnumerable<(string Nome, double Quantidade, string? Unidade)> ingredientes)
@@ -124,7 +113,7 @@ namespace ProjetoIntegradorMobile.DAO
 
                 foreach (var item in ingredientes)
                 {
-                    // Ingrediente novo (que ainda não existe no banco) é criado
+                    // Cria o ingrediente se ainda não existe
                     string sNome = item.Nome.Trim();
                     Ingrediente? ingrediente = conn.Table<Ingrediente>().FirstOrDefault(i => i.Nome == sNome);
                     if (ingrediente == null)
@@ -140,9 +129,9 @@ namespace ProjetoIntegradorMobile.DAO
             });
         }
 
-        // ---------- DELETE ----------
+        // Delete
 
-        // Apaga só a cópia do usuário (e, em cascata, os ingredientes dela). A original não muda.
+        // Apaga só a cópia (e os ingredientes dela)
         public async Task<int> ExcluirAsync(int iIdAdaptacao)
         {
             var db = await DatabaseConfig.Database.Conexao();

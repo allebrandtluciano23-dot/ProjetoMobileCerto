@@ -4,7 +4,7 @@ using ProjetoIntegradorMobile.ViewModels;
 
 namespace ProjetoIntegradorMobile.Views;
 
-// "Minhas receitas": receitas criadas pelo usuário logado. Aberta pelo menu Flyout ou pelo Perfil.
+// Receitas criadas pelo usuário
 public partial class ReceitasCriadasPage : ContentPage
 {
     ListaReceitasViewModel vm = new ListaReceitasViewModel(TipoLista.CriadasPorMim);
@@ -26,7 +26,7 @@ public partial class ReceitasCriadasPage : ContentPage
         await Shell.Current.GoToAsync("..");
     }
 
-    // Abre o detalhe da receita como MODAL; ao fechar, recarrega (pode ter sido editada ou excluída)
+    // Abre o detalhe como modal; ao fechar, recarrega
     private async void Receita_Tapped(object sender, TappedEventArgs e)
     {
         if (e.Parameter is not ReceitaResumo receita)
@@ -38,7 +38,7 @@ public partial class ReceitasCriadasPage : ContentPage
         await Navigation.PushModalAsync(pagina);
     }
 
-    // Abre a tela Nova receita como MODAL; ao fechar, recarrega a lista
+    // Abre a Nova receita como modal; ao fechar, recarrega
     private async void btNovaReceita_Clicked(object sender, EventArgs e)
     {
         if (!SessaoUsuario.EstaLogado)

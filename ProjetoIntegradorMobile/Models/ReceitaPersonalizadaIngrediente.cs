@@ -1,9 +1,8 @@
-﻿using SQLite;
+using SQLite;
 
 namespace ProjetoIntegradorMobile.Models
 {
-    // Tabela de ligação com chave primária composta (id_receita_personalizada, id_ingrediente).
-    // Mesma observação de ReceitaIngrediente: para alterar/excluir, use SQL direto.
+    // Ligação cópia-ingrediente (PK composta: alterar/excluir via SQL)
     [Table("receita_personalizada_ingrediente")]
     public class ReceitaPersonalizadaIngrediente
     {

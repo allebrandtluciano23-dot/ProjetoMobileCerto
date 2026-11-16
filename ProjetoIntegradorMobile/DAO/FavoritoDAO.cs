@@ -1,6 +1,6 @@
 namespace ProjetoIntegradorMobile.DAO
 {
-    // Acesso aos dados da tabela "favorito" (quais receitas cada usuário favoritou)
+    // Acesso à tabela favorito
     public class FavoritoDAO
     {
         public async Task<bool> EhFavoritaAsync(int iIdUsuario, int iIdReceita)
@@ -25,7 +25,7 @@ namespace ProjetoIntegradorMobile.DAO
                 "DELETE FROM favorito WHERE id_usuario = ? AND id_receita = ?", iIdUsuario, iIdReceita);
         }
 
-        /// <summary>Liga/desliga o favorito. Retorna como ficou (true = agora é favorita).</summary>
+        // Liga/desliga o favorito; true = agora é favorita
         public async Task<bool> AlternarAsync(int iIdUsuario, int iIdReceita)
         {
             if (await EhFavoritaAsync(iIdUsuario, iIdReceita))

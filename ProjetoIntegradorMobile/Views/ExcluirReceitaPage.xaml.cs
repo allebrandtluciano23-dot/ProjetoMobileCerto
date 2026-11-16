@@ -3,12 +3,12 @@ using ProjetoIntegradorMobile.ViewModels;
 
 namespace ProjetoIntegradorMobile.Views;
 
-// Confirmação de exclusão. Aberta como MODAL pela tela de detalhe da receita.
+// Confirmação de exclusão (modal)
 public partial class ExcluirReceitaPage : ContentPage
 {
     ExcluirReceitaViewModel vm;
 
-    // Função da tela de detalhe, chamada depois de excluir (para o detalhe fechar também)
+    // Fecha o detalhe depois de excluir
     readonly Func<Task>? aoExcluir;
 
     bool bVerificouCapturas = false;
@@ -25,7 +25,7 @@ public partial class ExcluirReceitaPage : ContentPage
     {
         base.OnAppearing();
 
-        // Mostra o aviso se alguém já capturou a receita
+        // Avisa se alguém capturou
         if (!bVerificouCapturas)
         {
             bVerificouCapturas = true;
@@ -51,9 +51,9 @@ public partial class ExcluirReceitaPage : ContentPage
 
         ToastHelper.Mostrar("Receita excluída.");
 
-        await Navigation.PopModalAsync();   // fecha esta confirmação
+        await Navigation.PopModalAsync();  // fecha a confirmação
 
         if (aoExcluir != null)
-            await aoExcluir();              // fecha a tela de detalhe também
+            await aoExcluir();  // fecha o detalhe
     }
 }

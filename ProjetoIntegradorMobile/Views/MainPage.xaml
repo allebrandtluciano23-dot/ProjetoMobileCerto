@@ -12,15 +12,15 @@
 
     <Grid RowDefinitions="Auto,*,Auto">
 
-        <!-- ===================== CABEÇALHO (fica parado no topo) ===================== -->
+        <!-- Cabeçalho -->
         <VerticalStackLayout Grid.Row="0"
                              Padding="20,45,20,12"
                              Spacing="16">
 
-            <!-- Foto + saudação + botão do menu -->
+            <!-- Foto, saudação e menu -->
             <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
 
-                <!-- Foto do usuário (toque: abre o perfil, ou o login se ninguém entrou) -->
+                <!-- Foto: abre o perfil (ou login) -->
                 <Border WidthRequest="46"
                         HeightRequest="46"
                         StrokeThickness="0"
@@ -32,10 +32,11 @@
                     </Border.GestureRecognizers>
 
                     <Grid>
-                        <Path Data="{StaticResource IconeChapeu}"
-                              Style="{StaticResource Icone}"
-                              Stroke="{StaticResource Destaque}"
-                              IsVisible="{Binding SemFotoUsuario}"/>
+                        <Image Source="chef.png"
+                               WidthRequest="40"
+                               HeightRequest="40"
+                               Aspect="AspectFit"
+                               IsVisible="{Binding SemFotoUsuario}"/>
 
                         <Image x:Name="imFotoUsuario"
                                Source="{Binding FotoUsuario}"
@@ -44,7 +45,7 @@
                     </Grid>
                 </Border>
 
-                <!-- Saudação (toque: abre o perfil, ou o login se ninguém entrou) -->
+                <!-- Saudação: abre o perfil (ou login) -->
                 <VerticalStackLayout Grid.Column="1"
                                      Spacing="2"
                                      VerticalOptions="Center">
@@ -61,7 +62,7 @@
                            Style="{StaticResource TextoSecundario}"/>
                 </VerticalStackLayout>
 
-                <!-- Botão que abre o menu lateral (Flyout) -->
+                <!-- Abre o menu lateral -->
                 <Border Grid.Column="2"
                         WidthRequest="44"
                         HeightRequest="44"
@@ -81,8 +82,7 @@
                 </Border>
             </Grid>
 
-
-            <!-- BARRA DE PESQUISA: filtra pelo nome e pelos ingredientes -->
+            <!-- Busca (nome e ingredientes) -->
             <Border Stroke="{StaticResource Borda}"
                     StrokeThickness="1"
                     BackgroundColor="{StaticResource Cartao}"
@@ -106,8 +106,7 @@
                 </Grid>
             </Border>
 
-
-            <!-- CATEGORIAS: a selecionada fica na cor principal (ver MarcarCategoria no .cs) -->
+            <!-- Categorias -->
             <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
 
                 <HorizontalStackLayout x:Name="slCategorias" Spacing="8">
@@ -151,10 +150,7 @@
             </ScrollView>
         </VerticalStackLayout>
 
-
-        <!-- ===================== CONTEÚDO (rola) =====================
-             Cabeçalho da lista: receita em destaque (cartão grande) + título "Receitas".
-             Itens da lista: as outras receitas encontradas. -->
+        <!-- Lista: destaque + demais receitas -->
         <CollectionView Grid.Row="1"
                         x:Name="cvReceitas"
                         ItemsSource="{Binding Receitas}"
@@ -168,12 +164,12 @@
             <CollectionView.Header>
                 <VerticalStackLayout Spacing="16" Padding="0,4,0,12">
 
-                    <!-- Mensagem de erro (só aparece se o banco falhar) -->
+                    <!-- Erro do banco -->
                     <Label Text="{Binding MensagemErro}"
                            IsVisible="{Binding TemErro}"
                            Style="{StaticResource TextoErro}"/>
 
-                    <!-- RECEITA EM DESTAQUE (a primeira do resultado) -->
+                    <!-- Receita em destaque -->
                     <Border IsVisible="{Binding TemDestaque}"
                             BackgroundColor="{StaticResource Cartao}"
                             StrokeThickness="0"
@@ -190,20 +186,19 @@
 
                         <Grid RowDefinitions="160,Auto">
 
-                            <!-- Foto (ou o desenho de um prato, se não tiver foto) -->
+                            <!-- Foto ou prato -->
                             <Grid BackgroundColor="{StaticResource FotoVazia}">
-                                <Path Data="{StaticResource IconePrato}"
-                                      Style="{StaticResource Icone}"
-                                      Stroke="White"
-                                      WidthRequest="56"
-                                      HeightRequest="56"
-                                      IsVisible="{Binding Destaque.SemFoto}"/>
+                                <Image Source="prato.png"
+                                       WidthRequest="56"
+                                       HeightRequest="56"
+                                       Aspect="AspectFit"
+                                       IsVisible="{Binding Destaque.SemFoto}"/>
 
                                 <Image Source="{Binding Destaque.CaminhoFoto}"
                                        Aspect="AspectFill"
                                        IsVisible="{Binding Destaque.TemFoto}"/>
 
-                                <!-- Coração: só se o usuário logado favoritou -->
+                                <!-- Favorita do usuário -->
                                 <Border WidthRequest="38"
                                         HeightRequest="38"
                                         StrokeThickness="0"
@@ -257,7 +252,7 @@
                         </Grid>
                     </Border>
 
-                    <!-- Título + botão que abre a tela Nova receita (como Modal) -->
+                    <!-- Título + Nova receita -->
                     <Grid ColumnDefinitions="*,Auto">
 
                         <Label Text="Receitas"
@@ -275,15 +270,14 @@
                                 Clicked="btNovaReceita_Clicked"/>
                     </Grid>
 
-                    <!-- Nenhuma receita (banco vazio ou busca sem resultado) -->
+                    <!-- Nenhuma receita -->
                     <VerticalStackLayout IsVisible="{Binding SemReceitas}"
                                          Padding="0,30"
                                          Spacing="8">
-                        <Path Data="{StaticResource IconePrato}"
-                              Style="{StaticResource Icone}"
-                              Stroke="{StaticResource TextoFraco}"
-                              WidthRequest="44"
-                              HeightRequest="44"/>
+                        <Image Source="prato_vazio.png"
+                               WidthRequest="44"
+                               HeightRequest="44"
+                               Aspect="AspectFit"/>
                         <Label Text="Nenhuma receita encontrada."
                                Style="{StaticResource TextoSecundario}"
                                FontSize="15"
@@ -292,7 +286,7 @@
                 </VerticalStackLayout>
             </CollectionView.Header>
 
-            <!-- Item de cada receita -->
+            <!-- Item da receita -->
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:ReceitaResumo">
 
@@ -301,7 +295,7 @@
                             StrokeShape="RoundRectangle 18"
                             Padding="10">
 
-                        <!-- Tocar no item abre o detalhe da receita -->
+                        <!-- Abre o detalhe -->
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="Receita_Tapped"
                                                   CommandParameter="{Binding .}"/>
@@ -309,7 +303,7 @@
 
                         <Grid ColumnDefinitions="72,*,Auto" ColumnSpacing="12">
 
-                            <!-- Foto da receita (ou o desenho de um prato) -->
+                            <!-- Foto ou prato -->
                             <Border WidthRequest="72"
                                     HeightRequest="72"
                                     StrokeThickness="0"
@@ -317,12 +311,11 @@
                                     StrokeShape="RoundRectangle 14"
                                     VerticalOptions="Center">
                                 <Grid>
-                                    <Path Data="{StaticResource IconePrato}"
-                                          Style="{StaticResource Icone}"
-                                          Stroke="White"
-                                          WidthRequest="28"
-                                          HeightRequest="28"
-                                          IsVisible="{Binding SemFoto}"/>
+                                    <Image Source="prato.png"
+                                           WidthRequest="28"
+                                           HeightRequest="28"
+                                           Aspect="AspectFit"
+                                           IsVisible="{Binding SemFoto}"/>
                                     <Image Source="{Binding CaminhoFoto}"
                                            Aspect="AspectFill"
                                            IsVisible="{Binding TemFoto}"/>
@@ -352,7 +345,7 @@
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>
 
-                            <!-- Coração só nas receitas que o usuário logado favoritou -->
+                            <!-- Favorita do usuário -->
                             <Path Grid.Column="2"
                                   Data="{StaticResource IconeCoracao}"
                                   Style="{StaticResource Icone}"
@@ -370,8 +363,7 @@
 
         </CollectionView>
 
-
-        <!-- ===================== MENU INFERIOR ===================== -->
+        <!-- Menu inferior -->
         <Grid Grid.Row="2"
               RowDefinitions="1,Auto"
               BackgroundColor="{StaticResource Cartao}">
@@ -380,7 +372,7 @@
 
             <Grid Grid.Row="1" ColumnDefinitions="*,*,*" Padding="12,10,12,14">
 
-                <!-- INÍCIO (tela atual: na cor principal) -->
+                <!-- Início (ativo) -->
                 <VerticalStackLayout Grid.Column="0" Spacing="4" HorizontalOptions="Center">
                     <VerticalStackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="Inicio_Tapped"/>
@@ -396,7 +388,7 @@
                            HorizontalOptions="Center"/>
                 </VerticalStackLayout>
 
-                <!-- FAVORITOS -->
+                <!-- Favoritos -->
                 <VerticalStackLayout Grid.Column="1" Spacing="4" HorizontalOptions="Center">
                     <VerticalStackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="Favoritos_Tapped"/>
@@ -411,7 +403,7 @@
                            HorizontalOptions="Center"/>
                 </VerticalStackLayout>
 
-                <!-- PERFIL -->
+                <!-- Perfil -->
                 <VerticalStackLayout Grid.Column="2" Spacing="4" HorizontalOptions="Center">
                     <VerticalStackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="Perfil_Tapped"/>
@@ -428,8 +420,7 @@
             </Grid>
         </Grid>
 
-
-        <!-- AVISO "ENTRE NA SUA CONTA" (cartão reutilizável, Views/CartaoAviso.xaml) -->
+        <!-- Aviso de login -->
         <views:CartaoAviso x:Name="grAviso" Grid.RowSpan="3"/>
 
     </Grid>

@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
-<!--
-    "Minha versão": edição da cópia capturada de uma receita de outro usuário.
-    Aberta como MODAL (pelo detalhe da receita ou por "Cópias capturadas").
-    O que é salvo aqui fica só na cópia; a receita original do autor não muda.
--->
+<!-- "Minha versão": edita a cópia capturada (a original não muda) -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProjetoIntegradorMobile.Views.EditarCapturaPage"
@@ -21,7 +17,7 @@
 
             <VerticalStackLayout Padding="20,45,20,32" Spacing="20">
 
-                <!-- CABEÇALHO: fechar + título -->
+                <!-- Fechar + título -->
                 <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
 
                     <Border WidthRequest="44"
@@ -47,8 +43,7 @@
                            VerticalOptions="Center"/>
                 </Grid>
 
-
-                <!-- RECEITA ORIGINAL (só para mostrar de onde veio) -->
+                <!-- Receita original -->
                 <Border BackgroundColor="{StaticResource Cartao}"
                         Stroke="{StaticResource BordaCartao}"
                         StrokeThickness="1"
@@ -63,12 +58,11 @@
                                 BackgroundColor="{StaticResource FotoVazia}"
                                 StrokeShape="RoundRectangle 14">
                             <Grid>
-                                <Path Data="{StaticResource IconePrato}"
-                                      Style="{StaticResource Icone}"
-                                      Stroke="White"
-                                      WidthRequest="26"
-                                      HeightRequest="26"
-                                      IsVisible="{Binding SemFoto}"/>
+                                <Image Source="prato.png"
+                                       WidthRequest="26"
+                                       HeightRequest="26"
+                                       Aspect="AspectFit"
+                                       IsVisible="{Binding SemFoto}"/>
 
                                 <Image x:Name="imFoto"
                                        Source="{Binding CaminhoFoto}"
@@ -94,8 +88,7 @@
                     </Grid>
                 </Border>
 
-
-                <!-- NOME DA MINHA VERSÃO -->
+                <!-- Nome -->
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Nome" Style="{StaticResource Rotulo}"/>
 
@@ -115,13 +108,12 @@
                     </Border>
                 </VerticalStackLayout>
 
-
-                <!-- INGREDIENTES -->
+                <!-- Ingredientes -->
                 <VerticalStackLayout Spacing="10">
 
                     <Label Text="Ingredientes" Style="{StaticResource TituloSecao}"/>
 
-                    <!-- Campos para adicionar um ingrediente -->
+                    <!-- Novo ingrediente -->
                     <Border Stroke="{StaticResource Borda}"
                             StrokeThickness="1"
                             BackgroundColor="{StaticResource Cartao}"
@@ -186,7 +178,7 @@
                            IsVisible="{Binding TemErroIngrediente}"
                            Style="{StaticResource TextoErro}"/>
 
-                    <!-- Lista dos ingredientes da minha versão -->
+                    <!-- Ingredientes da cópia -->
                     <VerticalStackLayout x:Name="slIngredientes"
                                          Spacing="8"
                                          BindableLayout.ItemsSource="{Binding Ingredientes}">
@@ -211,7 +203,7 @@
                                                Style="{StaticResource TextoSecundario}"
                                                VerticalOptions="Center"/>
 
-                                        <!-- Remover ingrediente -->
+                                        <!-- Remover -->
                                         <Border Grid.Column="2"
                                                 WidthRequest="30"
                                                 HeightRequest="30"
@@ -239,8 +231,7 @@
                     </VerticalStackLayout>
                 </VerticalStackLayout>
 
-
-                <!-- MODO DE PREPARO -->
+                <!-- Modo de preparo -->
                 <VerticalStackLayout Spacing="10">
 
                     <Label Text="Modo de preparo" Style="{StaticResource TituloSecao}"/>
@@ -258,8 +249,7 @@
                     </Border>
                 </VerticalStackLayout>
 
-
-                <!-- OBSERVAÇÕES -->
+                <!-- Observações -->
                 <VerticalStackLayout Spacing="8">
                     <Label Text="O que você mudou? (opcional)" Style="{StaticResource Rotulo}"/>
 
@@ -277,16 +267,14 @@
                     </Border>
                 </VerticalStackLayout>
 
-
-                <!-- MENSAGEM DE ERRO -->
+                <!-- Erro -->
                 <Label x:Name="lbErro"
                        Text="{Binding MensagemErro}"
                        IsVisible="{Binding TemErro}"
                        Style="{StaticResource TextoErro}"
                        HorizontalOptions="Center"/>
 
-
-                <!-- BOTÕES -->
+                <!-- Botões -->
                 <VerticalStackLayout Spacing="10">
 
                     <Button x:Name="btSalvar"
@@ -306,7 +294,7 @@
 
         </ScrollView>
 
-        <!-- Cartão de aviso (no lugar do alerta padrão do sistema) -->
+        <!-- Cartão de aviso -->
         <views:CartaoAviso x:Name="grAviso"/>
     </Grid>
 

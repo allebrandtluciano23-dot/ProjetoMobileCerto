@@ -5,19 +5,18 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.ViewModels
 {
-    // ViewModel da tela inicial (MainPage): lista de receitas com filtro em tempo real
+    // ViewModel da tela inicial
     public class MainViewModel : BaseViewModel
     {
         private readonly ReceitaDAO receitaDAO = new ReceitaDAO();
 
-        // Todas as receitas lidas do banco (o filtro trabalha em cima desta lista)
+        // Todas as receitas do banco (base do filtro)
         private List<ReceitaResumo> lReceitasTodas = new List<ReceitaResumo>();
 
-        // O que aparece na tela (CollectionView). ObservableCollection avisa a tela quando muda.
-        // A primeira receita do resultado vai para o cartão grande (Destaque); as outras ficam aqui.
+        // Receitas da lista (sem a do destaque)
         public ObservableCollection<ReceitaResumo> Receitas { get; } = new ObservableCollection<ReceitaResumo>();
 
-        // Receita mostrada no cartão grande do topo (null = nenhuma receita encontrada)
+        // Receita do cartão grande
         private ReceitaResumo? receitaDestaque;
         public ReceitaResumo? Destaque
         {
@@ -34,10 +33,10 @@ namespace ProjetoIntegradorMobile.ViewModels
 
         public bool TemDestaque => Destaque != null;
 
-        // Mostra "Nenhuma receita encontrada" (banco vazio ou busca sem resultado)
+        // Mostra "Nenhuma receita encontrada"
         public bool SemReceitas => Destaque == null;
 
-        // ---------- Campos da tela (ligados por Binding) ----------
+        // Campos da tela
 
         private string sSaudacao = "Olá, Chefe!";
         public string Saudacao
@@ -46,7 +45,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sSaudacao, value);
         }
 
-        // Foto do usuário logado no topo da tela (sem foto: mostra o desenho do chapéu de chef)
+        // Foto do usuário logado
         private string? sFotoUsuario;
         public string? FotoUsuario
         {
@@ -64,7 +63,7 @@ namespace ProjetoIntegradorMobile.ViewModels
         public bool TemFotoUsuario => !string.IsNullOrEmpty(FotoUsuario);
         public bool SemFotoUsuario => !TemFotoUsuario;
 
-        // Texto da barra de pesquisa: a cada letra digitada, a lista é filtrada
+        // Texto da busca: filtra a cada letra
         private string sFiltro = "";
         public string Filtro
         {
@@ -76,7 +75,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             }
         }
 
-        // Categoria escolhida nos botões (Todos, Rápidos, Almoço...). "" = todas
+        // Categoria escolhida ("" = todas)
         private string sCategoriaSelecionada = "";
         public string CategoriaSelecionada
         {
@@ -88,16 +87,16 @@ namespace ProjetoIntegradorMobile.ViewModels
             }
         }
 
-        // ---------- Ações ----------
+        // Ações
 
-        /// <summary>Lê as receitas do banco. Chamado toda vez que a tela aparece.</summary>
+        // Carrega as receitas do banco
         public async Task CarregarAsync()
         {
             AtualizarSaudacao();
 
             try
             {
-                // O coração dos itens mostra as favoritas de quem está logado (0 = ninguém logado)
+                // 0 = ninguém logado
                 int iIdUsuario = SessaoUsuario.UsuarioAtual?.IdUsuario ?? 0;
                 lReceitasTodas = await receitaDAO.ListarResumoAsync(iIdUsuario);
                 MensagemErro = "";
@@ -111,8 +110,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             AplicarFiltro();
         }
 
-        // Mostra na tela só as receitas que combinam com o texto digitado e a categoria escolhida.
-        // O texto é procurado no título e nos ingredientes (ex.: "frango" acha receitas com frango).
+        // Filtra por texto (título e ingredientes) e categoria
         private void AplicarFiltro()
         {
             string sTermo = (Filtro ?? "").Trim().ToLowerInvariant();
@@ -131,7 +129,7 @@ namespace ProjetoIntegradorMobile.ViewModels
                 if (!bCategoriaOk || !bTextoOk)
                     continue;
 
-                // A primeira que combinar vai para o cartão grande; as demais, para a lista
+                // 1ª vai para o destaque, o resto para a lista
                 if (primeira == null)
                     primeira = receita;
                 else
@@ -141,7 +139,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             Destaque = primeira;
         }
 
-        // "Olá, Luciano!" se houver alguém logado; senão "Olá, Chefe!"
+        // "Olá, <nome>!" ou "Olá, Chefe!"
         private void AtualizarSaudacao()
         {
             Usuario? usuario = SessaoUsuario.UsuarioAtual;

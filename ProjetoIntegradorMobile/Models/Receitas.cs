@@ -1,4 +1,4 @@
-﻿using SQLite;
+using SQLite;
 
 namespace ProjetoIntegradorMobile.Models
 {
@@ -26,15 +26,15 @@ namespace ProjetoIntegradorMobile.Models
         [Column("porcoes")]
         public int? Porcoes { get; set; }
 
-        // Campo booleano da tabela (CheckBox "Vegetariana" no formulário)
+        // Booleano (CheckBox Vegetariana)
         [Column("vegetariana")]
         public bool Vegetariana { get; set; }
 
-        // Valores usados: "Fácil", "Média", "Difícil"
+        // Fácil, Média ou Difícil
         [Column("dificuldade")]
         public string? Dificuldade { get; set; }
 
-        // Caminho da foto copiada para a pasta do app (null = sem foto)
+        // Caminho da foto (null = sem foto)
         [Column("caminho_foto")]
         public string? CaminhoFoto { get; set; }
 

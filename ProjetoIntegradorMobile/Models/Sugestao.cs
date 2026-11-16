@@ -1,4 +1,4 @@
-﻿using SQLite;
+using SQLite;
 
 namespace ProjetoIntegradorMobile.Models
 {
@@ -26,7 +26,7 @@ namespace ProjetoIntegradorMobile.Models
         [NotNull, Column("data_envio")]
         public string DataEnvio { get; set; } = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
 
-        // Valores aceitos: pendente, aceita, rejeitada
+        // pendente, aceita ou rejeitada
         [NotNull, Column("status")]
         public string Status { get; set; } = "pendente";
     }

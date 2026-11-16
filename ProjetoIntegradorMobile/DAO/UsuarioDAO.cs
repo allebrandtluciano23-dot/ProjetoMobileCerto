@@ -4,13 +4,10 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.DAO
 {
-    // Acesso aos dados da tabela "usuario"
+    // Acesso à tabela usuario
     public class UsuarioDAO
     {
-        /// <summary>
-        /// Cadastra um usuário guardando a senha com hash.
-        /// Retorna null se o e-mail já estiver cadastrado.
-        /// </summary>
+        // Cadastra com senha em hash; null = e-mail já existe
         public async Task<Usuario?> CadastrarAsync(string sNome, string sEmail, string sSenha)
         {
             var db = await DatabaseConfig.Database.Conexao();
@@ -27,13 +24,11 @@ namespace ProjetoIntegradorMobile.DAO
                 DataCadastro = Database.Agora()
             };
 
-            await db.InsertAsync(usuario); // preenche usuario.IdUsuario
+            await db.InsertAsync(usuario);
             return usuario;
         }
 
-        /// <summary>
-        /// Confere e-mail e senha. Retorna o usuário se estiverem corretos, senão null.
-        /// </summary>
+        // Confere e-mail e senha; null = inválido
         public async Task<Usuario?> AutenticarAsync(string sEmail, string sSenha)
         {
             Usuario? usuario = await BuscarPorEmailAsync(sEmail);
@@ -62,7 +57,7 @@ namespace ProjetoIntegradorMobile.DAO
             return await db.Table<Usuario>().CountAsync(u => u.Email == sEmail) > 0;
         }
 
-        // Grava o caminho da foto do perfil
+        // Grava a foto do perfil
         public async Task AlterarFotoAsync(int iIdUsuario, string? sCaminhoFoto)
         {
             var db = await DatabaseConfig.Database.Conexao();

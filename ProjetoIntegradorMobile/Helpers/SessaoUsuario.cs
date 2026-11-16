@@ -2,7 +2,7 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.Helpers
 {
-    // Guarda o usuário logado em memória enquanto o app estiver aberto.
+    // Usuário logado (em memória)
     public static class SessaoUsuario
     {
         public static Usuario? UsuarioAtual { get; set; }

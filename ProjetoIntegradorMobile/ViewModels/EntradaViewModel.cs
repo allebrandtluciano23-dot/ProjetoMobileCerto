@@ -4,12 +4,12 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.ViewModels
 {
-    // ViewModel da tela de login (EntradaPage)
+    // ViewModel do login
     public class EntradaViewModel : BaseViewModel
     {
         private readonly UsuarioDAO usuarioDAO = new UsuarioDAO();
 
-        // ---------- Campos da tela (ligados por Binding) ----------
+        // Campos da tela
 
         private string sEmail = "";
         public string Email
@@ -25,12 +25,9 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sSenha, value);
         }
 
-        // ---------- Ações ----------
+        // Ações
 
-        /// <summary>
-        /// Valida os campos e confere e-mail e senha no banco.
-        /// Retorna true se o login deu certo (a tela então navega para a página inicial).
-        /// </summary>
+        // Valida e confere e-mail e senha; true = entrou
         public async Task<bool> EntrarAsync()
         {
             if (bProcessando)

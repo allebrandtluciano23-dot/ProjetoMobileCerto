@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
-<!-- Lista das receitas que o usuário capturou. Aberta pelo Perfil (navegação em pilha). -->
+<!-- Cópias capturadas pelo usuário (pilha) -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProjetoIntegradorMobile.Views.CapturasPage"
@@ -12,7 +12,7 @@
 
     <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="20,45,20,0">
 
-        <!-- CABEÇALHO: voltar + título -->
+        <!-- Voltar + título -->
         <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
 
             <Border WidthRequest="44"
@@ -86,7 +86,7 @@
                             StrokeShape="RoundRectangle 18"
                             Padding="10">
 
-                        <!-- Tocar no item abre a sua versão -->
+                        <!-- Abre a cópia -->
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="Adaptacao_Tapped"
                                                   CommandParameter="{Binding .}"/>
@@ -94,7 +94,7 @@
 
                         <Grid ColumnDefinitions="72,*,Auto" ColumnSpacing="12">
 
-                            <!-- Foto da receita (o desenho do prato fica por baixo; a foto, se houver, cobre) -->
+                            <!-- Foto ou prato -->
                             <Border WidthRequest="72"
                                     HeightRequest="72"
                                     StrokeThickness="0"
@@ -102,11 +102,10 @@
                                     StrokeShape="RoundRectangle 14"
                                     VerticalOptions="Center">
                                 <Grid>
-                                    <Path Data="{StaticResource IconePrato}"
-                                          Style="{StaticResource Icone}"
-                                          Stroke="White"
-                                          WidthRequest="28"
-                                          HeightRequest="28"/>
+                                    <Image Source="prato.png"
+                                           WidthRequest="28"
+                                           HeightRequest="28"
+                                           Aspect="AspectFit"/>
                                     <Image Source="{Binding CaminhoFoto}"
                                            Aspect="AspectFill"
                                            IsVisible="{Binding TemFoto}"/>

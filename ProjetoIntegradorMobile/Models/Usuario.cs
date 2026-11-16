@@ -1,4 +1,4 @@
-﻿using SQLite;
+using SQLite;
 
 namespace ProjetoIntegradorMobile.Models
 {
@@ -17,11 +17,11 @@ namespace ProjetoIntegradorMobile.Models
         [NotNull, Column("senha_hash")]
         public string SenhaHash { get; set; } = string.Empty;
 
-        // Foto do perfil copiada para a pasta do app (null = sem foto, mostra o 👨‍🍳)
+        // Caminho da foto do perfil (null = sem foto)
         [Column("caminho_foto")]
         public string? CaminhoFoto { get; set; }
 
-        // Mesmo formato do datetime('now') do SQLite (UTC)
+        // Data em UTC (igual ao SQLite)
         [NotNull, Column("data_cadastro")]
         public string DataCadastro { get; set; } = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
     }

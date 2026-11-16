@@ -13,23 +13,16 @@
 
         <ScrollView>
 
-            <VerticalStackLayout Padding="24,80,24,36" Spacing="24">
+            <VerticalStackLayout Padding="24,56,24,36" Spacing="24">
 
-                <!-- MARCA -->
+                <!-- Marca -->
                 <VerticalStackLayout Spacing="10">
 
-                    <Border WidthRequest="56"
-                            HeightRequest="56"
-                            StrokeThickness="0"
-                            BackgroundColor="{StaticResource Destaque}"
-                            StrokeShape="RoundRectangle 18"
-                            HorizontalOptions="Start">
-                        <Path Data="{StaticResource IconeChapeu}"
-                              Style="{StaticResource Icone}"
-                              Stroke="White"
-                              WidthRequest="28"
-                              HeightRequest="28"/>
-                    </Border>
+                    <Image Source="chef.png"
+                           WidthRequest="96"
+                           HeightRequest="96"
+                           Aspect="AspectFit"
+                           HorizontalOptions="Start"/>
 
                     <Label Text="CheefBook"
                            FontFamily="Bricolage"
@@ -40,11 +33,10 @@
                            FontSize="15"/>
                 </VerticalStackLayout>
 
-
-                <!-- CAMPOS -->
+                <!-- Campos -->
                 <VerticalStackLayout Spacing="14">
 
-                    <!-- USUÁRIO / E-MAIL -->
+                    <!-- E-mail -->
                     <VerticalStackLayout Spacing="8">
                         <Label Text="Usuário ou e-mail" Style="{StaticResource Rotulo}"/>
 
@@ -64,7 +56,7 @@
                         </Border>
                     </VerticalStackLayout>
 
-                    <!-- SENHA -->
+                    <!-- Senha -->
                     <VerticalStackLayout Spacing="8">
                         <Label Text="Senha" Style="{StaticResource Rotulo}"/>
 
@@ -84,7 +76,7 @@
                                        IsPassword="True"
                                        VerticalOptions="Center"/>
 
-                                <!-- Mostrar / ocultar senha -->
+                                <!-- Mostrar/ocultar senha -->
                                 <Image Grid.Column="1"
                                        x:Name="imOlho"
                                        Source="eye_off.png"
@@ -101,7 +93,7 @@
                         </Border>
                     </VerticalStackLayout>
 
-                    <!-- ESQUECEU A SENHA -->
+                    <!-- Esqueceu a senha -->
                     <Label Text="Esqueceu sua senha?"
                            FontFamily="InterSemiBold"
                            FontSize="13"
@@ -114,16 +106,14 @@
                     </Label>
                 </VerticalStackLayout>
 
-
-                <!-- MENSAGEM DE ERRO -->
+                <!-- Erro -->
                 <Label x:Name="lbErro"
                        Text="{Binding MensagemErro}"
                        Style="{StaticResource TextoErro}"
                        HorizontalOptions="Center"
                        IsVisible="{Binding TemErro}"/>
 
-
-                <!-- BOTÃO ENTRAR -->
+                <!-- Entrar -->
                 <Border BackgroundColor="{StaticResource Destaque}"
                         StrokeThickness="0"
                         HeightRequest="54"
@@ -141,8 +131,7 @@
                            VerticalOptions="Center"/>
                 </Border>
 
-
-                <!-- CADASTRO -->
+                <!-- Cadastro -->
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="5" Margin="0,12,0,0">
 
                     <Label Text="Não tem uma conta?"
@@ -165,7 +154,7 @@
 
         </ScrollView>
 
-        <!-- Cartão de aviso (no lugar do alerta padrão do sistema) -->
+        <!-- Cartão de aviso -->
         <views:CartaoAviso x:Name="grAviso"/>
     </Grid>
 

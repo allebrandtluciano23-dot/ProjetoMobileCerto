@@ -3,7 +3,7 @@ using ProjetoIntegradorMobile.ViewModels;
 
 namespace ProjetoIntegradorMobile.Views;
 
-// Receitas que o usuário logado favoritou. Aberta pelo menu Flyout ou pelo menu inferior.
+// Receitas favoritas do usuário
 public partial class FavoritosPage : ContentPage
 {
     ListaReceitasViewModel vm = new ListaReceitasViewModel(TipoLista.Favoritas);
@@ -25,7 +25,7 @@ public partial class FavoritosPage : ContentPage
         await Shell.Current.GoToAsync("..");
     }
 
-    // Abre o detalhe da receita como MODAL; ao fechar, recarrega (a pessoa pode ter desfavoritado)
+    // Abre o detalhe como modal; ao fechar, recarrega
     private async void Receita_Tapped(object sender, TappedEventArgs e)
     {
         if (e.Parameter is not ReceitaResumo receita)

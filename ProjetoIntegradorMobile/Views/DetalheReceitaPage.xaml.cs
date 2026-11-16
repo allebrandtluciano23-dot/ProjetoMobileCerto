@@ -3,7 +3,7 @@ using ProjetoIntegradorMobile.ViewModels;
 
 namespace ProjetoIntegradorMobile.Views;
 
-// Detalhe da receita com ABAS (TabbedPage). Aberta como MODAL pela tela inicial.
+// Detalhe com abas (TabbedPage), aberto como modal
 public partial class DetalheReceitaPage : TabbedPage
 {
     DetalheReceitaViewModel vm;
@@ -20,7 +20,7 @@ public partial class DetalheReceitaPage : TabbedPage
     {
         base.OnAppearing();
 
-        // Carrega só na primeira vez; depois de editar, quem recarrega é o btEditar_Clicked
+        // Carrega só na primeira vez
         if (bCarregou)
             return;
         bCarregou = true;
@@ -40,7 +40,7 @@ public partial class DetalheReceitaPage : TabbedPage
             ToastHelper.Mostrar(sMensagem);
     }
 
-    // Captura a receita (se ainda não capturou) e abre "Minha versão" como MODAL
+    // Captura e abre a cópia como modal
     private async void btCapturar_Clicked(object sender, EventArgs e)
     {
         bool bJaTinha = vm.IdAdaptacao > 0;
@@ -54,7 +54,7 @@ public partial class DetalheReceitaPage : TabbedPage
 
         EditarCapturaPage pagina = new EditarCapturaPage(iIdAdaptacao);
 
-        // Ao voltar, atualiza o botão (a versão pode ter sido excluída)
+        // Ao voltar, atualiza o botão
         pagina.Disappearing += async (s, ev) => await vm.CarregarAsync();
 
         await Navigation.PushModalAsync(pagina);
@@ -65,21 +65,21 @@ public partial class DetalheReceitaPage : TabbedPage
         await Navigation.PopModalAsync();
     }
 
-    // Abre a mesma tela de Nova receita, mas em modo de edição (também como Modal)
+    // Abre a Nova receita em modo edição (modal)
     private async void btEditar_Clicked(object sender, EventArgs e)
     {
         NovaReceitaPage pagina = new NovaReceitaPage(vm.IdReceita);
 
-        // Quando a edição fechar, mostra os dados atualizados
+        // Ao fechar, recarrega os dados
         pagina.Disappearing += async (s, ev) => await vm.CarregarAsync();
 
         await Navigation.PushModalAsync(pagina);
     }
 
-    // Abre a tela de confirmação de exclusão (também como Modal)
+    // Abre a confirmação de exclusão (modal)
     private async void btExcluir_Clicked(object sender, EventArgs e)
     {
-        // Se a receita for excluída, a tela de confirmação chama esta função para fechar o detalhe também
+        // Fecha o detalhe depois de excluir
         ExcluirReceitaPage pagina = new ExcluirReceitaPage(vm.IdReceita, vm.Titulo, FecharDepoisDeExcluirAsync);
         await Navigation.PushModalAsync(pagina);
     }

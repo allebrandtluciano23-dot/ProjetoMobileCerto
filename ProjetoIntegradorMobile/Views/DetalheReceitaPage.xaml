@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
-<!--
-    TabbedPage: uma página com ABAS (requisito "Tabbed_Pages").
-    Cada <ContentPage> abaixo vira uma aba: Resumo | Ingredientes | Preparo.
-    É aberta como MODAL a partir da tela inicial, ao tocar numa receita.
--->
+<!-- Detalhe da receita com abas (TabbedPage), aberto como modal -->
 <TabbedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
             x:Class="ProjetoIntegradorMobile.Views.DetalheReceitaPage"
@@ -16,7 +12,7 @@
             SelectedTabColor="{StaticResource Destaque}"
             UnselectedTabColor="{StaticResource TextoSuave}">
 
-    <!-- ===================== ABA 1: RESUMO ===================== -->
+    <!-- Aba Resumo -->
     <ContentPage Title="Resumo" BackgroundColor="{StaticResource Fundo}">
 
         <Grid>
@@ -24,18 +20,17 @@
             <ScrollView>
                 <VerticalStackLayout Padding="20,18,20,28" Spacing="14">
 
-                    <!-- Foto (ou o desenho de um prato, se a receita não tiver foto) -->
+                    <!-- Foto ou prato -->
                     <Border HeightRequest="190"
                             StrokeThickness="0"
                             BackgroundColor="{StaticResource FotoVazia}"
                             StrokeShape="RoundRectangle 22">
                         <Grid>
-                            <Path Data="{StaticResource IconePrato}"
-                                  Style="{StaticResource Icone}"
-                                  Stroke="White"
-                                  WidthRequest="64"
-                                  HeightRequest="64"
-                                  IsVisible="{Binding SemFoto}"/>
+                            <Image Source="prato.png"
+                                   WidthRequest="64"
+                                   HeightRequest="64"
+                                   Aspect="AspectFit"
+                                   IsVisible="{Binding SemFoto}"/>
 
                             <Image x:Name="imFoto"
                                    Source="{Binding CaminhoFoto}"
@@ -57,7 +52,7 @@
                                Style="{StaticResource TextoSecundario}"/>
                     </VerticalStackLayout>
 
-                    <!-- Tempo | Porções | Dificuldade -->
+                    <!-- Tempo, porções e dificuldade -->
                     <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
 
                         <Border BackgroundColor="{StaticResource Cartao}"
@@ -129,7 +124,7 @@
                         </Border>
                     </Grid>
 
-                    <!-- Selo vegetariana -->
+                    <!-- Vegetariana -->
                     <HorizontalStackLayout Spacing="6" IsVisible="{Binding Vegetariana}">
                         <Path Data="{StaticResource IconeFolha}"
                               Style="{StaticResource Icone}"
@@ -150,22 +145,21 @@
                     <!-- Botões -->
                     <VerticalStackLayout Spacing="10" Margin="0,6,0,0">
 
-                        <!-- Favoritar: para qualquer usuário logado (cada um tem os seus favoritos) -->
+                        <!-- Favoritar (usuário logado) -->
                         <Button x:Name="btFavoritar"
                                 Text="{Binding TextoFavorito}"
                                 Style="{StaticResource BotaoContorno}"
                                 IsVisible="{Binding EstaLogado}"
                                 Clicked="btFavoritar_Clicked"/>
 
-                        <!-- Capturar: para quem NÃO é o autor. Cria uma cópia só sua, que você pode editar.
-                             Se já capturou, o botão abre a sua versão. -->
+                        <!-- Capturar (quem não é o autor) -->
                         <Button x:Name="btCapturar"
                                 Text="{Binding TextoCaptura}"
                                 Style="{StaticResource BotaoEscuro}"
                                 IsVisible="{Binding PodeCapturar}"
                                 Clicked="btCapturar_Clicked"/>
 
-                        <!-- Editar e Excluir: só aparecem para quem criou a receita -->
+                        <!-- Editar e Excluir (só o autor) -->
                         <Grid ColumnDefinitions="*,*"
                               ColumnSpacing="10"
                               IsVisible="{Binding EhAutor}">
@@ -191,13 +185,12 @@
                 </VerticalStackLayout>
             </ScrollView>
 
-            <!-- Cartão de aviso (no lugar do alerta padrão do sistema) -->
+            <!-- Cartão de aviso -->
             <views:CartaoAviso x:Name="grAviso"/>
         </Grid>
     </ContentPage>
 
-
-    <!-- ===================== ABA 2: INGREDIENTES ===================== -->
+    <!-- Aba Ingredientes -->
     <ContentPage Title="Ingredientes" BackgroundColor="{StaticResource Fundo}">
 
         <Grid RowDefinitions="Auto,*" Padding="20,22,20,0" RowSpacing="16">
@@ -257,8 +250,7 @@
         </Grid>
     </ContentPage>
 
-
-    <!-- ===================== ABA 3: MODO DE PREPARO ===================== -->
+    <!-- Aba Preparo -->
     <ContentPage Title="Preparo" BackgroundColor="{StaticResource Fundo}">
 
         <ScrollView>

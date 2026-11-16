@@ -4,7 +4,7 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.ViewModels
 {
-    // ViewModel da tela de confirmação de exclusão (ExcluirReceitaPage)
+    // ViewModel da confirmação de exclusão
     public class ExcluirReceitaViewModel : BaseViewModel
     {
         private readonly ReceitaDAO receitaDAO = new ReceitaDAO();
@@ -24,10 +24,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sMensagem, value);
         }
 
-        /// <summary>
-        /// Se alguém já capturou a receita, acrescenta o aviso na mensagem:
-        /// ao excluir a original, as cópias capturadas também são apagadas (ON DELETE CASCADE).
-        /// </summary>
+        // Avisa se alguém capturou (as cópias serão apagadas)
         public async Task VerificarCapturasAsync()
         {
             try
@@ -40,14 +37,11 @@ namespace ProjetoIntegradorMobile.ViewModels
             }
             catch (Exception)
             {
-                // Se não conseguir contar, a confirmação continua funcionando sem o aviso
+                // Sem contagem, segue sem o aviso
             }
         }
 
-        /// <summary>
-        /// Exclui a receita (e, em cascata, os ingredientes ligados a ela e as cópias capturadas).
-        /// Retorna true se excluiu.
-        /// </summary>
+        // Exclui a receita (ingredientes e cópias vão junto)
         public async Task<bool> ExcluirAsync()
         {
             if (bProcessando)
@@ -59,9 +53,9 @@ namespace ProjetoIntegradorMobile.ViewModels
             {
                 Receita? receita = await receitaDAO.BuscarPorIdAsync(iIdReceita);
                 if (receita == null)
-                    return true; // já não existe
+                    return true;  // já não existe
 
-                // Segurança: só o autor pode excluir
+                // Só o autor pode excluir
                 if (SessaoUsuario.UsuarioAtual?.IdUsuario != receita.IdUsuario)
                 {
                     MensagemErro = "Só quem criou a receita pode excluí-la.";
@@ -83,7 +77,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             }
         }
 
-        // Apaga o arquivo da foto da pasta do app (se houver)
+        // Apaga o arquivo da foto
         private static void ApagarFoto(string? sCaminhoFoto)
         {
             try
@@ -93,7 +87,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             }
             catch (Exception)
             {
-                // Se não conseguir apagar a foto, a receita já foi excluída: não é um problema para o usuário
+                // Falha ao apagar a foto não afeta o usuário
             }
         }
     }

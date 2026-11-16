@@ -5,14 +5,14 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.ViewModels
 {
-    // ViewModel da lista "Minhas adaptações" (receitas que o usuário capturou)
+    // ViewModel da lista de cópias capturadas
     public class CapturasViewModel : BaseViewModel
     {
         private readonly AdaptacaoDAO adaptacaoDAO = new AdaptacaoDAO();
 
         public ObservableCollection<AdaptacaoResumo> Adaptacoes { get; } = new ObservableCollection<AdaptacaoResumo>();
 
-        /// <summary>Lê as cópias do usuário logado. Chamado toda vez que a tela aparece.</summary>
+        // Carrega as cópias do usuário logado
         public async Task CarregarAsync()
         {
             Usuario? usuario = SessaoUsuario.UsuarioAtual;
@@ -26,7 +26,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             {
                 List<AdaptacaoResumo> lAdaptacoes = await adaptacaoDAO.ListarResumoDoUsuarioAsync(usuario.IdUsuario);
 
-                // Só limpa DEPOIS de ler do banco (evita lista duplicada quando duas recargas se cruzam)
+                // Limpa só depois de ler o banco (evita lista duplicada)
                 Adaptacoes.Clear();
                 foreach (AdaptacaoResumo adaptacao in lAdaptacoes)
                     Adaptacoes.Add(adaptacao);

@@ -4,7 +4,7 @@ using ProjetoIntegradorMobile.ViewModels;
 
 namespace ProjetoIntegradorMobile.Views;
 
-// "Minha versão" da receita capturada. Aberta como MODAL.
+// "Minha versão" da receita capturada (modal)
 public partial class EditarCapturaPage : ContentPage
 {
     EditarCapturaViewModel vm;
@@ -54,7 +54,7 @@ public partial class EditarCapturaPage : ContentPage
         await Navigation.PopModalAsync();
     }
 
-    // Confirmação antes de excluir (requisito: confirmação de exclusão)
+    // Confirma antes de excluir
     private async void btExcluir_Clicked(object sender, EventArgs e)
     {
         bool bConfirmou = await grAviso.MostrarAsync("Excluir minha versão?",

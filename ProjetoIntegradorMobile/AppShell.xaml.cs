@@ -12,12 +12,11 @@ namespace ProjetoIntegradorMobile
             Routing.RegisterRoute(nameof(FavoritosPage), typeof(FavoritosPage));
             Routing.RegisterRoute(nameof(PerfilPage), typeof(PerfilPage));
             Routing.RegisterRoute(nameof(EntradaPage), typeof(EntradaPage));
-            Routing.RegisterRoute(nameof(CadastroPage), typeof(CadastroPage));
             Routing.RegisterRoute(nameof(CapturasPage), typeof(CapturasPage));
             Routing.RegisterRoute(nameof(ReceitasCriadasPage), typeof(ReceitasCriadasPage));
         }
 
-        // Sempre que o menu abre, mostra quem está logado e troca "Entrar" / "Sair"
+        // Ao abrir o menu, atualiza usuário e Entrar/Sair
         protected override void OnPropertyChanged(string? propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
@@ -44,7 +43,7 @@ namespace ProjetoIntegradorMobile
             }
         }
 
-        // Foto do perfil no topo do menu (sem foto: mostra o desenho do chapéu de chef)
+        // Foto do usuário no menu
         private void MostrarFoto(string? sCaminhoFoto)
         {
             bool bTemFoto = !string.IsNullOrEmpty(sCaminhoFoto);
@@ -53,7 +52,7 @@ namespace ProjetoIntegradorMobile
             grMenuSemFoto.IsVisible = !bTemFoto;
         }
 
-        // Fecha o menu e abre a tela. As que dependem de login mandam para o login se ninguém entrou.
+        // Fecha o menu e abre a tela (pede login se precisar)
         private async Task AbrirAsync(string sRota, bool bPrecisaLogin)
         {
             FlyoutIsPresented = false;
@@ -68,7 +67,7 @@ namespace ProjetoIntegradorMobile
             await GoToAsync(sRota);
         }
 
-        // ---------- Opções do menu Flyout ----------
+        // Opções do menu
 
         private async void miInicio_Clicked(object sender, EventArgs e)
         {
@@ -95,7 +94,7 @@ namespace ProjetoIntegradorMobile
             await AbrirAsync(nameof(PerfilPage), true);
         }
 
-        // "Entrar" se ninguém está logado; "Sair da conta" se alguém está
+        // Entrar ou Sair da conta
         private async void miConta_Clicked(object sender, EventArgs e)
         {
             if (!SessaoUsuario.EstaLogado)
@@ -109,7 +108,7 @@ namespace ProjetoIntegradorMobile
             ToastHelper.Mostrar("Você saiu da conta.");
             await GoToAsync("//MainPage");
 
-            // Se já estava na tela inicial, ela não "reaparece": atualiza saudação e favoritos na mão
+            // Na tela inicial, atualiza saudação e favoritos
             if (CurrentPage is MainPage paginaInicial)
                 await paginaInicial.RecarregarAsync();
         }

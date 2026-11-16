@@ -1,7 +1,6 @@
 namespace ProjetoIntegradorMobile.Helpers
 {
-    // Busca uma cor de Resources/Styles/Colors.xaml pelo nome (ex.: "Destaque"),
-    // para quando o código (e não o XAML) precisa trocar uma cor.
+    // Busca uma cor do Colors.xaml pelo nome
     public static class CorHelper
     {
         public static Color Buscar(string sNome)

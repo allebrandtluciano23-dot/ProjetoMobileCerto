@@ -1,7 +1,6 @@
 namespace ProjetoIntegradorMobile.Models
 {
-    // Não é tabela: é o resultado da consulta que junta receita_ingrediente com ingrediente,
-    // para mostrar na tela o nome do ingrediente junto com quantidade e unidade.
+    // Ingrediente com quantidade e unidade (não é tabela)
     public class IngredienteDaReceita
     {
         public int IdIngrediente { get; set; }
@@ -11,7 +10,7 @@ namespace ProjetoIntegradorMobile.Models
 
         public string Descricao => $"{Quantidade:0.##} {Unidade} {Nome}".Replace("  ", " ").Trim();
 
-        // Só a quantidade, ex.: "400 g" (mostrada à direita do nome na aba Ingredientes)
+        // Ex.: "400 g"
         public string QuantidadeTexto => $"{Quantidade:0.##} {Unidade}".Trim();
     }
 }

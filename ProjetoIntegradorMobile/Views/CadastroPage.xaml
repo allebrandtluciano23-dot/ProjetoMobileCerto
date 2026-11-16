@@ -12,7 +12,7 @@
 
         <VerticalStackLayout Padding="24,45,24,36" Spacing="22">
 
-            <!-- VOLTAR -->
+            <!-- Voltar -->
             <Border WidthRequest="44"
                     HeightRequest="44"
                     Stroke="{StaticResource Borda}"
@@ -31,7 +31,7 @@
                       HeightRequest="18"/>
             </Border>
 
-            <!-- TÍTULO -->
+            <!-- Título -->
             <VerticalStackLayout Spacing="6">
                 <Label Text="Criar conta"
                        FontFamily="Bricolage"
@@ -42,11 +42,10 @@
                        FontSize="15"/>
             </VerticalStackLayout>
 
-
-            <!-- CAMPOS -->
+            <!-- Campos -->
             <VerticalStackLayout Spacing="14">
 
-                <!-- NOME -->
+                <!-- Nome -->
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Nome completo" Style="{StaticResource Rotulo}"/>
 
@@ -61,7 +60,7 @@
                     </Border>
                 </VerticalStackLayout>
 
-                <!-- E-MAIL -->
+                <!-- E-mail -->
                 <VerticalStackLayout Spacing="8">
                     <Label Text="E-mail" Style="{StaticResource Rotulo}"/>
 
@@ -76,7 +75,7 @@
                     </Border>
                 </VerticalStackLayout>
 
-                <!-- SENHA -->
+                <!-- Senha -->
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Senha" Style="{StaticResource Rotulo}"/>
 
@@ -90,7 +89,7 @@
                                    IsPassword="True"
                                    VerticalOptions="Center"/>
 
-                            <!-- Mostrar / ocultar senha -->
+                            <!-- Mostrar/ocultar senha -->
                             <Image Grid.Column="1"
                                    x:Name="imOlho"
                                    Source="eye_off.png"
@@ -106,7 +105,7 @@
                     </Border>
                 </VerticalStackLayout>
 
-                <!-- CONFIRMAR SENHA -->
+                <!-- Confirmar senha -->
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Confirmar senha" Style="{StaticResource Rotulo}"/>
 
@@ -122,16 +121,14 @@
                 </VerticalStackLayout>
             </VerticalStackLayout>
 
-
-            <!-- MENSAGEM DE ERRO -->
+            <!-- Erro -->
             <Label x:Name="lbErro"
                    Text="{Binding MensagemErro}"
                    Style="{StaticResource TextoErro}"
                    HorizontalOptions="Center"
                    IsVisible="{Binding TemErro}"/>
 
-
-            <!-- BOTÃO CADASTRAR -->
+            <!-- Cadastrar -->
             <Border BackgroundColor="{StaticResource Destaque}"
                     StrokeThickness="0"
                     HeightRequest="54"
@@ -149,8 +146,7 @@
                        VerticalOptions="Center"/>
             </Border>
 
-
-            <!-- JÁ TEM CONTA -->
+            <!-- Já tem conta -->
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
 
                 <Label Text="Já tem uma conta?"
@@ -166,9 +162,6 @@
                     </Label.GestureRecognizers>
                 </Label>
             </HorizontalStackLayout>
-
         </VerticalStackLayout>
-
     </ScrollView>
-
 </ContentPage>

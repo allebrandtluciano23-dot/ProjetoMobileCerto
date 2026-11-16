@@ -1,13 +1,11 @@
-using Microsoft.Maui.Controls.Shapes;
 using ProjetoIntegradorMobile.Helpers;
 
 namespace ProjetoIntegradorMobile.Views;
 
-// Cartão de aviso/confirmação usado no lugar do DisplayAlertAsync.
-// Cada página que precisa dele coloca <views:CartaoAviso x:Name="grAviso"/> por cima do conteúdo.
+// Cartão de aviso/confirmação (substitui o DisplayAlertAsync)
 public partial class CartaoAviso : Grid
 {
-    // Guarda a resposta até o usuário tocar em um dos botões
+    // Resposta do usuário
     TaskCompletionSource<bool>? tcsResposta;
 
     public CartaoAviso()
@@ -15,12 +13,7 @@ public partial class CartaoAviso : Grid
         InitializeComponent();
     }
 
-    /// <summary>
-    /// Mostra o cartão e espera a resposta.
-    /// Retorna true se tocou no botão de confirmar; false se cancelou ou tocou fora.
-    /// Sem sTextoCancelar, aparece só um botão (aviso simples, tipo "OK").
-    /// bPerigo = true: ícone de lixeira e botão vermelho (exclusões).
-    /// </summary>
+    // Mostra o cartão; true = confirmou. bPerigo = lixeira e botão vermelho
     public Task<bool> MostrarAsync(string sTitulo, string sMensagem, string sTextoConfirmar,
                                    string? sTextoCancelar = null, bool bPerigo = false)
     {
@@ -33,12 +26,10 @@ public partial class CartaoAviso : Grid
         btCancelar.Text = sTextoCancelar ?? "";
         btCancelar.IsVisible = sTextoCancelar != null;
 
+        // Exclusão: lixeira; aviso comum: chef
         bdIcone.BackgroundColor = CorHelper.Buscar(bPerigo ? "PerigoClaro" : "FundoAvatar");
-        paIcone.Stroke = CorHelper.Buscar(bPerigo ? "Perigo" : "Destaque");
-        if (Application.Current != null
-            && Application.Current.Resources.TryGetValue(bPerigo ? "IconeLixeira" : "IconeChapeu", out object? icone)
-            && icone is Geometry desenho)
-            paIcone.Data = desenho;
+        paIcone.IsVisible = bPerigo;
+        imIcone.IsVisible = !bPerigo;
 
         tcsResposta = new TaskCompletionSource<bool>();
         IsVisible = true;

@@ -1,4 +1,4 @@
-﻿using SQLite;
+using SQLite;
 
 namespace ProjetoIntegradorMobile.Models
 {
@@ -14,14 +14,14 @@ namespace ProjetoIntegradorMobile.Models
         [Column("id_plano")]
         public int? IdPlano { get; set; } // FK
 
-        // Preencha só UM destes dois (regra CHECK da tabela)
+        // Preencha só um dos dois
         [Column("id_receita")]
         public int? IdReceita { get; set; } // FK
 
         [Column("id_receita_personalizada")]
         public int? IdReceitaPersonalizada { get; set; } // FK
 
-        // Valores aceitos: cafe_da_manha, almoco, jantar, lanche, ceia
+        // cafe_da_manha, almoco, jantar, lanche ou ceia
         [NotNull, Column("tipo_refeicao")]
         public string TipoRefeicao { get; set; } = string.Empty;
 

@@ -2,7 +2,7 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.DAO
 {
-    // Acesso aos dados da tabela "categoria"
+    // Acesso à tabela categoria
     public class CategoriaDAO
     {
         public async Task<List<Categoria>> ListarAsync()

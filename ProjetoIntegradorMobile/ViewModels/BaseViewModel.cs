@@ -3,8 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace ProjetoIntegradorMobile.ViewModels
 {
-    // Classe base de todos os ViewModels.
-    // Avisa a tela (View) sempre que uma propriedade muda, para o Binding atualizar o que aparece.
+    // Base dos ViewModels: avisa a tela quando uma propriedade muda
     public class BaseViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -14,7 +13,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(sPropriedade));
         }
 
-        // Guarda o novo valor e avisa a tela, só se o valor realmente mudou
+        // Guarda o valor e avisa a tela, se mudou
         protected bool SetProperty<T>(ref T campo, T valor, [CallerMemberName] string sPropriedade = "")
         {
             if (EqualityComparer<T>.Default.Equals(campo, valor))
@@ -25,7 +24,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             return true;
         }
 
-        // ---------- Mensagem de erro (usada por todas as telas com formulário) ----------
+        // Mensagem de erro
 
         private string sMensagemErro = "";
         public string MensagemErro
@@ -38,10 +37,10 @@ namespace ProjetoIntegradorMobile.ViewModels
             }
         }
 
-        // O Label de erro fica visível só quando existe mensagem
+        // Mostra o Label de erro só quando há mensagem
         public bool TemErro => !string.IsNullOrEmpty(MensagemErro);
 
-        // Evita que um toque duplo no botão execute a ação duas vezes
+        // Evita executar a ação duas vezes no toque duplo
         protected bool bProcessando = false;
     }
 }

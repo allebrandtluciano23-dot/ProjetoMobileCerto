@@ -6,7 +6,7 @@ namespace ProjetoIntegradorMobile.Views
 {
     public partial class MainPage : ContentPage
     {
-        // A lista, o filtro e a leitura do banco ficam no ViewModel
+        // Lista e filtro ficam no ViewModel
         MainViewModel vm = new MainViewModel();
 
         public MainPage()
@@ -15,31 +15,31 @@ namespace ProjetoIntegradorMobile.Views
             BindingContext = vm;
         }
 
-        // Recarrega a lista sempre que a tela aparece (ex.: ao voltar depois de criar uma receita)
+        // Recarrega ao aparecer
         protected override async void OnAppearing()
         {
             base.OnAppearing();
             await vm.CarregarAsync();
         }
 
-        // Usado pelo menu (ex.: depois de sair da conta) para atualizar saudação e favoritos
+        // Recarrega a pedido do menu (ex.: ao sair)
         public async Task RecarregarAsync()
         {
             await vm.CarregarAsync();
         }
 
-        // Botão de menu (três linhas): abre o menu lateral (Flyout)
+        // Abre o menu lateral
         private void Menu_Tapped(object sender, TappedEventArgs e)
         {
             Shell.Current.FlyoutIsPresented = true;
         }
 
-        // ---------- Nova receita ----------
+        // Nova receita
 
-        // Abre a tela Nova receita como MODAL (por cima da tela inicial)
+        // Abre a Nova receita como modal
         private async void btNovaReceita_Clicked(object sender, EventArgs e)
         {
-            // A receita fica no nome de quem está logado, então precisa entrar antes
+            // Precisa estar logado
             if (!SessaoUsuario.EstaLogado)
             {
                 bool bEntrar = await grAviso.MostrarAsync("Entre na sua conta",
@@ -53,15 +53,15 @@ namespace ProjetoIntegradorMobile.Views
 
             NovaReceitaPage pagina = new NovaReceitaPage();
 
-            // Quando o modal fechar, recarrega a lista (para a receita nova aparecer)
+            // Ao fechar, recarrega a lista
             pagina.Disappearing += async (s, ev) => await vm.CarregarAsync();
 
             await Navigation.PushModalAsync(pagina);
         }
 
-        // ---------- Detalhe da receita ----------
+        // Detalhe da receita
 
-        // Abre o detalhe (TabbedPage com abas Resumo | Ingredientes | Preparo) como MODAL
+        // Abre o detalhe (abas) como modal
         private async void Receita_Tapped(object sender, TappedEventArgs e)
         {
             if (e.Parameter is not ReceitaResumo receita)
@@ -69,13 +69,13 @@ namespace ProjetoIntegradorMobile.Views
 
             DetalheReceitaPage pagina = new DetalheReceitaPage(receita.IdReceita);
 
-            // Quando o detalhe fechar, recarrega a lista (a receita pode ter sido editada ou excluída)
+            // Ao fechar, recarrega a lista
             pagina.Disappearing += async (s, ev) => await vm.CarregarAsync();
 
             await Navigation.PushModalAsync(pagina);
         }
 
-        // ---------- Categorias ----------
+        // Categorias
 
         private void Categoria_Tapped(object sender, TappedEventArgs e)
         {
@@ -85,7 +85,7 @@ namespace ProjetoIntegradorMobile.Views
             MarcarCategoria(sender as Border);
         }
 
-        // Destaca o botão da categoria escolhida (cor principal) e volta os outros ao normal
+        // Destaca a categoria escolhida
         private void MarcarCategoria(Border? bdSelecionada)
         {
             foreach (var item in slCategorias.Children)
@@ -100,7 +100,7 @@ namespace ProjetoIntegradorMobile.Views
             }
         }
 
-        // ---------- Menu inferior ----------
+        // Menu inferior
 
         private async void Inicio_Tapped(object sender, TappedEventArgs e)
         {

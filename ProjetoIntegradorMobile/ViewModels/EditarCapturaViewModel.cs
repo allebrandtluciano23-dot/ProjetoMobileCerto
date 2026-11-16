@@ -4,8 +4,7 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.ViewModels
 {
-    // ViewModel da tela "Minha versão" (EditarCapturaPage): edição da cópia capturada.
-    // Tudo o que é salvo aqui fica só na cópia de quem capturou; a receita original não muda.
+    // ViewModel da "Minha versão" (só altera a cópia, nunca a original)
     public class EditarCapturaViewModel : IngredientesViewModel
     {
         private const int TAMANHO_MINIMO_TITULO = 3;
@@ -23,7 +22,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             this.iIdAdaptacao = iIdAdaptacao;
         }
 
-        // ---------- Dados da receita original (só para mostrar) ----------
+        // Dados da original (só leitura)
 
         private string sOrigem = "";
         public string Origem
@@ -56,7 +55,7 @@ namespace ProjetoIntegradorMobile.ViewModels
         public bool TemFoto => !string.IsNullOrEmpty(CaminhoFoto);
         public bool SemFoto => !TemFoto;
 
-        // ---------- Campos editáveis da cópia (ligados por Binding) ----------
+        // Campos da cópia
 
         private string sTitulo = "";
         public string Titulo
@@ -72,7 +71,6 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sModoPreparo, value);
         }
 
-        // Ex.: "Troquei o açúcar por mel"
         private string sObservacoes = "";
         public string Observacoes
         {
@@ -80,14 +78,11 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sObservacoes, value);
         }
 
-        // Ingredientes (lista, campos, adicionar e remover): herdados de IngredientesViewModel
+        // Ingredientes: herdados de IngredientesViewModel
 
-        // ---------- Ações ----------
+        // Ações
 
-        /// <summary>
-        /// Lê a cópia, os ingredientes dela e os dados da original (só na primeira vez).
-        /// Retorna false se a cópia não existe mais ou não é do usuário logado.
-        /// </summary>
+        // Carrega a cópia e a original; false = cópia não existe
         public async Task<bool> CarregarAsync()
         {
             if (bCarregou)
@@ -107,7 +102,7 @@ namespace ProjetoIntegradorMobile.ViewModels
                 foreach (IngredienteDaReceita ingrediente in await adaptacaoDAO.ListarIngredientesAsync(iIdAdaptacao))
                     Ingredientes.Add(ingrediente);
 
-                // Dados da original: tempo, porções, dificuldade e foto vêm dela
+                // Tempo, porções, dificuldade e foto vêm da original
                 Receita? original = await receitaDAO.BuscarPorIdAsync(adaptacao.IdReceitaOriginal);
                 if (original != null)
                 {
@@ -129,7 +124,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             }
         }
 
-        /// <summary>Valida e salva a cópia. Retorna true se salvou.</summary>
+        // Valida e salva a cópia
         public async Task<bool> SalvarAsync()
         {
             if (bProcessando)
@@ -141,7 +136,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             string sModoPreparoDigitado = ModoPreparo?.Trim() ?? "";
             string sObservacoesDigitadas = Observacoes?.Trim() ?? "";
 
-            // ----- Validação do formulário -----
+            // Validação
             if (sTituloDigitado.Length < TAMANHO_MINIMO_TITULO || sTituloDigitado.Length > TAMANHO_MAXIMO_TITULO)
             {
                 MensagemErro = $"O nome deve ter entre {TAMANHO_MINIMO_TITULO} e {TAMANHO_MAXIMO_TITULO} caracteres.";
@@ -160,7 +155,7 @@ namespace ProjetoIntegradorMobile.ViewModels
                 return false;
             }
 
-            // ----- Gravação no banco -----
+            // Gravação
             bProcessando = true;
             try
             {
@@ -189,7 +184,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             }
         }
 
-        /// <summary>Exclui só a cópia do usuário. Retorna true se excluiu.</summary>
+        // Exclui só a cópia
         public async Task<bool> ExcluirAsync()
         {
             if (bProcessando)

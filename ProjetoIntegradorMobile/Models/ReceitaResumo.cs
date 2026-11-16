@@ -1,7 +1,6 @@
 namespace ProjetoIntegradorMobile.Models
 {
-    // Não é tabela: é o resultado da consulta que junta receita + categoria + ingredientes,
-    // com só o que o card da lista de receitas precisa mostrar.
+    // Resumo da receita para os cards (não é tabela)
     public class ReceitaResumo
     {
         public int IdReceita { get; set; }
@@ -11,7 +10,7 @@ namespace ProjetoIntegradorMobile.Models
         public int? Porcoes { get; set; }
         public bool Vegetariana { get; set; }
 
-        // Favorita DO USUÁRIO LOGADO (vem da tabela favorito, não da receita)
+        // Favorita do usuário logado
         public bool Favorita { get; set; }
         public string? Dificuldade { get; set; }
         public string? CaminhoFoto { get; set; }
@@ -19,13 +18,13 @@ namespace ProjetoIntegradorMobile.Models
         public bool TemFoto => !string.IsNullOrEmpty(CaminhoFoto);
         public bool SemFoto => !TemFoto;
 
-        // Nomes dos ingredientes separados por espaço (usado só pelo filtro de busca)
+        // Nomes dos ingredientes (para a busca)
         public string? NomesIngredientes { get; set; }
 
-        // Texto do card, ex.: "40 min · 2 porções · Fácil"
+        // Ex.: "40 min · 2 porções · Fácil"
         public string Detalhes => MontarDetalhes(TempoPreparoMin, Porcoes, Dificuldade);
 
-        // Linha do item da lista, ex.: "Almoço · 40 min · 2 porções · Fácil"
+        // Ex.: "Almoço · 40 min · 2 porções · Fácil"
         public string CategoriaEDetalhes
         {
             get
@@ -40,7 +39,7 @@ namespace ProjetoIntegradorMobile.Models
             }
         }
 
-        // Também usado pela tela de detalhe da receita
+        // Também usado no detalhe
         public static string MontarDetalhes(int? iTempoMin, int? iPorcoes, string? sDificuldade)
         {
             List<string> lPartes = new List<string>();

@@ -4,21 +4,19 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.ViewModels
 {
-    // Parte comum das telas que montam uma lista de ingredientes:
-    // Nova/Editar receita (NovaReceitaViewModel) e Minha versão (EditarCapturaViewModel).
-    // As duas herdam desta classe, então a validação do ingrediente fica num lugar só.
+    // Lista de ingredientes comum à Nova receita e à Minha versão
     public class IngredientesViewModel : BaseViewModel
     {
-        // Lista que aparece na tela (BindableLayout). ObservableCollection avisa a tela quando muda.
+        // Lista mostrada na tela
         public ObservableCollection<IngredienteDaReceita> Ingredientes { get; } = new ObservableCollection<IngredienteDaReceita>();
 
-        // Opções do Picker de unidade
+        // Opções de unidade
         public List<string> Unidades { get; } = new List<string>
         {
             "g", "kg", "ml", "l", "un", "colher (sopa)", "colher (chá)", "xícara", "pitada"
         };
 
-        // ---------- Campos para adicionar um ingrediente ----------
+        // Campos do novo ingrediente
 
         private string sNovoIngredienteNome = "";
         public string NovoIngredienteNome
@@ -41,7 +39,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sNovoIngredienteUnidade, value);
         }
 
-        // Erro dos campos de ingrediente (aparece logo abaixo deles)
+        // Erro dos campos de ingrediente
         private string sErroIngrediente = "";
         public string ErroIngrediente
         {
@@ -55,9 +53,9 @@ namespace ProjetoIntegradorMobile.ViewModels
 
         public bool TemErroIngrediente => !string.IsNullOrEmpty(ErroIngrediente);
 
-        // ---------- Ações ----------
+        // Ações
 
-        /// <summary>Valida os campos de ingrediente e adiciona na lista.</summary>
+        // Valida e adiciona o ingrediente
         public void AdicionarIngrediente()
         {
             ErroIngrediente = "";
@@ -97,7 +95,7 @@ namespace ProjetoIntegradorMobile.ViewModels
                 Unidade = NovoIngredienteUnidade
             });
 
-            // Limpa os campos para o próximo ingrediente
+            // Limpa os campos
             NovoIngredienteNome = "";
             NovoIngredienteQuantidade = "";
             NovoIngredienteUnidade = null;

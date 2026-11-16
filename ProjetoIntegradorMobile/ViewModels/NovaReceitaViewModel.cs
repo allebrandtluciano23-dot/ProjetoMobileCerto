@@ -4,8 +4,7 @@ using ProjetoIntegradorMobile.Models;
 
 namespace ProjetoIntegradorMobile.ViewModels
 {
-    // ViewModel da tela Nova receita (NovaReceitaPage).
-    // A mesma tela serve para EDITAR: basta criar com o id da receita.
+    // ViewModel da Nova receita (também edita)
     public class NovaReceitaViewModel : IngredientesViewModel
     {
         private const int TAMANHO_MINIMO_TITULO = 3;
@@ -15,7 +14,7 @@ namespace ProjetoIntegradorMobile.ViewModels
         private readonly ReceitaDAO receitaDAO = new ReceitaDAO();
         private readonly CategoriaDAO categoriaDAO = new CategoriaDAO();
 
-        // 0 = receita nova; maior que 0 = editando a receita com esse id
+        // 0 = nova; > 0 = editando
         private readonly int iIdReceitaEdicao;
         private bool bReceitaCarregada = false;
 
@@ -26,11 +25,11 @@ namespace ProjetoIntegradorMobile.ViewModels
 
         public bool EhEdicao => iIdReceitaEdicao > 0;
 
-        // Textos que mudam entre criar e editar
+        // Textos de criar/editar
         public string TituloTela => EhEdicao ? "Editar receita" : "Nova receita";
         public string TextoBotao => EhEdicao ? "Salvar alterações" : "Salvar receita";
 
-        // ---------- Campos da receita (ligados por Binding) ----------
+        // Campos da receita
 
         private string sTitulo = "";
         public string Titulo
@@ -46,7 +45,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sModoPreparo, value);
         }
 
-        // Nomes das categorias para o Picker (lidos do banco)
+        // Categorias do Picker
         private List<string> lCategorias = new List<string>();
         public List<string> Categorias
         {
@@ -61,7 +60,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sCategoriaSelecionada, value);
         }
 
-        // TimePicker: horas e minutos de preparo (00:30 = 30 minutos)
+        // Tempo de preparo
         private TimeSpan? tsTempoPreparo = new TimeSpan(0, 30, 0);
         public TimeSpan? TempoPreparo
         {
@@ -69,7 +68,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref tsTempoPreparo, value);
         }
 
-        // Fica como texto para conseguir validar se é um número
+        // Texto, para validar o número
         private string sPorcoes = "";
         public string Porcoes
         {
@@ -77,7 +76,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sPorcoes, value);
         }
 
-        // Preenchida pelos RadioButtons (Fácil, Média, Difícil)
+        // Escolhida nos RadioButtons
         private string sDificuldade = "";
         public string Dificuldade
         {
@@ -85,7 +84,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref sDificuldade, value);
         }
 
-        // CheckBox "Vegetariana" (campo booleano da tabela receita)
+        // CheckBox Vegetariana
         private bool bVegetariana = false;
         public bool Vegetariana
         {
@@ -93,7 +92,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             set => SetProperty(ref bVegetariana, value);
         }
 
-        // ---------- Foto ----------
+        // Foto
 
         private string? sCaminhoFoto;
         public string? CaminhoFoto
@@ -112,11 +111,11 @@ namespace ProjetoIntegradorMobile.ViewModels
         public bool TemFoto => !string.IsNullOrEmpty(CaminhoFoto);
         public bool SemFoto => !TemFoto;
 
-        // Ingredientes (lista, campos, adicionar e remover): herdados de IngredientesViewModel
+        // Ingredientes: herdados de IngredientesViewModel
 
-        // ---------- Ações ----------
+        // Ações
 
-        /// <summary>Lê as categorias do banco para o Picker (só na primeira vez).</summary>
+        // Carrega as categorias
         public async Task CarregarCategoriasAsync()
         {
             if (Categorias.Count > 0)
@@ -133,10 +132,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             }
         }
 
-        /// <summary>
-        /// Modo edição: preenche a tela com os dados da receita (só na primeira vez).
-        /// Retorna false se a receita não existe mais ou se o usuário não é o autor.
-        /// </summary>
+        // Modo edição: preenche a tela; false = não pode editar
         public async Task<bool> CarregarReceitaAsync()
         {
             if (!EhEdicao || bReceitaCarregada)
@@ -144,7 +140,7 @@ namespace ProjetoIntegradorMobile.ViewModels
 
             try
             {
-                await CarregarCategoriasAsync(); // o Picker precisa das categorias antes de marcar a escolhida
+                await CarregarCategoriasAsync();  // Picker precisa das categorias antes
 
                 Receita? receita = await receitaDAO.BuscarPorIdAsync(iIdReceitaEdicao);
                 if (receita == null || receita.IdUsuario != SessaoUsuario.UsuarioAtual?.IdUsuario)
@@ -177,16 +173,13 @@ namespace ProjetoIntegradorMobile.ViewModels
             }
         }
 
-        /// <summary>
-        /// Abre a galeria. A foto escolhida é copiada para a pasta do app,
-        /// assim ela continua aparecendo mesmo se for apagada da galeria.
-        /// </summary>
+        // Escolhe a foto e copia para a pasta do app
         public async Task EscolherFotoAsync()
         {
             try
             {
                 string? sNovaFoto = await FotoHelper.EscolherECopiarAsync("fotos");
-                if (sNovaFoto != null) // null = usuário cancelou
+                if (sNovaFoto != null)  // cancelou
                     CaminhoFoto = sNovaFoto;
             }
             catch (Exception)
@@ -195,11 +188,7 @@ namespace ProjetoIntegradorMobile.ViewModels
             }
         }
 
-        /// <summary>
-        /// Valida o formulário e grava a receita com os ingredientes
-        /// (insere se for nova, atualiza se estiver editando).
-        /// Retorna true se salvou (a tela então mostra o Toast e fecha).
-        /// </summary>
+        // Valida e salva (insere ou atualiza)
         public async Task<bool> SalvarAsync()
         {
             if (bProcessando)
@@ -214,7 +203,7 @@ namespace ProjetoIntegradorMobile.ViewModels
                 return false;
             }
 
-            // ----- Validação do formulário -----
+            // Validação
             string sTituloDigitado = Titulo?.Trim() ?? "";
             string sModoPreparoDigitado = ModoPreparo?.Trim() ?? "";
 
@@ -261,7 +250,7 @@ namespace ProjetoIntegradorMobile.ViewModels
                 return false;
             }
 
-            // ----- Gravação no banco -----
+            // Gravação
             bProcessando = true;
             try
             {
@@ -270,7 +259,7 @@ namespace ProjetoIntegradorMobile.ViewModels
 
                 if (EhEdicao)
                 {
-                    // UPDATE: parte da receita salva (mantém autor e data de criação) e troca os campos
+                    // Update: mantém autor e data de criação
                     Receita? receita = await receitaDAO.BuscarPorIdAsync(iIdReceitaEdicao);
                     if (receita == null || receita.IdUsuario != usuario.IdUsuario)
                     {
@@ -291,7 +280,7 @@ namespace ProjetoIntegradorMobile.ViewModels
                 }
                 else
                 {
-                    // CREATE
+                    // Create
                     Receita receita = new Receita
                     {
                         IdUsuario = usuario.IdUsuario,

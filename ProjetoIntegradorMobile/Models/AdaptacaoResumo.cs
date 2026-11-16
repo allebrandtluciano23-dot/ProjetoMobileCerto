@@ -1,7 +1,6 @@
 namespace ProjetoIntegradorMobile.Models
 {
-    // Não é tabela: resultado da consulta que junta a adaptação (cópia capturada)
-    // com a receita original e o autor dela. Usado na lista "Minhas adaptações".
+    // Resumo da cópia capturada para a lista (não é tabela)
     public class AdaptacaoResumo
     {
         public int IdReceitaPersonalizada { get; set; }
@@ -16,7 +15,7 @@ namespace ProjetoIntegradorMobile.Models
 
         public bool TemFoto => !string.IsNullOrEmpty(CaminhoFoto);
 
-        // Ex.: Baseada em "Sopa de legumes" · por CheefBook
+        // Ex.: Baseada em "Sopa" · por Ana
         public string Origem => string.IsNullOrEmpty(NomeAutorOriginal)
             ? $"Baseada em \"{TituloOriginal}\""
             : $"Baseada em \"{TituloOriginal}\" · por {NomeAutorOriginal}";

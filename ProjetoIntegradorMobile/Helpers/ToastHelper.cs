@@ -1,10 +1,6 @@
 namespace ProjetoIntegradorMobile.Helpers
 {
-    /// <summary>
-    /// Toast: mensagem rápida que aparece no rodapé da tela e some sozinha.
-    /// Usa o Toast nativo do Android (não precisa de nenhum pacote NuGet).
-    /// Em outras plataformas (ex.: Windows) não mostra nada.
-    /// </summary>
+    // Toast nativo do Android (no Windows não aparece)
     public static class ToastHelper
     {
         public static void Mostrar(string sMensagem)
@@ -19,7 +15,7 @@ namespace ProjetoIntegradorMobile.Helpers
             }
             catch (Exception)
             {
-                // Se o Toast falhar, a ação já foi feita: só não mostra a mensagem
+                // Falha no Toast não afeta a ação
             }
 #endif
         }

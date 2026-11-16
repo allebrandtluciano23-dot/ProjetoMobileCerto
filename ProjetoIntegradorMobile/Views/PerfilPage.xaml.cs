@@ -5,7 +5,7 @@ namespace ProjetoIntegradorMobile.Views;
 
 public partial class PerfilPage : ContentPage
 {
-    // Nome, e-mail e foto ficam no ViewModel
+    // Dados no ViewModel
     PerfilViewModel vm = new PerfilViewModel();
 
     public PerfilPage()
@@ -27,7 +27,7 @@ public partial class PerfilPage : ContentPage
         vm.Carregar();
     }
 
-    // Toque na foto: abre a galeria para escolher a foto do perfil
+    // Troca a foto do perfil
     private async void Foto_Tapped(object sender, TappedEventArgs e)
     {
         bool bTrocou = await vm.AlterarFotoAsync();
@@ -35,14 +35,12 @@ public partial class PerfilPage : ContentPage
             ToastHelper.Mostrar("Foto do perfil atualizada!");
     }
 
-    // ---------- Ações do perfil ----------
-    // Receitas criadas por mim
+    // Atalhos do perfil
     private async void MinhasReceitas_Tapped(object sender, TappedEventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(ReceitasCriadasPage));
     }
 
-    // Receitas de outros usuários que eu capturei
     private async void MinhasAdaptacoes_Tapped(object sender, TappedEventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(CapturasPage));
@@ -54,7 +52,7 @@ public partial class PerfilPage : ContentPage
         await Shell.Current.GoToAsync("//MainPage");
     }
 
-    // ---------- Menu inferior ----------
+    // Menu inferior
     private async void Inicio_Tapped(object sender, TappedEventArgs e)
     {
         await Shell.Current.GoToAsync("//MainPage");
@@ -67,6 +65,6 @@ public partial class PerfilPage : ContentPage
 
     private void Perfil_Tapped(object sender, TappedEventArgs e)
     {
-        // já está na página de perfil
+        // já está no perfil
     }
 }
